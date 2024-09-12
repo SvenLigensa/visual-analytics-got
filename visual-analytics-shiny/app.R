@@ -1,118 +1,84 @@
 library(shiny)
+library(shinyjs)
 library(bslib)
 
-# Define UI
 ui <- page_sidebar(
   titlePanel("Game of Thrones Analyzer"),
-  
-  # Updated CSS to align checkboxes horizontally and center text
+  useShinyjs(),
+
+  # Links to external CSS and JS code
   tags$head(
-    tags$style(HTML("
-      /* The image spans the whole height of the screen (with some fixed padding) */
-      .full-screen-img {
-        height: calc(100vh - 100px);
-        object-fit: contain;
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-      }
-      /* The checkboxes span the whole width and are aligned horizontally */
-      .season-choices .shiny-options-group {
-        width: 100%;
-        display: flex;
-        flex-wrap: nowrap;
-        gap: 0; /* Ensure no gap between buttons */
-      }
-      /* Hide the default checkbox input */
-      .season-choices .shiny-options-group input[type='checkbox'] {
-        display: none;
-      }
-      .season-choices .shiny-options-group label {
-          display: flex !important;
-          align-items: center;
-          justify-content: center;
-          min-width: min-content;  /* Don't shrink below the width of the text */
-          border: 1px solid #2b2b2b;
-          background-color: #e8eaf6;
-          padding: 0 !important; /* Remove the padding in front of the text to be able to center it properly */
-          font-family: sans-serif; /* Todo: https://fontmeme.com/fonts/game-of-thrones-font/ */
-          width: 100%;
-          height: 30px;
-          white-space: nowrap;
-          cursor: pointer;
-          margin: 0;
-          border-left: none;
-          border-right: none;
-      }
-      .season-choices .shiny-options-group label:first-child {
-          border-left: 1px solid #2b2b2b;
-      }
-      .season-choices .shiny-options-group label:last-child {
-          border-right: 1px solid #2b2b2b;
-      }
-      /* Color of button gets darker on hover */
-      .season-choices .shiny-options-group label:hover {
-        background-color: #9fa8da;
-      }
-      /* Color of button gets darker when selected */
-      .season-choices .shiny-options-group label.selected {
-        background-color: #9fa8da;
-      }
-    "))
+    tags$link(rel = "stylesheet", type = "text/css", href = "styles.css"),
+    tags$script(src = "script.js")  # Link to the external JS file
   ),
   
-  # JavaScript to dynamically toggle the "selected" class based on checkbox value
-  tags$script(HTML("
-    $(document).on('shiny:inputchanged', function(event) {
-      if (event.name === 'season') {
-        $('input[name=\"season\"]').each(function() {
-          var checkboxValue = $(this).val();
-          if ($(this).is(':checked')) {
-            // console.log('Checkbox with value:', checkboxValue, 'checked, adding selected class');
-            $('label:contains(' + checkboxValue + ')').addClass('selected');
-          } else {
-            // console.log('Checkbox with value:', checkboxValue, 'unchecked, removing selected class');
-            $('label:contains(' + checkboxValue + ')').removeClass('selected');
-          }
-        });
-      }
-    });
-  ")),
-  
-  # Display the JPG image with the new class for full-screen height
-  sidebar = sidebar(
-    tags$img(src = "westeros.jpg", class = "full-screen-img")
+  layout_column_wrap(
+    width = 1/2,
+    heights_equal = "row",
+    
+    card(
+      div(id = "map-container",
+        tags$img(id = "map-img", src = "westeros.jpg"),
+        tags$svg(id = "map-canvas"),
+      )
+    ),
+    
+    card(
+      card_header("Dummy Card"),
+      numericInput("x_coord", "X Coordinate", value = 0, min = 0, max = 1),
+      numericInput("y_coord", "Y Coordinate", value = 0, min = 0, max = 1),
+      numericInput("diameter", "Circle Diameter", value = 0.1, min = 0, max = 1),
+      actionButton("draw_circle", "Draw Circle"),
+
+      card_footer("Graphic coming soon...")
+    )
   ),
   
-  card(
-    # card_header(""),
-    div(class = "season-choices",
+  card(id = "bottom-card",
+    div(class = "full-horizontal-choices",
         checkboxGroupInput(
           inputId = "season",
-          label = "Select season and episode:",
+          label = "Select seasons and episodes of interest:",
           choices = c("Season 1", "Season 2", "Season 3", "Season 4", 
                       "Season 5", "Season 6", "Season 7", "Season 8"),
           inline = TRUE,
-        )
+        ),
+        # Placeholder for dynamically generated episode choices
+        uiOutput("episode_ui"),
     ),
-    textOutput("selected_seasons"),
-    card_footer("Interactive App by Sven Ligensa"),
   )
 )
-# Define server logic
+
 server <- function(input, output, session) {
+
+  # Draw circle when button is pressed
+  observeEvent(input$draw_circle, {
+    runjs(sprintf("drawCircle(%f, %f, %f, '#5e35b1');", 
+                  input$x_coord, input$y_coord, input$diameter))
+  })
   
-  # Render the selected checkboxes as text
-  # output$selected_seasons <- renderText({
-  #   selected <- input$season
-  #   if (length(selected) > 0) {
-  #     paste("You have selected:", paste(selected, collapse = ", "))
-  #   } else {
-  #     "No season selected."
-  #   }
-  # })
+  # Dynamically show episode checkboxGroupInput based on selected season
+  observeEvent(input$season, {
+    # If exactly one season is selected, show episode choices
+    if (!is.null(input$season) && length(input$season) == 1) {
+      output$episode_ui <- renderUI({
+        div(class = "full-horizontal-choices",
+            checkboxGroupInput(
+              inputId = "episode",
+              label = NULL,
+              choices = paste0("Episode ", 1:10),  # Episodes 1-10
+              inline = TRUE
+            )
+        )
+      })
+    } else {
+      # If no season or multiple seasons are selected, hide the episode choices
+      output$episode_ui <- renderUI({
+        NULL
+      })
+    }
+  })
 
 }
 
-# Run the application 
 shinyApp(ui = ui, server = server)
