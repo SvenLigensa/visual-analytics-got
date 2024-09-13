@@ -1,3 +1,10 @@
+:root {
+  --selection-1: #bbdefb;
+  --selection-2: #64b5f6;
+  --selection-3: #2196f3;
+  --border-color: #2b2b2b;
+}
+
 /* Make it possible for the application to draw on top of the image 
  * The image and the canvas are children of the container.
  */
@@ -47,8 +54,8 @@
     align-items: center;
     justify-content: center;
     min-width: min-content;  /* Don't shrink below the width of the text */
-    border: 1px solid #2b2b2b;
-    background-color: #a9dfbf;
+    border: 1px solid var(--border-color);
+    background-color: var(--selection-1);
     padding: 0 !important; /* Remove the padding in front of the text for proper centering */
     font-family: sans-serif; /* Todo: https://fontmeme.com/fonts/game-of-thrones-font/ */
     width: 100%;
@@ -62,18 +69,18 @@
 
 /* First option has left border */
 .full-horizontal-choices .shiny-options-group label:first-child {
-    border-left: 1px solid #2b2b2b;
+    border-left: 1px solid var(--border-color);
 }
 /* Last option has right border */
 .full-horizontal-choices .shiny-options-group label:last-child {
-    border-right: 1px solid #2b2b2b;
+    border-right: 1px solid var(--border-color);
 }
 
 /* Color of button changes when selected */
 .full-horizontal-choices .shiny-options-group label.selected {
-  background-color: #27ae60;
+  background-color: var(--selection-3);
 }
 /* Color of button changes on hover */
 .full-horizontal-choices .shiny-options-group label:hover {
-  background-color: #52be80 ;
+  background-color: var(--selection-2) ;
 }
