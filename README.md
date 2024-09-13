@@ -1,3 +1,5 @@
+[![Deploy Shiny App](https://github.com/SvenLigensa/visual-analytics-got/actions/workflows/build-and-deploy.yml/badge.svg)](https://github.com/SvenLigensa/visual-analytics-got/actions/workflows/build-and-deploy.yml)
+
 # Visual Analytics app for Game Of Thrones
 
 ## Deployment
