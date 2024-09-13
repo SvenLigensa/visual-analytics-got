@@ -4,7 +4,7 @@
 
 ## Deployment
 
-This app is deployed on [GitHub pages](https://svenligensa.github.io/visual-analytics-got/) by following [this tutorial](https://medium.com/@rami.krispin/deploy-shiny-app-on-github-pages-b4cbd433bdc).
+This app is deployed on GitHub pages by following [this tutorial](https://medium.com/@rami.krispin/deploy-shiny-app-on-github-pages-b4cbd433bdc).
 
 - Initially, the packages `shinylive` and `httpuv` need to be installed: `install.packages(c("shinylive", "httpuv"))`.
 - Then, after changing the Shiny app, the changes are propagated to the `docs` directory with the following command: `shinylive::export(appdir = "visual-analytics-shiny", destdir = "docs")`
