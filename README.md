@@ -1,4 +1,5 @@
-[![Deploy Shiny App](https://github.com/SvenLigensa/visual-analytics-got/actions/workflows/build-and-deploy.yml/badge.svg)](https://github.com/SvenLigensa/visual-analytics-got/actions/workflows/build-and-deploy.yml)
+[![GitHub Pages Link](https://img.shields.io/badge/Website-GitHub_Pages-2196f3)](https://svenligensa.github.io/visual-analytics-got/)
+[![Build and Deploy Shiny App](https://github.com/SvenLigensa/visual-analytics-got/actions/workflows/build-and-deploy.yml/badge.svg)](https://github.com/SvenLigensa/visual-analytics-got/actions/workflows/build-and-deploy.yml)
 
 # Visual Analytics app for Game Of Thrones
 
