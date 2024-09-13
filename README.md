@@ -3,7 +3,7 @@
 ## Deployment
 
 This app is deployed on [GitHub pages](https://svenligensa.github.io/visual-analytics-got/) by following [this tutorial](https://medium.com/@rami.krispin/deploy-shiny-app-on-github-pages-b4cbd433bdc).
-The main steps to be executed in the R shell are:
-1. `install.packages(c("shinylive", "httpuv"))`
-2. `shinylive::export(appdir = "visual-analytics-shiny", destdir = "docs")`
-3. `httpuv::runStaticServer("docs/", port=8008)`
+
+- Initially, the packages `shinylive` and `httpuv` need to be installed: `install.packages(c("shinylive", "httpuv"))`.
+- Then, after changing the Shiny app, the changes are propagated to the `docs` directory with the following command: `shinylive::export(appdir = "visual-analytics-shiny", destdir = "docs")`
+- Optionally, to test it locally, run: `httpuv::runStaticServer("docs/", port=8008)`
