@@ -11,7 +11,12 @@ ui <- page_sidebar(
     tags$link(rel = "stylesheet", type = "text/css", href = "styles.css"),
     tags$script(src = "script.js")  # Link to the external JS file
   ),
-  
+
+  sidebar = div(
+    h4("Selected season(s) and episode(s):"),
+    verbatimTextOutput("selection_text")
+  ),
+    
   layout_column_wrap(
     width = 1/2,
     heights_equal = "row",
@@ -79,6 +84,28 @@ server <- function(input, output, session) {
     }
   })
 
+  output$selection_text <- renderText({
+    seasons <- input$season
+    episodes <- input$episode
+    
+    if (is.null(seasons)) {
+      season_text <- "None"
+    } else {
+      # Extract numbers from seasons
+      season_nums <- gsub("Season ", "", seasons)
+      season_text <- paste(season_nums, collapse = ", ")
+    }
+    
+    if (is.null(episodes) || length(episodes) == 0) {
+      episode_text <- "None"
+    } else {
+      # Extract numbers from episodes
+      episode_nums <- gsub("Episode ", "", episodes)
+      episode_text <- paste(episode_nums, collapse = ", ")
+    }
+    
+    paste("Seasons:", season_text, "\nEpisodes:", episode_text)
+  })
 }
 
 shinyApp(ui = ui, server = server)
