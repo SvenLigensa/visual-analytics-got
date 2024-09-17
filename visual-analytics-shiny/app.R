@@ -8,7 +8,7 @@ ui <- page_sidebar(
   # Links to external CSS and JS code
   tags$head(
     tags$link(rel = "stylesheet", type = "text/css", href = "styles.css"),
-    tags$script(src = "script.js")  # Link to the external JS file
+    tags$script(src = "script.js")
   ),
 
   tags$div(
@@ -19,10 +19,7 @@ ui <- page_sidebar(
   sidebar = div(
     card(
       card_header("Interact with Map"),
-      # numericInput("x_coord", "X Coordinate", value = 0, min = 0, max = 1),
-      # numericInput("y_coord", "Y Coordinate", value = 0, min = 0, max = 1),
-      # numericInput("diameter", "Circle Diameter", value = 0.1, min = 0, max = 1),
-      actionButton("draw_circle", label = tagList("Draw Circle on ", em("Pentos")))
+      actionButton("show_point", label = tagList("Show ", em("Pentos")))
     ),
     card(
       card_header("Selected season(s) and episode(s):"),
@@ -32,7 +29,7 @@ ui <- page_sidebar(
   
   card(
     div(id = "map-container",
-        tags$img(id = "map-img", src = "map_annotated.png"),
+        tags$img(id = "map-img", src = "map.png"),
         tags$svg(id = "map-canvas"),
     )
   ),
@@ -64,10 +61,20 @@ ui <- page_sidebar(
 server <- function(input, output, session) {
   
   # Draw circle when button is pressed
-  observeEvent(input$draw_circle, {
+  observeEvent(input$show_point, {
+    FONT_SIZE <- 20
     # Image (2170, 1490)
     # Pentos (910, 816)
-    runjs("drawCircle(910/2170, 861/1490, 0.01, '#67331e');")
+    location_string <- "Pentos"
+    point_x <- 910
+    point_y <- 861
+    diameter <- 0.005
+    color <- "#f5f5f5"
+    runjs(sprintf("drawCircle(%f, %f, %f, '%s');", 
+                  point_x/2170, point_y/1490, diameter, color))
+
+    runjs(sprintf("writeText(%f, %f, '%s', %f, '%s');", 
+                  (point_x + 10)/2170, (point_y - 10)/1490, color, FONT_SIZE, location_string))
   })
   
   # Show/hide episode selection based on selected season(s)
