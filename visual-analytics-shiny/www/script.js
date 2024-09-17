@@ -35,26 +35,39 @@ window.addEventListener('resize', updateSVGSize);
 // Ensure SVG is synced with the image dimensions on image load
 document.getElementById('map-img').addEventListener('load', updateSVGSize);
 
-function drawCircle(x, y, diameter, color) {
+function showCity(x, y, diameter, color, fontSize, label) {
+  // Image dimensions: (2170, 1490)
+  
   var svg = document.getElementById('map-canvas');
   var viewBox = svg.viewBox.baseVal;
+  
   var newCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-  newCircle.setAttribute('cx', x * viewBox.width);
-  newCircle.setAttribute('cy', y * viewBox.height);
+  newCircle.setAttribute('cx', x);
+  newCircle.setAttribute('cy', y);
   newCircle.setAttribute('r', 1/2 * diameter * Math.min(viewBox.width, viewBox.height));
   newCircle.setAttribute('fill', color);
   svg.appendChild(newCircle);
+  
+  var newText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  newText.textContent = label;
+  newText.setAttribute('x', x + 10);
+  newText.setAttribute('y', y - 10);
+  newText.setAttribute('font-size', fontSize);
+  newText.setAttribute('fill', color);
+  newText.setAttribute('class', 'got-font');
+  svg.appendChild(newText);
 }
 
-function writeText(x, y, color, fontSize, text) {
-    var svg = document.getElementById('map-canvas');
-    var viewBox = svg.viewBox.baseVal;
-    var newText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-    newText.setAttribute('x', x * viewBox.width);
-    newText.setAttribute('y', y * viewBox.height);
-    newText.textContent = text;
-    newText.setAttribute('font-size', fontSize);
-    newText.setAttribute('fill', color);
-    newText.setAttribute('class', 'got-font');
-    svg.appendChild(newText);
+function hideAnnotations() {
+  var svg = document.getElementById('map-canvas');
+  // Remove all circles...
+  var circles = svg.getElementsByTagName('circle');
+  while (circles.length > 0) {
+    circles[0].parentNode.removeChild(circles[0]);
+  }
+  // ... and text
+  var texts = svg.getElementsByTagName('text');
+  while (texts.length > 0) {
+    texts[0].parentNode.removeChild(texts[0]);
+  }
 }

@@ -19,7 +19,8 @@ ui <- page_sidebar(
   sidebar = div(
     card(
       card_header("Interact with Map"),
-      actionButton("show_point", label = tagList("Show ", em("Pentos")))
+      actionButton("show", label = tagList("Show ", em("Cities"))),
+      actionButton("hide", label = tagList("Hide ", em("Cities")))
     ),
     card(
       card_header("Selected season(s) and episode(s):"),
@@ -60,21 +61,18 @@ ui <- page_sidebar(
 
 server <- function(input, output, session) {
   
-  # Draw circle when button is pressed
-  observeEvent(input$show_point, {
-    FONT_SIZE <- 20
-    # Image (2170, 1490)
-    # Pentos (910, 816)
-    location_string <- "Pentos"
-    point_x <- 910
-    point_y <- 861
-    diameter <- 0.005
-    color <- "#f5f5f5"
-    runjs(sprintf("drawCircle(%f, %f, %f, '%s');", 
-                  point_x/2170, point_y/1490, diameter, color))
+  city_data <- read.csv("city_data.csv", stringsAsFactors = FALSE)
 
-    runjs(sprintf("writeText(%f, %f, '%s', %f, '%s');", 
-                  (point_x + 10)/2170, (point_y - 10)/1490, color, FONT_SIZE, location_string))
+  observeEvent(input$show, {
+    for (i in 1:nrow(city_data)) {
+      city <- city_data[i, ]
+      runjs(sprintf("showCity(%f, %f, %f, '%s', %f, '%s');", 
+                  city$point_x, city$point_y, city$diameter, city$color, city$font_size, city$location_string))
+    }
+  })
+  
+  observeEvent(input$hide, {
+    runjs("hideAnnotations();")
   })
   
   # Show/hide episode selection based on selected season(s)
