@@ -3,65 +3,61 @@ library(shinyjs)
 library(bslib)
 
 ui <- page_sidebar(
-  titlePanel("Game of Thrones Analyzer"),
   useShinyjs(),
-  
+
   # Links to external CSS and JS code
   tags$head(
     tags$link(rel = "stylesheet", type = "text/css", href = "styles.css"),
     tags$script(src = "script.js")  # Link to the external JS file
   ),
-  
-  sidebar = div(
-    h4("Selected season(s) and episode(s):"),
-    verbatimTextOutput("selection_text")
+
+  tags$div(
+    class = "got-font",
+    tags$h1("Game of Thrones Analyzer")
   ),
-  
-  layout_column_wrap(
-    width = 1/2,
-    heights_equal = "row",
-    
+
+  sidebar = div(
     card(
-      div(id = "map-container",
-          tags$img(id = "map-img", src = "westeros.jpg"),
-          tags$svg(id = "map-canvas"),
-      )
+      card_header("Interact with Map"),
+      # numericInput("x_coord", "X Coordinate", value = 0, min = 0, max = 1),
+      # numericInput("y_coord", "Y Coordinate", value = 0, min = 0, max = 1),
+      # numericInput("diameter", "Circle Diameter", value = 0.1, min = 0, max = 1),
+      actionButton("draw_circle", label = tagList("Draw Circle on ", em("Pentos")))
     ),
-    
     card(
-      card_header("Dummy Card"),
-      numericInput("x_coord", "X Coordinate", value = 0, min = 0, max = 1),
-      numericInput("y_coord", "Y Coordinate", value = 0, min = 0, max = 1),
-      numericInput("diameter", "Circle Diameter", value = 0.1, min = 0, max = 1),
-      actionButton("draw_circle", "Draw Circle"),
-      
-      card_footer("Graphic coming soon...")
+      card_header("Selected season(s) and episode(s):"),
+      verbatimTextOutput("selection_text")
     )
   ),
   
-  card(id = "bottom-card",
-       div(class = "full-horizontal-choices",
-           checkboxGroupInput(
-             inputId = "season",
-             label = "Select seasons and episodes of interest:",
-             choices = c("Season 1", "Season 2", "Season 3", "Season 4", 
-                         "Season 5", "Season 6", "Season 7", "Season 8"),
-             inline = TRUE,
-           ),
-           # Episode selection is always present but initially hidden
-           div(
-             id = "episode_selection",
-             style = "display: none;",  # Hide it initially
-             div(class = "full-horizontal-choices",
-                 checkboxGroupInput(
-                   inputId = "episode",
-                   label = NULL,
-                   choices = paste0("Episode ", 1:10),  # Episodes 1-10
-                   inline = TRUE
-                 )
-             )
-           )
-       ),
+  card(
+    div(id = "map-container",
+        tags$img(id = "map-img", src = "map_annotated.png"),
+        tags$svg(id = "map-canvas"),
+    )
+  ),
+  
+  div(class = "full-horizontal-choices",
+    checkboxGroupInput(
+      inputId = "season",
+      label = "Select seasons and episodes of interest:",
+      choices = c("Season 1", "Season 2", "Season 3", "Season 4", 
+                  "Season 5", "Season 6", "Season 7", "Season 8"),
+      inline = TRUE,
+    ),
+    # Episode selection is always present but initially hidden
+    div(
+      id = "episode_selection",
+      style = "display: none;",  # Hide it initially
+      div(class = "full-horizontal-choices",
+        checkboxGroupInput(
+          inputId = "episode",
+          label = NULL,
+          choices = paste0("Episode ", 1:10),  # Episodes 1-10
+          inline = TRUE
+        )
+      )
+    )
   )
 )
 
@@ -69,8 +65,9 @@ server <- function(input, output, session) {
   
   # Draw circle when button is pressed
   observeEvent(input$draw_circle, {
-    runjs(sprintf("drawCircle(%f, %f, %f, '#5e35b1');", 
-                  input$x_coord, input$y_coord, input$diameter))
+    # Image (2170, 1490)
+    # Pentos (910, 816)
+    runjs("drawCircle(910/2170, 861/1490, 0.01, '#67331e');")
   })
   
   # Show/hide episode selection based on selected season(s)
