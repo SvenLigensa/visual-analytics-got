@@ -13,10 +13,11 @@
   font-family: 'got', sans-serif;
 }
 
-/* Ensure the html and body take up full height */
-html, body {
+.navbar-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   height: 100%;
-  margin: 0;
 }
 
 /* Main container uses Flexbox to layout the sidebar and content */
