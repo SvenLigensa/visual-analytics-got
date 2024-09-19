@@ -9,14 +9,11 @@
   font-family: 'got';
   src: url('got.ttf') format('truetype');
 }
-
 .got-font {
   font-family: 'got', sans-serif;
 }
 
-/* Make it possible for the application to draw on top of the image 
- * The image and the canvas are children of the container.
- */
+/* Overlay a canvas over the map image. Both comopnents are children of the container */
 #map-container {
   position: relative;
   display: inline-block;
@@ -35,63 +32,3 @@
   pointer-events: none; /* Prevent interference with clicks */
   z-index: 10; /* Ensure canvas is on top of image */
 }
-
-#season {
-  margin-bottom: 0.5rem;
-}
-#episode {
-  margin-bottom: 0.5rem;
-}
-/* The checkboxes span the whole width and are aligned horizontally */
-.full-horizontal-choices .shiny-options-group {
-  width: 100%;
-  display: flex;
-  flex-wrap: nowrap;
-  gap: 0; /* Ensure no gap between buttons */
-}
-
-/* Default checkboxes are hidden */
-.full-horizontal-choices .shiny-options-group input[type='checkbox'] {
-  display: none;
-}
-
-.full-horizontal-choices .shiny-options-group label {
-    display: flex !important;
-    align-items: center;
-    justify-content: center;
-    min-width: min-content;  /* Don't shrink below the width of the text */
-    border: 1px solid var(--border-color);
-    background-color: var(--selection-1);
-    padding: 0 !important; /* Remove the padding in front of the text for proper centering */
-    width: 100%;
-    height: 30px;
-    white-space: nowrap;
-    cursor: pointer;
-    margin: 0;
-    border-left: none;
-    border-right: none;
-}
-
-/* First option has left border */
-.full-horizontal-choices .shiny-options-group label:first-child {
-    border-left: 1px solid var(--border-color);
-}
-/* Last option has right border */
-.full-horizontal-choices .shiny-options-group label:last-child {
-    border-right: 1px solid var(--border-color);
-}
-
-/* Color of button changes when selected */
-.full-horizontal-choices .shiny-options-group label.selected {
-  background-color: var(--selection-3);
-}
-/* Color of button changes on hover */
-.full-horizontal-choices .shiny-options-group label:hover {
-  background-color: var(--selection-2) ;
-}
-
-
-.fixed-height-card {
-      height: 250px;
-    }
-    

@@ -1,27 +1,3 @@
-$(document).on('shiny:inputchanged', function(event) {
-  if (event.name === 'season') {
-    $('input[name="season"]').each(function() {
-      var checkboxValue = $(this).val();
-      if ($(this).is(':checked')) {
-        $('label:contains(' + checkboxValue + ')').addClass('selected');
-      } else {
-        $('label:contains(' + checkboxValue + ')').removeClass('selected');
-      }
-    });
-  }
-  
-  if (event.name === 'episode') {
-    $('input[name="episode"]').each(function() {
-      var checkboxValue = $(this).val();
-      if ($(this).is(':checked')) {
-        $('label:contains(' + checkboxValue + ')').addClass('selected');
-      } else {
-        $('label:contains(' + checkboxValue + ')').removeClass('selected');
-      }
-    });
-  }
-});
-
 // Function to update SVG canvas size based on image dimensions
 function updateSVGSize() {
   var img = document.getElementById('map-img');
