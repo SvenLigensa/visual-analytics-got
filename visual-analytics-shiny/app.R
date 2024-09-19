@@ -14,7 +14,8 @@ ui <- page_navbar(
     useShinyjs(),
     tags$head(
       tags$link(rel = "stylesheet", type = "text/css", href = "styles.css"),
-      tags$script(src = "script.js")
+      tags$link(rel = "stylesheet", type = "text/css", href = "map-styles.css"),
+      tags$script(src = "script.js"),
     )
   ),
 
@@ -45,14 +46,12 @@ ui <- page_navbar(
           class = "map-card",
           actionButton(
             inputId = "toggle_fit",
-            label = tags$img(src = "fit_h.png", height = "40px"),
+            label = tags$img(src = "fit_h.png", height = "30px"),
             class = "fit-toggle-button"
           ),
           div(id = "map-container",
-            div(class = "map-wrapper",
-              tags$img(id = "map-img", src = "map.png"),
-              tags$svg(id = "map-canvas")
-            )
+            tags$img(id = "map-img", src = "map.png"),
+            tags$svg(id = "map-canvas")
           )
         )
       )
@@ -61,32 +60,49 @@ ui <- page_navbar(
 
   nav_panel(
     title = "Network",
-    card(
-      h2("Coming soon...")
+    layout_sidebar(
+      sidebar = div(
+        card(
+          card_header(h4("Show character")),
+          selectizeInput(
+            inputId = "character",
+            label = "Select character:",
+            choices = NULL,  # Choices will be updated server-side
+            multiple = FALSE,
+            options = list(
+              placeholder = 'Type to search...',
+              maxOptions = 5
+            )
+          ),
+          actionButton("show", label = "Show"),
+        )
+      ),
+      card(
+        card_footer("Coming soon...")
+      )
     )
   )
 )
 
 server <- function(input, output, session) {
-  
-  # Load city data
+
   city_data <- read.csv("city_data.csv", stringsAsFactors = FALSE)
   
-  # Update the selectizeInput choices
+  # Update selectizeInput choices
   locations <- city_data[["location"]]
   updateSelectizeInput(session, "location", choices = locations, server = TRUE)
+
+  updateSelectizeInput(session, "character", choices = c("Jon", "Arya", "Brandon"), server = TRUE)
   
-  # Initialize fit_mode reactive value
   fit_mode <- reactiveVal("Width")
   
-  # Observe the toggle_fit button
   observeEvent(input$toggle_fit, {
     if (fit_mode() == "Width") {
       fit_mode("Height")
       updateActionButton(
         session = session,
         inputId = "toggle_fit",
-        label = HTML('<img src="fit_w.png" height="40px">')
+        label = HTML('<img src="fit_w.png" height="30px">')
       )
       addClass("map-container", "fit-height")
       removeClass("map-container", "fit-width")
@@ -95,7 +111,7 @@ server <- function(input, output, session) {
       updateActionButton(
         session = session,
         inputId = "toggle_fit",
-        label = HTML('<img src="fit_h.png" height="40px">')
+        label = HTML('<img src="fit_h.png" height="30px">')
       )
       addClass("map-container", "fit-width")
       removeClass("map-container", "fit-height")
@@ -116,7 +132,7 @@ server <- function(input, output, session) {
     }
   })
   
-  # Hide annotations on the map
+  # Hide all annotations on the map
   observeEvent(input$hide, {
     runjs("hideAnnotations();")
   })
