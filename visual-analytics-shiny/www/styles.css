@@ -13,22 +13,116 @@
   font-family: 'got', sans-serif;
 }
 
-/* Overlay a canvas over the map image. Both comopnents are children of the container */
+/* Ensure the html and body take up full height */
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+/* Main container uses Flexbox to layout the sidebar and content */
+.main-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Content container will grow to fill the available space */
+.content-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Map card should fill the available space */
+.map-card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Map container */
 #map-container {
+  flex: 1;
   position: relative;
-  display: inline-block;
-  width: 100%;
+  overflow: auto; /* Allows scrolling */
 }
+
+/* Map wrapper ensures image and SVG are aligned */
+.map-wrapper {
+  position: relative;
+  display: flex;
+  flex-shrink: 0; /* Prevents shrinking */
+  align-items: flex-start; /* Align items at the top */
+}
+
+/* Map image styles */
 #map-img {
-  width: 100%; /* Image is as wide as the container */
-  height: auto; /* Preserve aspect ratio */
+  display: block;
+  width: auto;
+  height: auto;
 }
+
+/* SVG canvas overlays the image */
 #map-canvas {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%; /* SVG is as wide as the container */
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Adjust image size based on fit mode */
+.fit-width .map-wrapper {
+  width: 100%;
+  height: auto;
+}
+
+.fit-width #map-img {
+  width: 100%;
+  height: auto;
+}
+
+.fit-height .map-wrapper {
+  width: auto;
   height: 100%;
-  pointer-events: none; /* Prevent interference with clicks */
-  z-index: 10; /* Ensure canvas is on top of image */
+}
+
+.fit-height #map-img {
+  width: auto;
+  height: 100%;
+}
+
+/* Ensure the SVG canvas matches the image size */
+.map-wrapper #map-canvas {
+  width: 100%;
+  height: 100%;
+}
+
+.map-card {
+  position: relative;
+}
+
+.fit-toggle-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 20; /* Higher than map-canvas z-index */
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.fit-toggle-button img {
+  width: 30px;
+  height: 30px;
+}
+
+/* Remove default button styling */
+.fit-toggle-button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
 }
