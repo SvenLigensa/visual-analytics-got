@@ -89,3 +89,9 @@
 .full-horizontal-choices .shiny-options-group label:hover {
   background-color: var(--selection-2) ;
 }
+
+
+.fixed-height-card {
+      height: 250px;
+    }
+    

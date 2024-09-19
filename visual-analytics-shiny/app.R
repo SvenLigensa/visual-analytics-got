@@ -1,5 +1,6 @@
 library(shiny)
 library(shinyjs)
+library(shinyWidgets)
 library(bslib)
 
 ui <- page_sidebar(
@@ -18,14 +19,24 @@ ui <- page_sidebar(
 
   sidebar = div(
     card(
-      card_header("Interact with Map"),
-      actionButton("show", label = tagList("Show ", em("Cities"))),
-      actionButton("hide", label = tagList("Hide ", em("Cities")))
-    ),
-    card(
       card_header("Selected season(s) and episode(s):"),
       verbatimTextOutput("selection_text")
-    )
+    ),
+    card(
+      card_header(h4("Show locations")),
+      selectizeInput(
+        inputId = "location",
+        label = "Select locations:",
+        choices = c(),
+        multiple = TRUE,
+        options = list(
+          placeholder = 'Type to search...',
+          maxOptions = 5
+        )
+      ),
+      actionButton("show", label = tagList("Show")),
+      actionButton("hide", label = tagList("Hide"))
+    ),
   ),
   
   card(
@@ -60,14 +71,20 @@ ui <- page_sidebar(
 )
 
 server <- function(input, output, session) {
-  
+
   city_data <- read.csv("city_data.csv", stringsAsFactors = FALSE)
 
+  locations <- city_data[["location"]]
+  updateSelectizeInput(session, "location", choices = locations, server = TRUE)
+
   observeEvent(input$show, {
-    for (i in 1:nrow(city_data)) {
-      city <- city_data[i, ]
+    selected_cities <- city_data[city_data$location %in% input$location, ]
+    
+    # Loop through the filtered city_data and run the JavaScript code only for selected cities
+    for (i in 1:nrow(selected_cities)) {
+      city <- selected_cities[i, ]
       runjs(sprintf("showCity(%f, %f, %f, '%s', %f, '%s');", 
-                  city$point_x, city$point_y, city$diameter, city$color, city$font_size, city$location_string))
+                    city$point_x, city$point_y, city$diameter, city$color, city$font_size, city$location))
     }
   })
   
