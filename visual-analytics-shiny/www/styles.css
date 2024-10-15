@@ -16,3 +16,9 @@
   justify-content: center;
   height: 100%;
 }
+
+.sidebar-content {
+  height: 100%;
+  overflow-y: auto;  /* Allow scrolling if content is too large */
+  background-color: #f6f6f6; /* Optional: Customize the background color */
+}
