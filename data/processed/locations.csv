@@ -1,4 +1,4 @@
-location_id,location,region,x_coord,y_coord
+location_id,sub_location,location,x_coord,y_coord
 1,North of the Wall,North of the Wall,,
 2,The Lands of Always Winter,North of the Wall,,
 3,Cave Outside Wildling Camp,North of the Wall,,
@@ -104,11 +104,11 @@ location_id,location,region,x_coord,y_coord
 103,Dorne,Dorne,,
 104,Tower of Joy,Dorne,,
 105,The Water Gardens,Dorne,,
-106,Pentos,Pentos,910,861
+106,Pentos,Pentos,,
 107,Pentos to Volantis,Pentos,,
-108,Braavos,Braavos,910,629
+108,Braavos,Braavos,,
 109,The Summer Sea,The Summer Sea,,
-110,Volantis,Volantis,1180,1210
+110,Volantis,Volantis,,
 111,Volantis to Valyria,Volantis,,
 112,Valyria,Valyria,,
 113,Slaver's Bay,Valyria,,
