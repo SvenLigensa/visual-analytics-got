@@ -1,5 +1,6 @@
 from pathlib import Path
 from shiny import App, ui, reactive
+from shiny._main import run_app
 import pandas as pd
 
 from util import map
@@ -495,3 +496,4 @@ app_dir = Path(__file__).parent
 static_dir = app_dir / "static"
 data_dir = app_dir / "data"
 app = App(app_ui, server, static_assets=static_dir)
+run_app(app)

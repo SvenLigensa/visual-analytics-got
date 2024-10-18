@@ -1,0 +1,12 @@
+{
+    "https://api.shinyapps.io": {
+        "server_url": "https://api.shinyapps.io",
+        "filename": "/Users/svenligensa/Documents/Code/data_visualization/visual-analytics-got/visual-analytics-shiny",
+        "app_url": "https://sven-ligensa.shinyapps.io/got-analytics/",
+        "app_id": 13060783,
+        "app_guid": null,
+        "title": "got-analytics",
+        "app_mode": "python-shiny",
+        "app_store_version": 1
+    }
+}
