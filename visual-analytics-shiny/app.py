@@ -220,6 +220,7 @@ def server(input, output, session):
     character_data = pd.read_csv(data_dir / "characters.csv", dtype=str)
     episode_data = pd.read_csv(data_dir / "episodes.csv", dtype=str)
     time_data = pd.read_csv(data_dir / "time.csv")
+    time_data = pd.read_csv(data_dir / "time.csv")
 
     # Update selectize inputs
     characters = character_data["name"].tolist()
@@ -267,6 +268,32 @@ def server(input, output, session):
         server=True,
         session=session,
     )
+
+    
+    @render_widget
+    def screentime_linechart():
+        selected_characters = input.screentime_linechart_character()
+
+        if not selected_characters:
+            return px.line()
+
+        filtered_data = time_data[time_data['name'].isin(selected_characters)]
+
+        # Melt the DataFrame so that episodes become x-axis and times become y-axis
+        # 'name' remains as the identifier for each line
+        df_melted = filtered_data.melt(id_vars=['name'], var_name='episode', value_name='time')
+
+        # Ensure that the episode order is maintained correctly (e.g., S01E01, S01E02)
+        df_melted['episode'] = pd.Categorical(df_melted['episode'], categories=sorted(filtered_data.columns[1:]), ordered=True)
+
+        # Plot the data using Plotly
+        fig = px.line(df_melted, x='episode', y='time', color='name', title='Time Spent on Each Episode')
+
+        return fig
+
+
+
+    
 
     
     @render_widget
