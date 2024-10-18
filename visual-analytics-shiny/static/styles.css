@@ -22,3 +22,12 @@
   overflow-y: auto;  /* Allow scrolling if content is too large */
   background-color: #f6f6f6; /* Optional: Customize the background color */
 }
+
+body {
+  height: 100vh;
+}
+
+.full-size-card {
+  height: calc(100vh - 90px);
+  display: flex;
+}
