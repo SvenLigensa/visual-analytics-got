@@ -1,6 +1,8 @@
 from pathlib import Path
 from shiny import App, ui, reactive
 from shiny._main import run_app
+from shinywidgets import output_widget, render_widget
+import plotly.express as px
 import pandas as pd
 
 from util import map
@@ -9,6 +11,13 @@ app_ui = ui.page_fluid(
     ui.tags.div(
         {"class": "got-font", "style": "font-size: 32px; text-align: center;"},
         "Game of Thrones Analyzer",
+    ),
+    ui.tags.style(
+        """
+        body {
+            height: 100vh;
+        }
+        """
     ),
     ui.tags.head(
         ui.tags.link(rel="stylesheet", type="text/css", href="styles.css"),
@@ -127,7 +136,12 @@ app_ui = ui.page_fluid(
                             ),
                         )
                     )
-                )
+                ),
+                ui.div(
+                    {"class": "content-container"},
+                    ui.card(
+                    ),
+                ),
             ),
         ),
         ui.nav_panel(
@@ -167,7 +181,13 @@ app_ui = ui.page_fluid(
                             ),
                         )
                     )
-                )
+                ),
+                ui.div(
+                    {"class": "full-size-card"},
+                    ui.card(
+                        output_widget("screentime_linechart", width="100%")
+                    ),
+                ),
             ),
         ),
         ui.nav_panel(
@@ -180,7 +200,13 @@ app_ui = ui.page_fluid(
                             "Coming soon...",
                         )
                     )
-                )
+                ),
+                ui.div(
+                    {"class": "content-container"},
+                    ui.card(
+
+                    ),
+                ),
             ),
         ),
     ),
@@ -193,6 +219,7 @@ def server(input, output, session):
     location_data = pd.read_csv(data_dir / "locations.csv", dtype=str)
     character_data = pd.read_csv(data_dir / "characters.csv", dtype=str)
     episode_data = pd.read_csv(data_dir / "episodes.csv", dtype=str)
+    time_data = pd.read_csv(data_dir / "time.csv")
 
     # Update selectize inputs
     characters = character_data["name"].tolist()
@@ -241,6 +268,31 @@ def server(input, output, session):
         session=session,
     )
 
+    
+    @render_widget
+    def screentime_linechart():
+        selected_characters = input.screentime_linechart_character()
+
+        if not selected_characters:
+            return px.line()
+
+        filtered_data = time_data[time_data['name'].isin(selected_characters)]
+
+        # Melt the DataFrame so that episodes become x-axis and times become y-axis
+        # 'name' remains as the identifier for each line
+        df_melted = filtered_data.melt(id_vars=['name'], var_name='episode', value_name='time')
+
+        # Ensure that the episode order is maintained correctly (e.g., S01E01, S01E02)
+        df_melted['episode'] = pd.Categorical(df_melted['episode'], categories=sorted(filtered_data.columns[1:]), ordered=True)
+
+        # Plot the data using Plotly
+        fig = px.line(df_melted, x='episode', y='time', color='name', title='Time Spent on Each Episode')
+
+        return fig
+
+
+
+    
     @reactive.Effect
     @reactive.event(input.toggle_fit)
     async def toggle_fit():
