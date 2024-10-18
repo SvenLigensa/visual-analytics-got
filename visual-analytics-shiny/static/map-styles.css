@@ -1,6 +1,6 @@
 /* Content container will grow to fill the available space */
 .content-container {
-  height: calc(100vh - 90px);
+  height: calc(100vh - var(--header-height) - var(--navbar-height));
   display: flex;
   overflow: hidden;
 }
@@ -10,23 +10,23 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  padding: 2px;
 }
 
 #map-container {
   position: relative;
   display: flex;
-  flex-shrink: 0; /* Prevents shrinking */
-  align-items: flex-start; /* Align items at the top */
+  flex-shrink: 0;
+  align-items: flex-start;
   flex: 1;
-  overflow: auto; /* Allows scrolling */
+  overflow: auto; /* Allow scrolling in the container */
 }
 
 #map-img {
   display: block;
-  width: auto;
+  width: 100%;
   height: auto;
   pointer-events: none;
+  z-index: 1;
 }
 
 /* SVG canvas overlays the image */
@@ -34,8 +34,8 @@
   position: absolute;
   top: 0;
   left: 0;
-  z-index: 10;
   pointer-events: none;
+  z-index: 2;
 }
 
 /* Ensure the SVG canvas matches the image size */
@@ -44,43 +44,34 @@
   height: 100%;
 }
 
-.fit-toggle-button {
+.map-settings-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: absolute;
-  top: 20px;
+  cursor: pointer;
+  border: none;
+  background-color: white;
   left: 20px;
-  z-index: 20; /* Higher than map-canvas z-index */
-  background-color: white;
-  border: none;
+  width: 20px;
+  height: 20px;
   padding: 0;
-  cursor: pointer;
+  z-index: 3;
 }
-
-.zoom-in-button {
-  position: absolute;
-  top: 20px;
-  left: 60px;
-  z-index: 20; /* Higher than map-canvas z-index */
-  background-color: white;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-}
-
-.zoom-out-button {
-  position: absolute;
-  top: 20px;
-  left: 100px;
-  z-index: 20; /* Higher than map-canvas z-index */
-  background-color: white;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-}
-
 .map-settings-button:hover {
-  background-color: var(--light-gray);
+  background-color: var(--gray);
+}
+.fit-toggle-button {
+  top: 20px;
+}
+.zoom-in-button {
+  top: 45px;
+}
+.zoom-out-button {
+  top: 70px;
 }
 
+/* Remove any default padding or margin to display the main content as large as possible */
 .bslib-sidebar-layout > .main {
   padding: 0px;
 }

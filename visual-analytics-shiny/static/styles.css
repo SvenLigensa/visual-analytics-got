@@ -1,7 +1,9 @@
 :root {
-  --light-gray: #cacaca;
+  --light-gray: #f8f8f8;
+  --gray: #cacaca;
+  --header-height: 60px;
+  --navbar-height: 40px;
 }
-
 @font-face {
   font-family: 'got';
   src: url('got.ttf') format('truetype');
@@ -10,24 +12,42 @@
   font-family: 'got', sans-serif;
 }
 
-.navbar-header {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-}
-
-.sidebar-content {
-  height: 100%;
-  overflow-y: auto;  /* Allow scrolling if content is too large */
-  background-color: #f6f6f6; /* Optional: Customize the background color */
-}
-
 body {
   height: 100vh;
 }
 
-.full-size-card {
-  height: calc(100vh - 90px);
+h1 {
+  font-size: 48px;
+  text-align: center;
+  height: var(--header-height);
+  overflow: hidden;
   display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0%;
+  margin: 0%;
+}
+
+.navbar-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--navbar-height);
+}
+
+.sidebar-content {
+  height: calc(100vh - var(--header-height) - var(--navbar-height));
+  overflow-y: auto;
+  background-color: var(--light-gray);
+}
+
+/* Needed to make the card fill the whole height */
+.full-size-div {
+  height: calc(100vh - var(--header-height) - var(--navbar-height));
+  display: flex;
+}
+/* Needed to make the card fill the whole width */
+.full-size-div > .card {
+  width: 100%;
+  height: 100%;
 }
