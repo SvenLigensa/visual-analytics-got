@@ -1,7 +1,7 @@
 import pandas as pd
 
 def filter_map_data(name, episode_start, episode_end):
-    time_location_data = pd.read_csv("visual-analytics-shiny/data/time_location.csv")
+    time_location_data = pd.read_csv("visual-analytics-shiny/data/time_location_post.csv")
     # Filter name
     data = time_location_data[time_location_data["name"] == name]
     # Filter episode range

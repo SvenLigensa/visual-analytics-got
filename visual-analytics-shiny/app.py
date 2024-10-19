@@ -1,9 +1,10 @@
 from pathlib import Path
-from shiny import App, ui, reactive
+from shiny import App, ui, reactive, render
 from shiny._main import run_app
 from shinywidgets import output_widget, render_widget
 import plotly.express as px
 import pandas as pd
+import matplotlib.pyplot as plt
 
 from util import map
 
@@ -191,6 +192,52 @@ app_ui = ui.page_fluid(
             ),
         ),
         ui.nav_panel(
+            "Screentime Streamgraph",
+            ui.layout_sidebar(
+                ui.sidebar(
+                    ui.div(
+                        ui.card(
+                            ui.card_header(ui.h4("Settings")),
+                            ui.input_selectize(
+                                "screentime_streamgraph_character",
+                                "Select characters:",
+                                choices=[],  # Updated server-side
+                                multiple=True,
+                                options={
+                                    "placeholder": "Type to search...",
+                                    "maxOptions": 5,
+                                },
+                            ),
+                            ui.input_selectize(
+                                "streamgraph_episode_start",
+                                "Select start episode:",
+                                choices=[],  # Updated server-side
+                                multiple=False,
+                                options={
+                                    "maxOptions": 5,
+                                },
+                            ),
+                            ui.input_selectize(
+                                "streamgraph_episode_end",
+                                "Select end episode:",
+                                choices=[],  # Updated server-side
+                                multiple=False,
+                                options={
+                                    "maxOptions": 5,
+                                },
+                            ),
+                        )
+                    )
+                ),
+                ui.div(
+                    {"class": "full-size-div"},
+                    ui.card(
+                        ui.output_plot("screentime_streamgraph", width="100%")
+                    ),
+                ),
+            ),
+        ),
+        ui.nav_panel(
             "Screentime Heatmap",
             ui.layout_sidebar(
                 ui.sidebar(
@@ -220,6 +267,7 @@ def server(input, output, session):
     character_data = pd.read_csv(data_dir / "characters.csv", dtype=str)
     episode_data = pd.read_csv(data_dir / "episodes.csv", dtype=str)
     time_data = pd.read_csv(data_dir / "time.csv")
+    time_data_alt = pd.read_csv(data_dir / "characters_time.csv")
 
     # Update selectize inputs
     characters = character_data["name"].tolist()
@@ -232,6 +280,12 @@ def server(input, output, session):
     )
     ui.update_selectize(
         "screentime_linechart_character",
+        choices=characters,
+        server=True,
+        session=session,
+    )
+    ui.update_selectize(
+        "screentime_streamgraph_character",
         choices=characters,
         server=True,
         session=session,
@@ -267,12 +321,86 @@ def server(input, output, session):
         server=True,
         session=session,
     )
+    ui.update_selectize(
+        "streamgraph_episode_start",
+        choices=episodes,
+        selected="S01E01",
+        server=True,
+        session=session,
+    )
+    ui.update_selectize(
+        "streamgraph_episode_end",
+        choices=episodes,
+        selected="S08E06",
+        server=True,
+        session=session,
+    )
+
+    @render.plot(alt="Streamgraph showing the screentime of selected characters")
+    def screentime_streamgraph():
+        selected_characters = input.screentime_streamgraph_character()
+        if not selected_characters:
+            fig, ax = plt.subplots(figsize=(10, 6))
+            ax.text(0.5, 0.5, 'Please select at least one character.', horizontalalignment='center', verticalalignment='center')
+            return fig
+
+        print(selected_characters)
+
+        # Filter data for selected characters
+        filtered_data = time_data_alt[time_data_alt['name'].isin(selected_characters)]
+        # Ensure episodes are sorted correctly
+        episodes = sorted(episode_data['identifier'].unique())
+        episode_indices = {ep: idx for idx, ep in enumerate(episodes)}
+        filtered_data['episode_idx'] = filtered_data['episode'].map(episode_indices)
+        # Pivot the data to have characters as rows and episodes as columns
+        pivot_df = filtered_data.pivot_table(index='name', columns='episode_idx', values='time', fill_value=0)
+        # Ensure all episodes are represented
+        pivot_df = pivot_df.reindex(columns=range(len(episodes)), fill_value=0)
+        # Prepare data for stackplot
+        x = range(len(episodes))
+        y = pivot_df.values
+        # Create the streamgraph
+        fig, ax = plt.subplots(figsize=(12, 6))
+        ax.stackplot(
+            x,
+            y,
+            labels=pivot_df.index,
+            baseline='wiggle',
+            colors=plt.cm.tab20.colors[:len(pivot_df.index)]
+        )
+
+        # Customize the plot
+        ax.set_xticks(x)
+        ax.set_xticklabels([episodes[i] for i in x], rotation=45, ha='right')
+        ax.set_xlim(0, len(episodes)-1)
+        ax.set_xlabel('Episode')
+        ax.set_ylabel('Screen Time')
+        ax.set_title('Screentime Streamgraph')
+        ax.legend(loc='upper left', bbox_to_anchor=(1, 1))
+
+        plt.tight_layout()
+        return fig
 
     @render_widget
     def screentime_linechart():
         selected_characters = input.screentime_linechart_character()
         if not selected_characters:
-            return px.line()
+            fig = px.line()
+            fig.add_annotation(
+                x=0.5,
+                y=0.5,
+                text='Please select at least one character.',
+                showarrow=False,
+                font=dict(size=12),
+                xref='paper',
+                yref='paper',
+                xanchor='center',
+                yanchor='middle'
+            )
+            # Make the axes range from 0 to 1 to avoid showing the default range
+            fig.update_xaxes(range=[0, 1])
+            fig.update_yaxes(range=[0, 1])
+            return fig
         filtered_data = time_data[time_data['name'].isin(selected_characters)]
         # Melt the DataFrame so that episodes become x-axis and times become y-axis
         # 'name' remains as the identifier for each line
@@ -351,9 +479,6 @@ def server(input, output, session):
                 location_data,
                 on="sub_location",
                 how="left",
-            )
-            character_locations_aggregated = character_locations_aggregated.drop(
-                columns=["location_id"]
             )
 
             for _, row in character_locations_aggregated.iterrows():
@@ -447,9 +572,6 @@ def server(input, output, session):
                 location_data,
                 on="sub_location",
                 how="left",
-            )
-            character_locations_aggregated = character_locations_aggregated.drop(
-                columns=["location_id"]
             )
 
             for _, row in character_locations_aggregated.iterrows():

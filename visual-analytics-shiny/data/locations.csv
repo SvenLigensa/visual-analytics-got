@@ -1,118 +1,85 @@
-location_id,location,sub_location,x_coord,y_coord
-1,North of the Wall,North of the Wall,,
-2,North of the Wall,The Lands of Always Winter,,
-3,North of the Wall,Cave Outside Wildling Camp,,
-4,North of the Wall,Wildling Camp,,
-5,North of the Wall,Frostfang Mountains,,
-6,North of the Wall,The Three-Eyed Raven,,
-7,North of the Wall,Outside the Three-Eyed Raven,,
-8,North of the Wall,Fist of the First Men,,
-9,North of the Wall,Wildlings March South,,
-10,North of the Wall,Nightswatch March South,,
-11,North of the Wall,Hardhome,,
-12,North of the Wall,Craster's Keep,,
-13,North of the Wall,The Haunted Forest,628,66
-14,North of the Wall,South to the Wall,,
-15,North of the Wall,Destroyed Cabin,,
-16,North of the Wall,Near Nightfort,,
-17,North of the Wall,The Wall,559,86
-18,The Wall,The Wall,559,86
-19,The Wall,Nightfort,,
-20,The Wall,Eastwatch,635,100
-21,The Wall,Top of the Wall,,
-22,The Wall,Castle Black,586,100
-23,The Wall,Outside Castle Black,,
-24,The Wall,Mole's Town,,
-25,The Wall,The Gift,,
-26,The North,The North,,
-27,The North,The Gift,,
-28,The North,Last Hearth,,
-29,The North,Bear Island,,
-30,The North,North to the Wall,,
-31,The North,Deepwood Motte,,
-32,The North,Stannis Baratheon's Camp,,
-33,The North,The Wolfswood,,
-34,The North,Outside Winterfell,,
-35,The North,Winterfell,494,393
-36,The North,Winter Town,,
-37,The North,The Dreadfort,,
-38,The North,The Kingsroad South to King's Landing,,
-39,The North,Moat Cailin,,
-40,The North,The Neck,,
-41,The Shivering Sea,The Shivering Sea,939,418
-42,The Vale,The Vale,,
-43,The Vale,Runestone,,
-44,The Vale,The Eyrie,,
-45,The Vale,To The Eyrie,,
-46,The Vale,Eastern Road,,
-47,The Vale,To the Westerlands,,
-48,The Vale,Outside the Inn,,
-49,The Vale,Inn,,
-50,The Vale,To The Vale,,
-51,The Vale,Coast of the Vale,,
-52,The Iron Islands,The Iron Islands,,
-53,The Iron Islands,Pyke,,
-54,The Iron Islands,Lordsport,,
-55,The Sunset Sea,The Sunset Sea,,
-56,The Westerlands,The Westerlands,,
-57,The Westerlands,Casterly Rock,,
-58,The Westerlands,Outside Casterly Rock,,
-59,The Westerlands,Oxcross,,
-60,The Westerlands,Lannister Camp,,
-61,The Westerlands,Camp of the North,,
-62,The Westerlands,To King's Landing,,
-63,The Riverlands,The Riverlands,,
-64,The Riverlands,The Twins,,
-65,The Riverlands,Away from the Twins,,
-66,The Riverlands,To The Twins,,
-67,The Riverlands,To The Eyrie,,
-68,The Riverlands,Lannister Camp,,
-69,The Riverlands,Battlefield,,
-70,The Riverlands,Camp of the North,,
-71,The Riverlands,Village,,
-72,The Riverlands,The Kingsroad,,
-73,The Riverlands,Forest,,
-74,The Riverlands,Crossroads Inn,566,713
-75,The Riverlands,Hollow Hill,456,688
-76,The Riverlands,East to King's Landing,456,786
-77,The Riverlands,Riverrun,450,720
-78,The Riverlands,Red Fork,469,704
-79,The Riverlands,To Riverrun,,
-81,The Riverlands,To Harrenhal,537,718
-82,The Riverlands,Harrenhal,553,748
-83,The Riverlands,Outside Harrenhal,543,737
-84,The Riverlands,South to King's Landing,581,783
-85,The Narrow Sea,The Narrow Sea,781,891
-87,The Crownlands,Dragonstone,728,798
-88,The Crownlands,Castle Stokeworth,590,820
-89,The Crownlands,Blackwater Bay,690,838
-90,The Crownlands,King's Landing,616,860
-91,The Crownlands,Outside King's Landing,605,840
-92,The Crownlands,The Kingswood,630,900
-93,The Crownlands,Blackwater Rush,455,809
-95,The Stormlands,Tarth,757,963
-97,The Stormlands,Storm's End,680,980
-99,The Reach,Highgarden,379,1025
-101,The Reach,Horn Hill,374,1064
-102,The Reach,Oldtown,287,1113
-103,Dorne,Dorne,563,1167
-104,Dorne,Tower of Joy,430,1098
-105,Dorne,The Water Gardens,742,1179
-106,Pentos,Pentos,910,861
-107,Pentos,Pentos to Volantis,992,1217
-108,Braavos,Braavos,906,580
-109,The Summer Sea,The Summer Sea,813,1354
-110,Volantis,Volantis,1180,1210
-111,Volantis,Volantis to Valyria,1242,1282
-112,Valyria,Valyria,1376,1418
-113,Valyria,Slaver's Bay,1376,1418
-114,The Dothraki Sea,The Dothraki Sea,1664,888
-115,The Dothraki Sea,Dothraki Camp,1664,888
-116,The Dothraki Sea,Lhazareen Village,1877,1039
-117,Meereen,Meereen,1709,1090
-119,Yunkai,Yunkai,1668,1138
-121,Astapor,Astapor,1646,1236
-123,Vaes Dothrak,Vaes Dothrak,2007,768
-124,The Red Waste,The Red Waste,1958,1154
-125,The Red Waste,The Desert,1958,1154
-126,Qarth,Qarth,2153,1353
+location,sub_location,x_coord,y_coord
+North of the Wall,The Lands of Always Winter,357,28
+North of the Wall,Wildling Camp,406,22
+North of the Wall,Frostfang Mountains,436,26
+North of the Wall,The Three-Eyed Raven,563,42
+North of the Wall,Fist of the First Men,502,34
+North of the Wall,Hardhome,664,28
+North of the Wall,Craster's Keep,556,61
+North of the Wall,The Haunted Forest,598,62
+North of the Wall,At The Wall,559,86
+The Wall,Nightfort,574,100
+The Wall,Eastwatch,635,100
+The Wall,Top of the Wall,604,90
+The Wall,Castle Black,586,100
+The Wall,Mole's Town,595,105
+The North,The Gift,610,130
+The North,Last Hearth,612,200
+The North,Bear Island,374,173
+The North,North to the Wall,540,200
+The North,Deepwood Motte,395,246
+The North,Stannis Baratheon's Camp,560,125
+The North,The Wolfswood,468,269
+The North,Winterfell,494,316
+The North,The Dreadfort,624,282
+The North,The Kingsroad South to King's Landing,502,346
+The North,Moat Cailin,502,458
+The North,The Neck,505,501
+The Shivering Sea,The Shivering Sea,939,418
+The Vale,Runestone,758,670
+The Vale,The Eyrie,645,665
+The Vale,Eastern Road,600,700
+The Vale,Inn,596,710
+The Vale,Coast of the Vale,736,649
+The Iron Islands,Pyke,298,678
+The Iron Islands,Lordsport,303,666
+The Sunset Sea,The Sunset Sea,175,900
+The Westerlands,Casterly Rock,297,810
+The Westerlands,Oxcross,374,769
+The Westerlands,Lannister Camp,369,799
+The Westerlands,Camp of the North,411,785
+The Westerlands,To King's Landing,517,781
+The Riverlands,The Riverlands,483,689
+The Riverlands,The Twins,466,604
+The Riverlands,To The Eyrie,576,671
+The Riverlands,The Kingsroad,511,651
+The Riverlands,Crossroads Inn,566,713
+The Riverlands,Hollow Hill,456,688
+The Riverlands,East to King's Landing,456,786
+The Riverlands,Riverrun,450,720
+The Riverlands,Red Fork,469,704
+The Riverlands,To Harrenhal,537,718
+The Riverlands,Harrenhal,553,748
+The Riverlands,Outside Harrenhal,543,737
+The Riverlands,South to King's Landing,581,783
+The Narrow Sea,The Narrow Sea,781,891
+The Crownlands,Dragonstone,728,798
+The Crownlands,Castle Stokeworth,590,820
+The Crownlands,Blackwater Bay,690,838
+The Crownlands,King's Landing,616,860
+The Crownlands,Outside King's Landing,605,840
+The Crownlands,The Kingswood,630,900
+The Crownlands,Blackwater Rush,455,809
+The Stormlands,Tarth,757,963
+The Stormlands,Storm's End,680,980
+The Reach,Highgarden,379,1025
+The Reach,Horn Hill,374,1064
+The Reach,Oldtown,287,1113
+Dorne,Dorne,563,1167
+Dorne,Tower of Joy,430,1098
+Dorne,The Water Gardens,742,1179
+Pentos,Pentos,910,861
+Pentos,Pentos to Volantis,992,1217
+Braavos,Braavos,906,580
+The Summer Sea,The Summer Sea,813,1354
+Volantis,Volantis,1180,1210
+Volantis,Volantis to Valyria,1242,1282
+Valyria,Valyria,1376,1418
+The Dothraki Sea,The Dothraki Sea,1664,888
+The Dothraki Sea,Lhazar,1877,1039
+Meereen,Meereen,1709,1090
+Yunkai,Yunkai,1668,1138
+Astapor,Astapor,1646,1236
+Vaes Dothrak,Vaes Dothrak,2007,768
+The Red Waste,The Red Waste,1958,1154
+Qarth,Qarth,2153,1353
