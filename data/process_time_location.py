@@ -1,7 +1,7 @@
 import json
 import pandas as pd
 
-with open("../raw/episodes.json") as file:
+with open("raw/episodes.json") as file:
     data = json.load(file)
 
 data_list = []
@@ -31,12 +31,12 @@ for episode in data["episodes"]:
 df = pd.DataFrame(data_list)
 
 # Use episode identifiers instead of titles
-episodes = pd.read_csv("episodes.csv")
+episodes = pd.read_csv("processed/episodes.csv")
 episode_titles = episodes["title"].tolist()
 episode_identifiers = episodes["identifier"].tolist()
 for i, title in enumerate(episode_titles):
     df["episode"] = df["episode"].str.replace(title, episode_identifiers[i])
 
 df = df[["name", "episode", "location", "sub_location", "time"]]
-df.to_csv("time_location.csv", index=False)
+df.to_csv("processed/time_location.csv", index=False)
 print(df)

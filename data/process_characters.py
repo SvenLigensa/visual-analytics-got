@@ -1,7 +1,7 @@
 import json
 import pandas as pd
 
-with open("../raw/characters.json") as file:
+with open("raw/characters.json") as file:
     data = json.load(file)
 
 data_list = []
@@ -20,5 +20,5 @@ for character in data["characters"]:
 
 df = pd.DataFrame(data_list)
 df = df[["character_id", "name", "house", "image"]]
-df.to_csv("characters.csv", index=False)
+df.to_csv("processed/characters.csv", index=False)
 print(df)
