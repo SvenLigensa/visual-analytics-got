@@ -1,14 +1,19 @@
-[![GitHub Pages Link](https://img.shields.io/badge/Website-GitHub_Pages-2196f3)](https://svenligensa.github.io/visual-analytics-got/)
-[![Build and Deploy Shiny App](https://github.com/SvenLigensa/visual-analytics-got/actions/workflows/build-and-deploy.yml/badge.svg)](https://github.com/SvenLigensa/visual-analytics-got/actions/workflows/build-and-deploy.yml)
-
 # Visual Analytics app for Game Of Thrones
 
-## Deployment
+Run the **Shiny Python** app locally by executing the `app.py` script from the root folder (`visual-analytics-got`).
 
-This app is deployed on GitHub pages by following [this tutorial](https://medium.com/@rami.krispin/deploy-shiny-app-on-github-pages-b4cbd433bdc).
+## Run Locally
 
-- Initially, the packages `shinylive` and `httpuv` need to be installed: `install.packages(c("shinylive", "httpuv"))`.
-- Then, after changing the Shiny app, the changes are propagated to the `docs` directory with the following command: `shinylive::export(appdir = "visual-analytics-shiny", destdir = "docs")`
-- Optionally, to test it locally, run: `httpuv::runStaticServer("docs/", port=8008)`
+*Without* Docker:
+- `$ shiny run --reload visual-analytics-shiny/app.py`
 
-- Run the Shiny Python app locally: `shiny run --reload visual-analytics-shiny/app.py`
+With *Docker* (Dockerfile set up following [this tutorial](https://hosting.analythium.io/containerizing-shiny-for-python-and-shinylive-applications/)):
+1. `$ docker build -t visual-analytics-got .`
+2. `$ docker run -p 8080:8080 visual-analytics-got`
+
+## TODOs
+
+- Improve the linechart to use `characters_time.csv` instead of `time.csv`
+    - Then, remove `time.csv` and `X_process_time.py`
+- Improve visual aesthetics of Linechart and Streamgraph
+- Add hover effects for Map

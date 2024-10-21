@@ -1,12 +1,23 @@
 from pathlib import Path
 from shiny import App, ui, reactive, render
-from shiny._main import run_app
+# from shiny._main import run_app
 from shinywidgets import output_widget, render_widget
 import plotly.express as px
 import pandas as pd
 import matplotlib.pyplot as plt
 
 from util import map
+
+app_dir = Path(__file__).parent
+static_dir = app_dir / "static"
+data_dir = app_dir / "data"
+
+location_data = pd.read_csv(data_dir / "locations.csv", dtype=str)
+character_data = pd.read_csv(data_dir / "characters.csv", dtype=str)
+episode_data = pd.read_csv(data_dir / "episodes.csv", dtype=str)
+time_data = pd.read_csv(data_dir / "time.csv")
+time_data_alt = pd.read_csv(data_dir / "characters_time.csv")
+time_location_data = pd.read_csv(data_dir / "time_location_post.csv")
 
 app_ui = ui.page_fluid(
     ui.tags.h1(
@@ -262,13 +273,6 @@ app_ui = ui.page_fluid(
 
 def server(input, output, session):
 
-    # Read data
-    location_data = pd.read_csv(data_dir / "locations.csv", dtype=str)
-    character_data = pd.read_csv(data_dir / "characters.csv", dtype=str)
-    episode_data = pd.read_csv(data_dir / "episodes.csv", dtype=str)
-    time_data = pd.read_csv(data_dir / "time.csv")
-    time_data_alt = pd.read_csv(data_dir / "characters_time.csv")
-
     # Update selectize inputs
     characters = character_data["name"].tolist()
     episodes = episode_data["identifier"].tolist()
@@ -452,7 +456,7 @@ def server(input, output, session):
             await session.send_custom_message(
                 "remove_svg_elements",
                 {
-                    "type": f"c-{character["character_id"].values[0]}",
+                    "type": f"c-{character['character_id'].values[0]}",
                 },
             )
 
@@ -469,7 +473,7 @@ def server(input, output, session):
             travel_paths = input.show_travel_paths()
 
             (character_locations, character_locations_aggregated, character_travels) = (
-                map.filter_map_data(name, episode_start, episode_end)
+                map.filter_map_data(name, episode_start, episode_end, time_location_data)
             )
 
             # Get x_coord and y_coord of every sub_location by performing a join of
@@ -655,9 +659,5 @@ def server(input, output, session):
 zoom_level = 100
 fit_mode = "w"
 previous_selected_characters = set()
-
-app_dir = Path(__file__).parent
-static_dir = app_dir / "static"
-data_dir = app_dir / "data"
 app = App(app_ui, server, static_assets=static_dir)
-run_app(app)
+# run_app(app)
