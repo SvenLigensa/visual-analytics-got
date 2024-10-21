@@ -2,8 +2,9 @@
 const BASE_RADIUS = 5;
 const FONT_SIZE = 10;
 
-const CIRCLE_COLOR = '#a4dcff';
-const TEXT_COLOR = '#f5f5f5';
+const CIRCLE_COLOR = 'hsla(246 70% 70% / 0.5)'; // 50% opacity
+const POPOUT_BACKGROUND_COLOR = 'hsl(246 70% 70%)';
+const TEXT_COLOR = 'hsl(360 0% 94%)';
 
 document.addEventListener('DOMContentLoaded', function() {
   Shiny.addCustomMessageHandler('remove_svg_elements', function(message) {
@@ -40,7 +41,6 @@ document.addEventListener('DOMContentLoaded', function() {
     newCircle.setAttribute('cy', y);
     newCircle.setAttribute('r', show_time ? time/100: BASE_RADIUS);
     newCircle.setAttribute('fill', CIRCLE_COLOR);
-    newCircle.setAttribute('fill-opacity', 0.5);
     newCircle.setAttribute('class', `c-${character_id}`);
     svg.appendChild(newCircle);
   
@@ -53,31 +53,23 @@ document.addEventListener('DOMContentLoaded', function() {
     newText.setAttribute('dominant-baseline', 'central');
     newText.setAttribute('fill', TEXT_COLOR);
     newText.setAttribute('class', `got-font c-${character_id}`);
+    newText.setAttribute('pointer-events', 'visiblePainted');  // Important to enable hover events
     svg.appendChild(newText);
 
-
-    console.log("showLocation function called with label:", label);
-
-    // Add a popup with the character name
     var popup;
-
     newText.addEventListener('mouseover', function () {
-      console.log("Hover over", label);
-
-      // Get the position of the text element relative to the viewport
       var rect = newText.getBoundingClientRect();
-
       popup = document.createElement('div');
-      popup.textContent = label;
+      popup.innerHTML = `<b>${label}</b><p>${character_id}: ${time} seconds</p>`;
       popup.style.position = 'absolute';
       popup.style.left = `${rect.left}px`;
       popup.style.top = `${rect.top - 30}px`;
-      popup.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
-      popup.style.color = 'white';
+      popup.style.backgroundColor = POPOUT_BACKGROUND_COLOR;
+      popup.style.color = TEXT_COLOR;
       popup.style.padding = '5px';
       popup.style.borderRadius = '5px';
       popup.style.pointerEvents = 'none';
-      popup.style.zIndex = 1000;
+      popup.style.zIndex = 10;
       document.body.appendChild(popup);
     });
 
@@ -98,7 +90,6 @@ document.addEventListener('DOMContentLoaded', function() {
     newLine.setAttribute('x2', to_x);
     newLine.setAttribute('y2', to_y);
     newLine.setAttribute('stroke', CIRCLE_COLOR);
-    newLine.setAttribute('stroke-opacity', 0.5);
     newLine.setAttribute('stroke-width', num_travels);
     newLine.setAttribute('class', `c-${character_id}`);
     svg.appendChild(newLine);
