@@ -3,3 +3,5 @@ pandas
 shinywidgets
 matplotlib
 plotly
+numpy
+scipy

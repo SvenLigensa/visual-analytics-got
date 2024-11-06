@@ -16,4 +16,9 @@ With *Docker* (Dockerfile set up following [this tutorial](https://hosting.analy
 - Improve the linechart to use `characters_time.csv` instead of `time.csv`
     - Then, remove `time.csv` and `X_process_time.py`
 - Improve visual aesthetics of Linechart and Streamgraph
-- Add hover effects for Map
+
+- Map
+    - Add hover effects: Reduce opacity of all other locations
+    - Slider to let user determine the opacity of the background
+    - Add support for multiple characters: Multiple colors, display sensibly
+    - Add arrows to lines to show direction

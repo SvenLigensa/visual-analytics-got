@@ -6,6 +6,10 @@ import plotly.express as px
 import pandas as pd
 import matplotlib.pyplot as plt
 
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.interpolate import make_interp_spline
+
 from util import map
 
 app_dir = Path(__file__).parent
@@ -79,6 +83,16 @@ app_ui = ui.page_fluid(
                             ),
                             ui.input_checkbox(
                                 "show_travel_paths", "Show travel paths", value=True
+                            ),
+                            # Slider between 0 and 100 for opacity of picture
+                            ui.input_slider(
+                                "map_opacity",
+                                "Opacity of the map:",
+                                min=0,
+                                max=100,
+                                value=100,
+                                step=5,
+                                ticks=False,
                             ),
                         )
                     )
@@ -360,20 +374,23 @@ def server(input, output, session):
         pivot_df = filtered_data.pivot_table(index='name', columns='episode_idx', values='time', fill_value=0)
         # Ensure all episodes are represented
         pivot_df = pivot_df.reindex(columns=range(len(episodes)), fill_value=0)
-        # Prepare data for stackplot
+
         x = range(len(episodes))
         y = pivot_df.values
-        # Create the streamgraph
+        
+        # Use interpolated values to make streamgraph smooth
+        x_new = np.linspace(min(x), max(x), 500)  # Increase number of points => Smoother
+        y_smooth = make_interp_spline(x, y, axis=1)(x_new)
+        
         fig, ax = plt.subplots(figsize=(12, 6))
         ax.stackplot(
-            x,
-            y,
+            x_new,
+            y_smooth,
             labels=pivot_df.index,
             baseline='wiggle',
             colors=plt.cm.tab20.colors[:len(pivot_df.index)]
         )
-
-        # Customize the plot
+        
         ax.set_xticks(x)
         ax.set_xticklabels([episodes[i] for i in x], rotation=45, ha='right')
         ax.set_xlim(0, len(episodes)-1)
@@ -381,7 +398,7 @@ def server(input, output, session):
         ax.set_ylabel('Screen Time')
         ax.set_title('Screentime Streamgraph')
         ax.legend(loc='upper left', bbox_to_anchor=(1, 1))
-
+        
         plt.tight_layout()
         return fig
 
@@ -416,6 +433,14 @@ def server(input, output, session):
         return fig
 
     @reactive.Effect
+    @reactive.event(input.map_opacity)
+    async def handle_map_opacity_change():
+        await session.send_custom_message(
+            "set_map_opacity",
+            {"opacity": input.map_opacity() / 100},
+        )
+
+    @reactive.Effect
     @reactive.event(input.toggle_fit)
     async def toggle_fit():
         global zoom_level, fit_mode
@@ -442,6 +467,9 @@ def server(input, output, session):
     @reactive.Effect
     @reactive.event(input.map_character)
     async def handle_map_character_change():
+        selected_characters = list(input.map_character())
+        print(selected_characters)
+
         global previous_selected_characters
         # Current selection from the input
         current_selected_characters = set(input.map_character())
@@ -485,20 +513,6 @@ def server(input, output, session):
                 how="left",
             )
 
-            for _, row in character_locations_aggregated.iterrows():
-                if pd.isna(row["x_coord"]) or pd.isna(row["y_coord"]):
-                    continue
-                await session.send_custom_message(
-                    "show_location",
-                    {
-                        "character_id": character_id,
-                        "sub_location": row["sub_location"],
-                        "x_coord": row["x_coord"],
-                        "y_coord": row["y_coord"],
-                        "time": row["time"],
-                        "show_time": time_spend,
-                    },
-                )
             if travel_paths:
                 for _, row in character_travels.iterrows():
                     # Get the x and y coordinates of the "from" and "to" locations
@@ -535,6 +549,34 @@ def server(input, output, session):
                             "num_travels": row["num_travels"],
                         },
                     )
+            for _, row in character_locations_aggregated.iterrows():
+                    if pd.isna(row["x_coord"]) or pd.isna(row["y_coord"]):
+                        continue
+                    await session.send_custom_message(
+                        "show_location_bubble",
+                        {
+                            "character_id": character_id,
+                            "sub_location": row["sub_location"],
+                            "x_coord": row["x_coord"],
+                            "y_coord": row["y_coord"],
+                            "time": row["time"],
+                            "show_time": time_spend,
+                        },
+                    )
+            for _, row in character_locations_aggregated.iterrows():
+                    if pd.isna(row["x_coord"]) or pd.isna(row["y_coord"]):
+                        continue
+                    await session.send_custom_message(
+                        "show_location_label",
+                        {
+                            "character_id": character_id,
+                            "sub_location": row["sub_location"],
+                            "x_coord": row["x_coord"],
+                            "y_coord": row["y_coord"],
+                            "time": row["time"],
+                            "show_time": time_spend,
+                        },
+                    )
 
     @reactive.Effect
     @reactive.event(input.map_episode_start)
@@ -566,7 +608,7 @@ def server(input, output, session):
             travel_paths = input.show_travel_paths()
 
             (character_locations, character_locations_aggregated, character_travels) = (
-                map.filter_map_data(name, episode_start, episode_end)
+                map.filter_map_data(name, episode_start, episode_end, time_location_data)
             )
 
             # Get x_coord and y_coord of every sub_location by performing a join of
@@ -619,7 +661,7 @@ def server(input, output, session):
                     character_locations,
                     character_locations_aggregated,
                     character_travels,
-                ) = map.filter_map_data(name, episode_start, episode_end)
+                ) = map.filter_map_data(name, episode_start, episode_end, time_location_data)
 
                 for _, row in character_travels.iterrows():
                     # Get the x and y coordinates of the "from" and "to" locations
