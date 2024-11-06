@@ -4,8 +4,8 @@ const FONT_SIZE = 14;
 const LABEL_WIDTH = 100;
 const LABEL_HEIGHT = 18;
 
-// Colormap from https://colorbrewer2.org/#type=qualitative&scheme=Pastel1&n=5
-const CHARACTER_COLORMAP = ['#fbb4ae','#b3cde3','#ccebc5','#decbe4','#fed9a6'];
+// Colormap from https://colorbrewer2.org/#type=qualitative&scheme=Dark2&n=3
+const CHARACTER_COLORMAP = ['#1b9e77','#d95f02','#7570b3'];
 
 const LABEL_BACKGROUND_COLOR = 'hsl(202 100% 11%)';
 const LABEL_TEXT_COLOR = 'hsl(202 100% 90%)';
@@ -19,18 +19,8 @@ document.addEventListener('DOMContentLoaded', function() {
   Shiny.addCustomMessageHandler('remove_svg_elements', function(message) {
     const svg = document.getElementById('map-canvas');
     if (!svg) return;
-    var elements = null;
-    if (message.type == 'circle') {
-      elements = document.getElementsByTagName('circle');
-    }
-    if (message.type == 'line') {
-      elements = document.getElementsByTagName('line');
-    }
-    if (message.type.startsWith('c-')) {
-      elements = document.getElementsByClassName(message.type);
-    }
-    while (elements.length > 0) {
-      svg.removeChild(elements[0]);
+    while (svg.firstChild) {
+      svg.removeChild(svg.firstChild);
     }
   });
 
@@ -38,11 +28,87 @@ document.addEventListener('DOMContentLoaded', function() {
     showTravel(message.character_id, Number(message.from_x), Number(message.from_y), Number(message.to_x), Number(message.to_y), Number(message.num_travels));
   });
 
+// Helper function to create SVG elements with attributes
+function createSvgElement(tag, attrs, children = []) {
+  const elem = document.createElementNS('http://www.w3.org/2000/svg', tag);
+  for (const [key, value] of Object.entries(attrs)) {
+    elem.setAttribute(key, value);
+  }
+  children.forEach(child => elem.appendChild(child));
+  return elem;
+}
+
+function showTravel(character_id, from_x, from_y, to_x, to_y, num_travels) {
+  const svg = document.getElementById('map-canvas');
+  if (!svg) return;
+
+  // Get the color for the character
+  const color = CHARACTER_COLORMAP[character_id];
+  console.log(character_id, color);
+
+  // Calculate the midpoint coordinates
+  const mid_x = (from_x + to_x) / 2;
+  const mid_y = (from_y + to_y) / 2;
+
+  // Define a unique marker id for each character
+  const markerId = `arrow-${character_id}`;
+
+  // Check if the marker for this character already exists
+  if (!document.getElementById(markerId)) {
+    const arrowPath = createSvgElement('path', {
+      d: 'M 0 0 L 10 5 L 0 10 z',
+      fill: color,
+    });
+
+    const arrowMarker = createSvgElement('marker', {
+      id: markerId,
+      viewBox: '0 0 10 10',
+      refX: '10',
+      refY: '5',
+      markerWidth: '10',
+      markerHeight: '10',
+      orient: 'auto-start-reverse',
+      class: `x-${to_x}_y-${to_y} x-${from_x}_y-${from_y}`,
+    }, [arrowPath]);
+
+    svg.appendChild(arrowMarker);
+  }
+
+  const lineAttrs = {
+    stroke: color,
+    'stroke-width': 2 * num_travels,
+    class: `x-${to_x}_y-${to_y} x-${from_x}_y-${from_y}`,
+  };
+
+  const line1 = createSvgElement('line', {
+    ...lineAttrs,
+    x1: from_x,
+    y1: from_y,
+    x2: mid_x,
+    y2: mid_y,
+    'marker-end': `url(#${markerId})`,
+  });
+
+  const line2 = createSvgElement('line', {
+    ...lineAttrs,
+    x1: mid_x,
+    y1: mid_y,
+    x2: to_x,
+    y2: to_y,
+  });
+
+  svg.appendChild(line1);
+  svg.appendChild(line2);
+}
+
   Shiny.addCustomMessageHandler('show_location_bubble', function(message) {
     showLocation(message.character_id, message.sub_location, Number(message.x_coord), Number(message.y_coord), message.time, message.show_time);
   });
 
   function showLocation(character_id, label, x, y, time, show_time) {
+
+    color = CHARACTER_COLORMAP[character_id % 3];
+
     var svg = document.getElementById('map-canvas');
     if (!svg) return;
     var newCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
@@ -53,18 +119,18 @@ document.addEventListener('DOMContentLoaded', function() {
     const radius = Math.sqrt(time / Math.PI);
 
     newCircle.setAttribute('r', show_time ? radius : BASE_RADIUS);
-    newCircle.setAttribute('fill', CIRCLE_COLOR);
+    newCircle.setAttribute('fill', color);
     // Give the circle a black border
     newCircle.setAttribute('stroke', 'black');
-    newCircle.setAttribute('class', `c-${character_id}`);
+    newCircle.setAttribute('class', `x-${x}_y-${y}`);
     svg.appendChild(newCircle);
   }
 
   Shiny.addCustomMessageHandler('show_location_label', function(message) {
-    showLocationLabel(message.character_id, message.sub_location, Number(message.x_coord), Number(message.y_coord), message.time);
+    showLocationLabel(message.sub_location, Number(message.x_coord), Number(message.y_coord));
   });
 
-  function showLocationLabel(character_id, label, x, y, time) {
+  function showLocationLabel(label, x, y) {
     var svg = document.getElementById('map-canvas');
     if (!svg) return;
 
@@ -75,7 +141,7 @@ document.addEventListener('DOMContentLoaded', function() {
     newTextBackground.setAttribute('width', LABEL_WIDTH);
     newTextBackground.setAttribute('height', LABEL_HEIGHT);
     newTextBackground.setAttribute('fill', LABEL_BACKGROUND_COLOR);
-    newTextBackground.setAttribute('class', `got-font c-${character_id}`);
+    newTextBackground.setAttribute('class', `x-${x}_y-${y}`);
     svg.appendChild(newTextBackground);
 
     // Create the text element inside the box
@@ -89,7 +155,7 @@ document.addEventListener('DOMContentLoaded', function() {
     newText.setAttribute('text-anchor', 'middle')
     newText.setAttribute('dominant-baseline', 'central');
     newText.setAttribute('fill', LABEL_TEXT_COLOR);
-    newText.setAttribute('class', `got-font c-${character_id}`);
+    newText.setAttribute('class', `got-font x-${x}_y-${y}`);
     newText.setAttribute('pointer-events', 'visiblePainted');  // Important to enable hover events
     svg.appendChild(newText);
     
@@ -102,7 +168,6 @@ document.addEventListener('DOMContentLoaded', function() {
         bbox = newText.getBBox();  // Update bounding box to check new width
     }
 
-    // Overlay plane creation on click event
     newText.addEventListener('click', function () {
       var overlayPlane = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
       overlayPlane.setAttribute('x', '0');
@@ -110,19 +175,31 @@ document.addEventListener('DOMContentLoaded', function() {
       overlayPlane.setAttribute('width', '100%');
       overlayPlane.setAttribute('height', '100%');
       overlayPlane.setAttribute('fill', 'white');
-      overlayPlane.setAttribute('opacity', '0.5');
+      overlayPlane.setAttribute('opacity', '0.7');
       overlayPlane.setAttribute('class', 'overlay');
       overlayPlane.setAttribute('pointer-events', 'visiblePainted');
+      svg.appendChild(overlayPlane);
 
-      // Add click event to remove highlight
+      const svgElements = document.querySelectorAll(`.x-${x}_y-${y}`);
+      svgElements.forEach(svgElement => {
+        const clone = svgElement.cloneNode(true);
+        clone.classList.add("overlay");
+        svg.appendChild(clone);
+
+        clone.addEventListener('click', function () {
+          const overlays = document.querySelectorAll('.overlay');
+          overlays.forEach(function(overlay) {
+            overlay.remove();
+          });
+        });
+      });
+
       overlayPlane.addEventListener('click', function () {
         const overlays = document.querySelectorAll('.overlay');
         overlays.forEach(function(overlay) {
           overlay.remove();
         });
       });
-
-      svg.appendChild(overlayPlane);
     });
 
     // var popup;
@@ -149,57 +226,6 @@ document.addEventListener('DOMContentLoaded', function() {
     //   }
     // });
   }
-
-  function showTravel(character_id, from_x, from_y, to_x, to_y, num_travels) {
-    var svg = document.getElementById('map-canvas');
-    if (!svg) return;
-
-    // Calculate the midpoint coordinates
-    const mid_x = (from_x + to_x) / 2;
-    const mid_y = (from_y + to_y) / 2;
-
-    // Create the first line segment (from start to midpoint) with an arrow head
-    var line1 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-    line1.setAttribute('x1', from_x);
-    line1.setAttribute('y1', from_y);
-    line1.setAttribute('x2', mid_x);
-    line1.setAttribute('y2', mid_y);
-    line1.setAttribute('stroke', CIRCLE_COLOR_FULL);
-    line1.setAttribute('stroke-width', 2);
-    line1.setAttribute('class', `c-${character_id}`);
-    line1.setAttribute('marker-end', 'url(#arrow)');  // Attach arrow to the midpoint
-
-    // Create the second line segment (from midpoint to end)
-    var line2 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-    line2.setAttribute('x1', mid_x);
-    line2.setAttribute('y1', mid_y);
-    line2.setAttribute('x2', to_x);
-    line2.setAttribute('y2', to_y);
-    line2.setAttribute('stroke', CIRCLE_COLOR_FULL);
-    line2.setAttribute('stroke-width', 2);
-    line2.setAttribute('class', `c-${character_id}`);
-
-    // Define the arrow marker
-    var arrow = document.createElementNS('http://www.w3.org/2000/svg', 'marker');
-    arrow.setAttribute('id', 'arrow');
-    arrow.setAttribute('viewBox', '0 0 10 10');
-    arrow.setAttribute('refX', '10');  // Adjust as needed for positioning
-    arrow.setAttribute('refY', '5');
-    arrow.setAttribute('markerWidth', '10');
-    arrow.setAttribute('markerHeight', '10');
-    arrow.setAttribute('orient', 'auto-start-reverse');
-
-    var arrowPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    arrowPath.setAttribute('d', 'M 0 0 L 10 5 L 0 10 z');
-    arrowPath.setAttribute('fill', CIRCLE_COLOR_FULL);
-    arrow.appendChild(arrowPath);
-
-    svg.appendChild(arrow);
-
-    // Add the two line segments to the SVG
-    svg.appendChild(line1);
-    svg.appendChild(line2);
-}
 
   // Set the zoom of the map-container and map-img by setting the width of both to the desired value
   Shiny.addCustomMessageHandler('set_zoom', function(message) {

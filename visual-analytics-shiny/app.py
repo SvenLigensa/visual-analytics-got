@@ -56,6 +56,7 @@ app_ui = ui.page_fluid(
                                 options={
                                     "placeholder": "Type to search...",
                                     "maxOptions": 5,
+                                    "maxItems": 3,
                                 },
                             ),
                             ui.input_selectize(
@@ -362,8 +363,6 @@ def server(input, output, session):
             ax.text(0.5, 0.5, 'Please select at least one character.', horizontalalignment='center', verticalalignment='center')
             return fig
 
-        print(selected_characters)
-
         # Filter data for selected characters
         filtered_data = time_data_alt[time_data_alt['name'].isin(selected_characters)]
         # Ensure episodes are sorted correctly
@@ -467,214 +466,54 @@ def server(input, output, session):
     @reactive.Effect
     @reactive.event(input.map_character)
     async def handle_map_character_change():
-        selected_characters = list(input.map_character())
-        print(selected_characters)
-
-        global previous_selected_characters
-        # Current selection from the input
-        current_selected_characters = set(input.map_character())
-        # Compute newly added and removed characters
-        added_character = current_selected_characters - previous_selected_characters
-        removed_character = previous_selected_characters - current_selected_characters
-        previous_selected_characters = current_selected_characters
-
-        if removed_character:
-            removed_character = list(removed_character)[0]
-            character = character_data[character_data["name"] == removed_character]
-            await session.send_custom_message(
-                "remove_svg_elements",
-                {
-                    "type": f"c-{character['character_id'].values[0]}",
-                },
-            )
-
-        if added_character:
-            added_character = list(added_character)[0]
-            character = character_data[character_data["name"] == added_character].iloc[
-                0
-            ]
-            name = character["name"]
-            character_id = character["character_id"]
-            episode_start = input.map_episode_start()
-            episode_end = input.map_episode_end()
-            time_spend = input.show_time_spent()
-            travel_paths = input.show_travel_paths()
-
-            (character_locations, character_locations_aggregated, character_travels) = (
-                map.filter_map_data(name, episode_start, episode_end, time_location_data)
-            )
-
-            # Get x_coord and y_coord of every sub_location by performing a join of
-            # the character_loccations_aggregated and the locations.csv data on the "sub_location" column
-            character_locations_aggregated = pd.merge(
-                character_locations_aggregated,
-                location_data,
-                on="sub_location",
-                how="left",
-            )
-
-            if travel_paths:
-                for _, row in character_travels.iterrows():
-                    # Get the x and y coordinates of the "from" and "to" locations
-                    from_location = location_data[
-                        location_data["sub_location"] == row["from"]
-                    ]
-                    to_location = location_data[
-                        location_data["sub_location"] == row["to"]
-                    ]
-                    # Check, if all coordinates are available
-                    if (
-                        from_location.empty
-                        or to_location.empty
-                        or any(
-                            pd.isna(
-                                [
-                                    from_location["x_coord"].values[0],
-                                    from_location["y_coord"].values[0],
-                                    to_location["x_coord"].values[0],
-                                    to_location["y_coord"].values[0],
-                                ]
-                            )
-                        )
-                    ):
-                        continue
-                    await session.send_custom_message(
-                        "show_travel",
-                        {
-                            "character_id": character_id,
-                            "from_x": from_location["x_coord"].values[0],
-                            "from_y": from_location["y_coord"].values[0],
-                            "to_x": to_location["x_coord"].values[0],
-                            "to_y": to_location["y_coord"].values[0],
-                            "num_travels": row["num_travels"],
-                        },
-                    )
-            for _, row in character_locations_aggregated.iterrows():
-                    if pd.isna(row["x_coord"]) or pd.isna(row["y_coord"]):
-                        continue
-                    await session.send_custom_message(
-                        "show_location_bubble",
-                        {
-                            "character_id": character_id,
-                            "sub_location": row["sub_location"],
-                            "x_coord": row["x_coord"],
-                            "y_coord": row["y_coord"],
-                            "time": row["time"],
-                            "show_time": time_spend,
-                        },
-                    )
-            for _, row in character_locations_aggregated.iterrows():
-                    if pd.isna(row["x_coord"]) or pd.isna(row["y_coord"]):
-                        continue
-                    await session.send_custom_message(
-                        "show_location_label",
-                        {
-                            "character_id": character_id,
-                            "sub_location": row["sub_location"],
-                            "x_coord": row["x_coord"],
-                            "y_coord": row["y_coord"],
-                            "time": row["time"],
-                            "show_time": time_spend,
-                        },
-                    )
+        await handle_map_change()
 
     @reactive.Effect
     @reactive.event(input.map_episode_start)
     async def handle_map_episode_start_change():
-        pass
+        await handle_map_change()
 
     @reactive.Effect
     @reactive.event(input.map_episode_end)
     async def handle_map_episode_end_change():
-        pass
+        await handle_map_change()
 
     @reactive.Effect
     @reactive.event(input.show_time_spent)
     async def handle_show_time_spend_change():
-        await session.send_custom_message(
-            "remove_svg_elements",
-            {
-                "type": "circle",
-            },
-        )
-        current_selected_characters = set(input.map_character())
-        for character in current_selected_characters:
-            character = character_data[character_data["name"] == character].iloc[0]
-            name = character["name"]
-            character_id = character["character_id"]
-            episode_start = input.map_episode_start()
-            episode_end = input.map_episode_end()
-            time_spend = input.show_time_spent()
-            travel_paths = input.show_travel_paths()
-
-            (character_locations, character_locations_aggregated, character_travels) = (
-                map.filter_map_data(name, episode_start, episode_end, time_location_data)
-            )
-
-            # Get x_coord and y_coord of every sub_location by performing a join of
-            # the character_loccations_aggregated and the locations.csv data on the "sub_location" column
-            character_locations_aggregated = pd.merge(
-                character_locations_aggregated,
-                location_data,
-                on="sub_location",
-                how="left",
-            )
-
-            for _, row in character_locations_aggregated.iterrows():
-                if pd.isna(row["x_coord"]) or pd.isna(row["y_coord"]):
-                    continue
-                await session.send_custom_message(
-                    "show_location",
-                    {
-                        "character_id": character_id,
-                        "sub_location": row["sub_location"],
-                        "x_coord": row["x_coord"],
-                        "y_coord": row["y_coord"],
-                        "time": row["time"],
-                        "show_time": time_spend,
-                    },
-                )
+        await handle_map_change()
 
     @reactive.Effect
     @reactive.event(input.show_travel_paths)
     async def handle_show_travel_paths_change():
-        if not input.show_travel_paths():
-            await session.send_custom_message("remove_lines", {})
-            await session.send_custom_message(
-                "remove_svg_elements",
-                {
-                    "type": "line",
-                },
-            )
-        else:
-            current_selected_characters = set(input.map_character())
-            for character in current_selected_characters:
-                character = character_data[character_data["name"] == character].iloc[0]
-                name = character["name"]
-                character_id = character["character_id"]
-                episode_start = input.map_episode_start()
-                episode_end = input.map_episode_end()
-                time_spend = input.show_time_spent()
-                travel_paths = input.show_travel_paths()
+        await handle_map_change()
 
-                (
-                    character_locations,
-                    character_locations_aggregated,
-                    character_travels,
-                ) = map.filter_map_data(name, episode_start, episode_end, time_location_data)
+    async def handle_map_change():
+        selected_characters = list(input.map_character())
+        character_mapping = {character: index for index, character in enumerate(selected_characters)}
 
-                for _, row in character_travels.iterrows():
-                    # Get the x and y coordinates of the "from" and "to" locations
-                    from_location = location_data[
-                        location_data["sub_location"] == row["from"]
-                    ]
-                    to_location = location_data[
-                        location_data["sub_location"] == row["to"]
-                    ]
-                    if from_location.empty or to_location.empty:
-                        continue
-                    # Check, if the x and y coordinates are available (i.e. not NaN)
-                    if any(
+        await session.send_custom_message("remove_svg_elements", {})
+
+        episode_start = input.map_episode_start()
+        episode_end = input.map_episode_end()
+        time_spend = input.show_time_spent()
+        travel_paths = input.show_travel_paths()
+        (_, character_locations_aggregated, character_travels) = map.filter_map_data(selected_characters, episode_start, episode_end, time_location_data)
+
+        if travel_paths:
+            for _, row in character_travels.iterrows():
+                # Get the x and y coordinates of the "from" and "to" locations
+                from_location = location_data[
+                    location_data["sub_location"] == row["from"]
+                ]
+                to_location = location_data[
+                    location_data["sub_location"] == row["to"]
+                ]
+                # Check, if all coordinates are available
+                if (
+                    from_location.empty
+                    or to_location.empty
+                    or any(
                         pd.isna(
                             [
                                 from_location["x_coord"].values[0],
@@ -683,23 +522,67 @@ def server(input, output, session):
                                 to_location["y_coord"].values[0],
                             ]
                         )
-                    ):
-                        continue
-                    await session.send_custom_message(
-                        "show_travel",
-                        {
-                            "character_id": character_id,
-                            "from_x": from_location["x_coord"].values[0],
-                            "from_y": from_location["y_coord"].values[0],
-                            "to_x": to_location["x_coord"].values[0],
-                            "to_y": to_location["y_coord"].values[0],
-                            "num_travels": row["num_travels"],
-                        },
                     )
+                ):
+                    continue
+                await session.send_custom_message(
+                    "show_travel",
+                    {
+                        "character_id": character_mapping[row["name"]],
+                        "from_x": from_location["x_coord"].values[0],
+                        "from_y": from_location["y_coord"].values[0],
+                        "to_x": to_location["x_coord"].values[0],
+                        "to_y": to_location["y_coord"].values[0],
+                        "num_travels": row["num_travels"],
+                    },
+                )
+        
+        character_locations_aggregated_sorted = character_locations_aggregated.sort_values(by=["sub_location", "time"], ascending=[True, False])
+        character_locations_aggregated_sorted = pd.merge(
+                character_locations_aggregated_sorted,
+                location_data,
+                on="sub_location",
+                how="left",
+            )
+        
+        print(character_locations_aggregated_sorted)
+        
+        for _, row in character_locations_aggregated_sorted.iterrows():
+            if pd.isna(row["x_coord"]) or pd.isna(row["y_coord"]):
+                continue
+            await session.send_custom_message(
+                "show_location_bubble",
+                {
+                    "character_id": character_mapping[row["name"]],
+                    "sub_location": row["sub_location"],
+                    "x_coord": row["x_coord"],
+                    "y_coord": row["y_coord"],
+                    "time": row["time"],
+                    "show_time": time_spend,
+                },
+            )
 
+        unique_location_data = (character_locations_aggregated_sorted.groupby("sub_location")
+            .agg(
+                {
+                    "x_coord": "first",
+                    "y_coord": "first",
+                }
+            ).reset_index())
+
+        for _, row in unique_location_data.iterrows():
+            if pd.isna(row["x_coord"]) or pd.isna(row["y_coord"]):
+                continue
+            await session.send_custom_message(
+                "show_location_label",
+                {
+                    "sub_location": row["sub_location"],
+                    "x_coord": row["x_coord"],
+                    "y_coord": row["y_coord"],
+                },
+            )
 
 zoom_level = 100
 fit_mode = "w"
-previous_selected_characters = set()
 app = App(app_ui, server, static_assets=static_dir)
 # run_app(app)
