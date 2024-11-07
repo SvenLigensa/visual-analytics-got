@@ -71,6 +71,28 @@
   top: 70px;
 }
 
+#legend {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  border: 2px solid black;
+  border-radius: 8px;
+  background-color: var(--light-gray);
+  top: 30px;
+  right: 30px;
+  width: 250px;
+  height: 90px;
+  padding: 0;
+  z-index: 3;
+}
+
+#legend p {
+  margin: 0;
+  text-align: center;
+}
+
 /* Remove any default padding or margin to display the main content as large as possible */
 .bslib-sidebar-layout > .main {
   padding: 0px;

@@ -1,14 +1,13 @@
-// Global variabels
-const BASE_RADIUS = 5;
-const FONT_SIZE = 14;
-const LABEL_WIDTH = 100;
-const LABEL_HEIGHT = 18;
-
-// Colormap from https://colorbrewer2.org/#type=qualitative&scheme=Dark2&n=3
-const CHARACTER_COLORMAP = ['#1b9e77','#d95f02','#7570b3'];
-
+// Colors
+const CHARACTER_COLORMAP = ['#1b9e77','#d95f02','#7570b3']; // Colormap from https://colorbrewer2.org/#type=qualitative&scheme=Dark2&n=3
 const LABEL_BACKGROUND_COLOR = 'hsl(202 100% 11%)';
 const LABEL_TEXT_COLOR = 'hsl(202 100% 90%)';
+
+const FONT_SIZE = 16;
+const LABEL_WIDTH = 100;
+const LABEL_HEIGHT = 18;
+const FOCUS_LEFT_OFFSET = 150;
+const FOCUS_HEIGHT = 100;
 
 const CIRCLE_COLOR_FULL = 'hsl(246 70% 70%)';
 const CIRCLE_COLOR = 'hsla(246 70% 70% / 0.8)'; // Last value is opacity
@@ -24,90 +23,126 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
-  Shiny.addCustomMessageHandler('show_travel', function(message) {
-    showTravel(message.character_id, Number(message.from_x), Number(message.from_y), Number(message.to_x), Number(message.to_y), Number(message.num_travels));
+  Shiny.addCustomMessageHandler('show_legend', function(message) {
+    showLegend(message.characters)
   });
 
-// Helper function to create SVG elements with attributes
-function createSvgElement(tag, attrs, children = []) {
-  const elem = document.createElementNS('http://www.w3.org/2000/svg', tag);
-  for (const [key, value] of Object.entries(attrs)) {
-    elem.setAttribute(key, value);
+  function showLegend(characters) {
+    const previous_legend = document.getElementById('legend');
+    if (previous_legend) previous_legend.remove()
+    if (characters.length === 0) return    
+
+    // Create the div element with the class 'legend'
+    const legendDiv = document.createElement('div');
+    legendDiv.id = 'legend';
+
+    const legendHeader = document.createElement('p');
+    legendHeader.textContent = "Legend";
+    legendHeader.classList.add('got-font');
+    legendDiv.appendChild(legendHeader);
+
+    for (let i = 0; i < characters.length; i++) {
+      const characterName = characters[i];
+      const characterColor = CHARACTER_COLORMAP[i];
+
+      const characterElement = document.createElement('p');
+      characterElement.textContent = characterName;
+      characterElement.style.color = characterColor;
+      characterElement.classList.add('got-font');
+      characterElement.style.fontSize = '12px';
+
+      legendDiv.appendChild(characterElement);
+    }
+
+    const mapCard = document.getElementsByClassName('map-card')[0];
+    if (mapCard) {
+      mapCard.prepend(legendDiv);
+    }
   }
-  children.forEach(child => elem.appendChild(child));
-  return elem;
-}
 
-function showTravel(character_id, from_x, from_y, to_x, to_y, num_travels) {
-  const svg = document.getElementById('map-canvas');
-  if (!svg) return;
+  Shiny.addCustomMessageHandler('show_travel', function(message) {
+    showTravel(message.character_num, Number(message.from_x), Number(message.from_y), Number(message.to_x), Number(message.to_y), Number(message.num_travels));
+  });
 
-  // Get the color for the character
-  const color = CHARACTER_COLORMAP[character_id];
-  console.log(character_id, color);
+  // Helper function to create SVG elements with attributes
+  function createSvgElement(tag, attrs, children = []) {
+    const elem = document.createElementNS('http://www.w3.org/2000/svg', tag);
+    for (const [key, value] of Object.entries(attrs)) {
+      elem.setAttribute(key, value);
+    }
+    children.forEach(child => elem.appendChild(child));
+    return elem;
+  }
 
-  // Calculate the midpoint coordinates
-  const mid_x = (from_x + to_x) / 2;
-  const mid_y = (from_y + to_y) / 2;
+  function showTravel(color_num, from_x, from_y, to_x, to_y, num_travels) {
+    const svg = document.getElementById('map-canvas');
+    if (!svg) return;
 
-  // Define a unique marker id for each character
-  const markerId = `arrow-${character_id}`;
+    // Get the color for the character
+    const color = CHARACTER_COLORMAP[color_num];
 
-  // Check if the marker for this character already exists
-  if (!document.getElementById(markerId)) {
-    const arrowPath = createSvgElement('path', {
-      d: 'M 0 0 L 10 5 L 0 10 z',
-      fill: color,
+    // Calculate the midpoint coordinates
+    const mid_x = (from_x + to_x) / 2;
+    const mid_y = (from_y + to_y) / 2;
+
+    // Define a unique marker id for each character
+    const markerId = `arrow-${color_num}`;
+
+    // Check if the marker for this character already exists
+    if (!document.getElementById(markerId)) {
+      const arrowPath = createSvgElement('path', {
+        d: 'M 0 0 L 10 5 L 0 10 z',
+        fill: color,
+      });
+
+      const arrowMarker = createSvgElement('marker', {
+        id: markerId,
+        viewBox: '0 0 10 10',
+        refX: '10',
+        refY: '5',
+        markerWidth: '10',
+        markerHeight: '10',
+        orient: 'auto-start-reverse',
+        class: `x-${to_x}_y-${to_y} x-${from_x}_y-${from_y}`,
+      }, [arrowPath]);
+
+      svg.appendChild(arrowMarker);
+    }
+
+    const lineAttrs = {
+      stroke: color,
+      'stroke-width': 2 * num_travels,
+      class: `x-${to_x}_y-${to_y} x-${from_x}_y-${from_y}`,
+    };
+
+    const line1 = createSvgElement('line', {
+      ...lineAttrs,
+      x1: from_x,
+      y1: from_y,
+      x2: mid_x,
+      y2: mid_y,
+      'marker-end': `url(#${markerId})`,
     });
 
-    const arrowMarker = createSvgElement('marker', {
-      id: markerId,
-      viewBox: '0 0 10 10',
-      refX: '10',
-      refY: '5',
-      markerWidth: '10',
-      markerHeight: '10',
-      orient: 'auto-start-reverse',
-      class: `x-${to_x}_y-${to_y} x-${from_x}_y-${from_y}`,
-    }, [arrowPath]);
+    const line2 = createSvgElement('line', {
+      ...lineAttrs,
+      x1: mid_x,
+      y1: mid_y,
+      x2: to_x,
+      y2: to_y,
+    });
 
-    svg.appendChild(arrowMarker);
+    svg.appendChild(line1);
+    svg.appendChild(line2);
   }
 
-  const lineAttrs = {
-    stroke: color,
-    'stroke-width': 2 * num_travels,
-    class: `x-${to_x}_y-${to_y} x-${from_x}_y-${from_y}`,
-  };
-
-  const line1 = createSvgElement('line', {
-    ...lineAttrs,
-    x1: from_x,
-    y1: from_y,
-    x2: mid_x,
-    y2: mid_y,
-    'marker-end': `url(#${markerId})`,
-  });
-
-  const line2 = createSvgElement('line', {
-    ...lineAttrs,
-    x1: mid_x,
-    y1: mid_y,
-    x2: to_x,
-    y2: to_y,
-  });
-
-  svg.appendChild(line1);
-  svg.appendChild(line2);
-}
-
   Shiny.addCustomMessageHandler('show_location_bubble', function(message) {
-    showLocation(message.character_id, message.sub_location, Number(message.x_coord), Number(message.y_coord), message.time, message.show_time);
+    showLocationBubble(message.character_num, Number(message.x_coord), Number(message.y_coord), message.time);
   });
 
-  function showLocation(character_id, label, x, y, time, show_time) {
+  function showLocationBubble(color_num, x, y, time) {
 
-    color = CHARACTER_COLORMAP[character_id % 3];
+    color = CHARACTER_COLORMAP[color_num % 3];
 
     var svg = document.getElementById('map-canvas');
     if (!svg) return;
@@ -118,19 +153,18 @@ function showTravel(character_id, from_x, from_y, to_x, to_y, num_travels) {
     // Calculate the radius of the circle, when the area should be given by the time
     const radius = Math.sqrt(time / Math.PI);
 
-    newCircle.setAttribute('r', show_time ? radius : BASE_RADIUS);
+    newCircle.setAttribute('r', radius);
     newCircle.setAttribute('fill', color);
-    // Give the circle a black border
     newCircle.setAttribute('stroke', 'black');
     newCircle.setAttribute('class', `x-${x}_y-${y}`);
     svg.appendChild(newCircle);
   }
 
   Shiny.addCustomMessageHandler('show_location_label', function(message) {
-    showLocationLabel(message.sub_location, Number(message.x_coord), Number(message.y_coord));
+    showLocationLabel(message.sub_location, Number(message.x_coord), Number(message.y_coord), message.character_nums, message.character_times);
   });
 
-  function showLocationLabel(label, x, y) {
+  function showLocationLabel(label, x, y, character_nums, character_times) {
     var svg = document.getElementById('map-canvas');
     if (!svg) return;
 
@@ -141,7 +175,6 @@ function showTravel(character_id, from_x, from_y, to_x, to_y, num_travels) {
     newTextBackground.setAttribute('width', LABEL_WIDTH);
     newTextBackground.setAttribute('height', LABEL_HEIGHT);
     newTextBackground.setAttribute('fill', LABEL_BACKGROUND_COLOR);
-    newTextBackground.setAttribute('class', `x-${x}_y-${y}`);
     svg.appendChild(newTextBackground);
 
     // Create the text element inside the box
@@ -155,7 +188,7 @@ function showTravel(character_id, from_x, from_y, to_x, to_y, num_travels) {
     newText.setAttribute('text-anchor', 'middle')
     newText.setAttribute('dominant-baseline', 'central');
     newText.setAttribute('fill', LABEL_TEXT_COLOR);
-    newText.setAttribute('class', `got-font x-${x}_y-${y}`);
+    newText.setAttribute('class', `got-font`);
     newText.setAttribute('pointer-events', 'visiblePainted');  // Important to enable hover events
     svg.appendChild(newText);
     
@@ -169,7 +202,7 @@ function showTravel(character_id, from_x, from_y, to_x, to_y, num_travels) {
     }
 
     newText.addEventListener('click', function () {
-      var overlayPlane = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+      const overlayPlane = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
       overlayPlane.setAttribute('x', '0');
       overlayPlane.setAttribute('y', '0');
       overlayPlane.setAttribute('width', '100%');
@@ -180,6 +213,61 @@ function showTravel(character_id, from_x, from_y, to_x, to_y, num_travels) {
       overlayPlane.setAttribute('pointer-events', 'visiblePainted');
       svg.appendChild(overlayPlane);
 
+      // Instead of only showing the label, create a box in which the label is shown
+      var newTextBackground2 = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+      newTextBackground2.setAttribute('x', x - FOCUS_LEFT_OFFSET - (LABEL_WIDTH/2));
+      newTextBackground2.setAttribute('y', y - (FOCUS_HEIGHT/2) - LABEL_HEIGHT);
+      newTextBackground2.setAttribute('width', LABEL_WIDTH);
+      newTextBackground2.setAttribute('height', LABEL_HEIGHT);
+      newTextBackground2.setAttribute('fill', LABEL_BACKGROUND_COLOR);
+      newTextBackground2.setAttribute('class', `overlay x-${x}_y-${y}`);
+      svg.appendChild(newTextBackground2);
+
+      var fontSize = FONT_SIZE;
+      var newText2 = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      newText2.textContent = label;
+      newText2.setAttribute('font-size', fontSize);
+      newText2.setAttribute('x', x - FOCUS_LEFT_OFFSET);
+      newText2.setAttribute('y', y - FOCUS_HEIGHT/2 - LABEL_HEIGHT/2);
+      newText2.setAttribute('text-anchor', 'middle');
+      newText2.setAttribute('dominant-baseline', 'central');
+      newText2.setAttribute('fill', LABEL_TEXT_COLOR);
+      newText2.setAttribute('class', `overlay got-font x-${x}_y-${y}`);
+      newText2.setAttribute('pointer-events', 'none');
+      svg.appendChild(newText2);
+      
+      // Adjust the font size dynamically
+      let bbox = newText2.getBBox();
+      const maxWidth = LABEL_WIDTH;
+      while (bbox.width > maxWidth && fontSize > 0) {
+          fontSize -= 1;
+          newText2.setAttribute('font-size', fontSize);
+          bbox = newText2.getBBox();
+      }
+
+      var numberTextBackground = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+      numberTextBackground.setAttribute('x', x - FOCUS_LEFT_OFFSET - (LABEL_WIDTH/2));
+      numberTextBackground.setAttribute('y', y - (FOCUS_HEIGHT/2));
+      numberTextBackground.setAttribute('width', FOCUS_HEIGHT);
+      numberTextBackground.setAttribute('height', FOCUS_HEIGHT);
+      numberTextBackground.setAttribute('fill', LABEL_BACKGROUND_COLOR);
+      numberTextBackground.setAttribute('class', `overlay x-${x}_y-${y}`);
+      svg.appendChild(numberTextBackground);
+
+      for (let i = 0; i < character_times.length; i++) {
+        var numberText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        numberText.textContent = character_times[i];
+        numberText.setAttribute('font-size', 20);
+        numberText.setAttribute('x', x - FOCUS_LEFT_OFFSET);
+        numberText.setAttribute('y', y - 30 + (i * 30));
+        numberText.setAttribute('text-anchor', 'middle');
+        numberText.setAttribute('dominant-baseline', 'central');
+        numberText.setAttribute('fill', CHARACTER_COLORMAP[character_nums[i]]);
+        numberText.setAttribute('class', `overlay got-font x-${x}_y-${y}`);
+        numberText.setAttribute('pointer-events', 'none');
+        svg.appendChild(numberText);
+      }
+
       const svgElements = document.querySelectorAll(`.x-${x}_y-${y}`);
       svgElements.forEach(svgElement => {
         const clone = svgElement.cloneNode(true);
@@ -188,7 +276,7 @@ function showTravel(character_id, from_x, from_y, to_x, to_y, num_travels) {
 
         clone.addEventListener('click', function () {
           const overlays = document.querySelectorAll('.overlay');
-          overlays.forEach(function(overlay) {
+          overlays.forEach(overlay => {
             overlay.remove();
           });
         });
@@ -196,7 +284,7 @@ function showTravel(character_id, from_x, from_y, to_x, to_y, num_travels) {
 
       overlayPlane.addEventListener('click', function () {
         const overlays = document.querySelectorAll('.overlay');
-        overlays.forEach(function(overlay) {
+        overlays.forEach(overlay => {
           overlay.remove();
         });
       });

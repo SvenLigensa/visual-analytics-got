@@ -492,6 +492,13 @@ def server(input, output, session):
         selected_characters = list(input.map_character())
         character_mapping = {character: index for index, character in enumerate(selected_characters)}
 
+        await session.send_custom_message(
+            "show_legend",
+            {
+                "characters": selected_characters,
+            },
+        )
+
         await session.send_custom_message("remove_svg_elements", {})
 
         episode_start = input.map_episode_start()
@@ -528,7 +535,7 @@ def server(input, output, session):
                 await session.send_custom_message(
                     "show_travel",
                     {
-                        "character_id": character_mapping[row["name"]],
+                        "character_num": character_mapping[row["name"]],
                         "from_x": from_location["x_coord"].values[0],
                         "from_y": from_location["y_coord"].values[0],
                         "to_x": to_location["x_coord"].values[0],
@@ -545,28 +552,27 @@ def server(input, output, session):
                 how="left",
             )
         
-        print(character_locations_aggregated_sorted)
-        
-        for _, row in character_locations_aggregated_sorted.iterrows():
-            if pd.isna(row["x_coord"]) or pd.isna(row["y_coord"]):
-                continue
-            await session.send_custom_message(
-                "show_location_bubble",
-                {
-                    "character_id": character_mapping[row["name"]],
-                    "sub_location": row["sub_location"],
-                    "x_coord": row["x_coord"],
-                    "y_coord": row["y_coord"],
-                    "time": row["time"],
-                    "show_time": time_spend,
-                },
-            )
+        if time_spend:
+            for _, row in character_locations_aggregated_sorted.iterrows():
+                if pd.isna(row["x_coord"]) or pd.isna(row["y_coord"]):
+                    continue
+                await session.send_custom_message(
+                    "show_location_bubble",
+                    {
+                        "character_num": character_mapping[row["name"]],
+                        "x_coord": row["x_coord"],
+                        "y_coord": row["y_coord"],
+                        "time": row["time"],
+                    },
+                )
 
         unique_location_data = (character_locations_aggregated_sorted.groupby("sub_location")
             .agg(
                 {
                     "x_coord": "first",
                     "y_coord": "first",
+                    "name": list,
+                    "time": list,
                 }
             ).reset_index())
 
@@ -579,6 +585,8 @@ def server(input, output, session):
                     "sub_location": row["sub_location"],
                     "x_coord": row["x_coord"],
                     "y_coord": row["y_coord"],
+                    "character_nums": [character_mapping[name] for name in row["name"]],
+                    "character_times": row["time"],
                 },
             )
 
