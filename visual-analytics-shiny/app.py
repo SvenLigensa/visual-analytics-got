@@ -55,7 +55,6 @@ app_ui = ui.page_fluid(
                                 multiple=True,
                                 options={
                                     "placeholder": "Type to search...",
-                                    "maxOptions": 5,
                                     "maxItems": 3,
                                 },
                             ),
@@ -64,18 +63,12 @@ app_ui = ui.page_fluid(
                                 "Select start episode:",
                                 choices=[],  # Updated server-side
                                 multiple=False,
-                                options={
-                                    "maxOptions": 5,
-                                },
                             ),
                             ui.input_selectize(
                                 "map_episode_end",
                                 "Select end episode:",
                                 choices=[],  # Updated server-side
                                 multiple=False,
-                                options={
-                                    "maxOptions": 5,
-                                },
                             ),
                             ui.input_checkbox(
                                 "show_time_spent",
@@ -141,7 +134,6 @@ app_ui = ui.page_fluid(
                                 multiple=True,
                                 options={
                                     "placeholder": "Type to search...",
-                                    "maxOptions": 5,
                                 },
                             ),
                             ui.input_selectize(
@@ -185,7 +177,6 @@ app_ui = ui.page_fluid(
                                 multiple=True,
                                 options={
                                     "placeholder": "Type to search...",
-                                    "maxOptions": 5,
                                 },
                             ),
                             ui.input_selectize(
@@ -193,18 +184,12 @@ app_ui = ui.page_fluid(
                                 "Select start episode:",
                                 choices=[],  # Updated server-side
                                 multiple=False,
-                                options={
-                                    "maxOptions": 5,
-                                },
                             ),
                             ui.input_selectize(
                                 "linechart_episode_end",
                                 "Select end episode:",
                                 choices=[],  # Updated server-side
                                 multiple=False,
-                                options={
-                                    "maxOptions": 5,
-                                },
                             ),
                         )
                     )
@@ -231,7 +216,6 @@ app_ui = ui.page_fluid(
                                 multiple=True,
                                 options={
                                     "placeholder": "Type to search...",
-                                    "maxOptions": 5,
                                 },
                             ),
                             ui.input_selectize(
@@ -239,18 +223,12 @@ app_ui = ui.page_fluid(
                                 "Select start episode:",
                                 choices=[],  # Updated server-side
                                 multiple=False,
-                                options={
-                                    "maxOptions": 5,
-                                },
                             ),
                             ui.input_selectize(
                                 "streamgraph_episode_end",
                                 "Select end episode:",
                                 choices=[],  # Updated server-side
                                 multiple=False,
-                                options={
-                                    "maxOptions": 5,
-                                },
                             ),
                         )
                     )
