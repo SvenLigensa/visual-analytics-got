@@ -1,3 +1,18 @@
+const IMG_SIZE = 40;
+const IMG_PADDING = IMG_SIZE * 2/3;
+const LINK_DISTANCE = 50;
+
+const DUMMY_COLOR = "#4a4e69";
+const LINK_COLORS = {
+  "parent": "#264653",
+  "siblings": "#F4A261",
+  "killed": "#E76F51",
+  "serves": "#E9C46A",
+  "married": "#2A9D8F",
+  "allies": "#E9C46A",
+  "guardianOf": "#22333b",
+};
+
 document.addEventListener('DOMContentLoaded', function() {
 
   Shiny.addCustomMessageHandler('show_network', function(message) {
@@ -10,42 +25,41 @@ document.addEventListener('DOMContentLoaded', function() {
     const svg = d3.select('#network-canvas');
     const container = document.querySelector('.network-card');
     if (!container) return;
-    
-    // Get the actual dimensions of the container
     const rect = container.getBoundingClientRect();
     const width = rect.width;
     const height = rect.height;
-    
     svg
       .attr('width', width)
       .attr('height', height)
-      // Add viewBox to ensure proper scaling
       .attr('viewBox', `0 0 ${width} ${height}`)
-      // Ensure SVG fills container
       .style('width', '100%')
       .style('height', '100%');
 
     return { width, height };
   }
 
-  // TODO: Add colors for each category
-  function getLinkColor(category) {
-    switch (category) {
-      case "killed":
-        return "red";
-      case "siblings":
-        return "blue";
-      default:
-        return "#999"; // default color
-    }
-  }
-
   function showNetwork(nodes, links) {
+    const svg = d3.select('#network-canvas');
+    svg.selectAll("*").remove();
     const dimensions = updateSVGSize();
+
+    // Add a container group for zoom
+    const g = svg.append("g")
+        .attr("class", "zoom-container");
+
+    // Add zoom behavior
+    const zoom = d3.zoom()
+        .scaleExtent([0.2, 4])
+        .on("zoom", (event) => {
+            g.attr("transform", event.transform);
+        });
+
+    svg.call(zoom);
+
     const simulation = d3.forceSimulation(nodes)
-      .force("link", d3.forceLink(links).id(d => d.id).distance(30))
-      .force("charge", d3.forceManyBody().strength(-40))
-      .force("collision", d3.forceCollide().radius(20))
+      .force("link", d3.forceLink(links).id(d => d.id).distance(LINK_DISTANCE))
+      .force("charge", d3.forceManyBody().strength(-IMG_PADDING * 2))
+      .force("collision", d3.forceCollide().radius(IMG_PADDING))
       .force("x", d3.forceX().strength(0.0005))
       .force("y", d3.forceY().strength(0.0005))
       .force("center", d3.forceCenter(dimensions.width / 2, dimensions.height / 2));
@@ -56,35 +70,36 @@ document.addEventListener('DOMContentLoaded', function() {
       simulation.alpha(0.05).restart();
     });
 
-    const svg = d3.select('#network-canvas');
-    svg.selectAll("*").remove();
-
     // Create arrow markers
     svg.append("defs")
-    .selectAll("marker")
-    .data(links)
-    .join("marker")
-    .attr("id", d => `arrowhead-${d.source.id.replace(/\s+/g, '')}-${d.target.id.replace(/\s+/g, '')}-${d.category}`)
-    .attr("viewBox", "0 -5 10 10")
-    .attr("refX", 20)
-    .attr("refY", 0)
-    .attr("orient", "auto")
-    .attr("markerWidth", 8)
-    .attr("markerHeight", 8)
-    .append("path")
-    .attr("d", "M0,-5L10,0L0,5")
-    .attr("fill", d => getLinkColor(d.category));
+      .selectAll("marker")
+      .data(links)
+      .join("marker")
+      .attr("id", d => `arrowhead-${d.source.id.replace(/\s+/g, '')}-${d.target.id.replace(/\s+/g, '')}-${d.category}`)
+      .attr("viewBox", "0 -5 10 10")
+      .attr("refX", 20)
+      .attr("refY", 0)
+      .attr("orient", "auto")
+      .attr("markerWidth", 10)
+      .attr("markerHeight", 10)
+      .append("path")
+      .attr("d", "M0,-5L10,0L0,5")
+      .attr("fill", d => LINK_COLORS[d.category]);
 
-    const link = svg.append("g")
+    const link = g.append("g")
       .selectAll("line")
       .attr("class", "link")
       .data(links)
       .join("line")
-      .style("stroke", d => getLinkColor(d.category))
-      .style("stroke-width", 1)
+      .style("stroke", d => LINK_COLORS[d.category])
+      .style("stroke-width", 2)
       .attr("marker-end", d => `url(#arrowhead-${d.source.id.replace(/\s+/g, '')}-${d.target.id.replace(/\s+/g, '')}-${d.category})`);
 
-    const node = svg.append("g")
+    // Add titles for nodes
+    link.append("title")
+      .text(d => `${d.category.charAt(0).toUpperCase() + d.category.slice(1)}: ${d.source.id} → ${d.target.id}`);
+
+    const node = g.append("g")
       .selectAll("g")
       .data(nodes)
       .join("g");
@@ -107,24 +122,55 @@ document.addEventListener('DOMContentLoaded', function() {
         .attr("transform", d => `translate(${d.x},${d.y})`);
     });
 
-    // Show images, if available
-    node.filter(d => d.characterImageThumb)
-      .append("image")
-      .attr("xlink:href", d => d.characterImageThumb)
-      .attr("width", 20)
-      .attr("height", 20)
-      .attr("x", -10)
-      .attr("y", -10);
+    // Check if the image is available
+    // By making a request to the image URL
+    // And checking if we get 404 error
+    const image_available = (url) => {
+      return new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => resolve(true);
+        img.onerror = () => resolve(false);
+        img.src = url;
+      });
+    };
 
-    // Show circles, if no image is available
+    // First create all nodes that don't have images
     node.filter(d => !d.characterImageThumb)
       .append("circle")
       .attr("r", 8)
-      .attr("fill", "#999");
+      .attr("fill", DUMMY_COLOR);
+
+    // Then handle nodes with potential images
+    node.filter(d => d.characterImageThumb).each(function(d) {
+      const element = d3.select(this);
+      image_available(d.characterImageThumb).then(available => {
+        if (available) {
+          element.append("image")
+            .attr("xlink:href", d.characterImageThumb)
+            .attr("width", IMG_SIZE)
+            .attr("height", IMG_SIZE)
+            .attr("x", -IMG_SIZE / 2)
+            .attr("y", -IMG_SIZE / 2);
+        } else {
+          element.append("circle")
+            .attr("r", 8)
+            .attr("fill", DUMMY_COLOR);
+        }
+      });
+    });
 
     // Add titles for nodes
     node.append("title")
       .text(d => d.id);
+
+    // Add click handler to nodes
+    node.on("click", function(event, d) {
+      // Prevent click from triggering drag
+      event.stopPropagation();
+      
+      // Send message to Shiny with clicked node's id
+      Shiny.setInputValue("network_node_click", d.id);
+    });
 
     // Drag functions
     function dragstarted(event, d) {

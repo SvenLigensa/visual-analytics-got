@@ -51,50 +51,49 @@ app_ui = ui.page_fluid(
             "Map",
             ui.layout_sidebar(
                 ui.sidebar(
-                    ui.div(
-                        ui.card(
-                            ui.card_header(ui.h4("Settings")),
-                            ui.input_selectize(
-                                "map_character",
-                                "Select characters:",
-                                choices=[],  # Updated server-side
-                                multiple=True,
-                                options={
-                                    "placeholder": "Type to search...",
-                                    "maxItems": 3,
-                                },
-                            ),
-                            ui.input_selectize(
-                                "map_episode_start",
-                                "Select start episode:",
-                                choices=[],  # Updated server-side
-                                multiple=False,
-                            ),
-                            ui.input_selectize(
-                                "map_episode_end",
-                                "Select end episode:",
-                                choices=[],  # Updated server-side
-                                multiple=False,
-                            ),
-                            ui.input_checkbox(
-                                "show_time_spent",
-                                "Show time spent at locations",
-                                value=True,
-                            ),
-                            ui.input_checkbox(
-                                "show_travel_paths", "Show travel paths", value=True
-                            ),
-                            # Slider between 0 and 100 for opacity of picture
-                            ui.input_slider(
-                                "map_opacity",
-                                "Opacity of the map:",
-                                min=0,
-                                max=100,
-                                value=100,
-                                step=5,
-                                ticks=False,
-                            ),
-                        )
+                    ui.card(
+                        {"class": "settings-card"},
+                        ui.card_header(ui.h4("Settings")),
+                        ui.input_selectize(
+                            "map_character",
+                            "Select characters:",
+                            choices=[],  # Updated server-side
+                            multiple=True,
+                            options={
+                                "placeholder": "Type to search...",
+                                "maxItems": 3,
+                            },
+                        ),
+                        ui.input_selectize(
+                            "map_episode_start",
+                            "Select start episode:",
+                            choices=[],  # Updated server-side
+                            multiple=False,
+                        ),
+                        ui.input_selectize(
+                            "map_episode_end",
+                            "Select end episode:",
+                            choices=[],  # Updated server-side
+                            multiple=False,
+                        ),
+                        ui.input_checkbox(
+                            "show_time_spent",
+                            "Show time spent at locations",
+                            value=True,
+                        ),
+                        ui.input_checkbox(
+                            "show_travel_paths", "Show travel paths", value=True
+                        ),
+                        # Slider between 0 and 100 for opacity of picture
+                        ui.input_slider(
+                            "map_opacity",
+                            "Opacity of the map:",
+                            min=0,
+                            max=100,
+                            value=100,
+                            step=5,
+                            ticks=False,
+                        ),
                     )
                 ),
                 # Main content area
@@ -130,36 +129,35 @@ app_ui = ui.page_fluid(
             "Character Network",
             ui.layout_sidebar(
                 ui.sidebar(
-                    ui.div(
-                        ui.card(
-                            ui.card_header(ui.h4("Settings")),
-                            ui.input_selectize(
-                                "network_character",
-                                "Select characters:",
-                                choices=[],  # Updated server-side
-                                multiple=True,
-                                options={
-                                    "placeholder": "Type to search...",
-                                },
-                            ),
-                            ui.input_selectize(
-                                "network_relationships",
-                                "Select relationship types:",
-                                choices=[
-                                    "Parent",
-                                    "Sibling",
-                                    "Married / Engaged",
-                                    "Killed",
-                                    "Serves",
-                                    "Guardian of",
-                                    "Ally",
-                                ],
-                                multiple=True,
-                                options={
-                                    "placeholder": "Type to search...",
-                                },
-                            ),
-                        )
+                    ui.card(
+                        {"class": "settings-card"},
+                        ui.card_header(ui.h4("Settings")),
+                        ui.input_selectize(
+                            "network_character",
+                            "Select characters:",
+                            choices=[],
+                            multiple=True,
+                            options={
+                                "placeholder": "Type to search...",
+                            },
+                        ),
+                        ui.input_selectize(
+                            "network_relationships",
+                            "Select relationship types:",
+                            choices=[
+                                "parent",
+                                "sibling",
+                                "married",
+                                "killed",
+                                "serves",
+                                "guardianOf",
+                                "ally",
+                            ],
+                            multiple=True,
+                            options={
+                                "placeholder": "Type to search...",
+                            },
+                        ),
                     )
                 ),
                 ui.div(
@@ -175,31 +173,30 @@ app_ui = ui.page_fluid(
             "Screentime Linechart",
             ui.layout_sidebar(
                 ui.sidebar(
-                    ui.div(
-                        ui.card(
-                            ui.card_header(ui.h4("Settings")),
-                            ui.input_selectize(
-                                "screentime_linechart_character",
-                                "Select characters:",
-                                choices=[],  # Updated server-side
-                                multiple=True,
-                                options={
-                                    "placeholder": "Type to search...",
-                                },
-                            ),
-                            ui.input_selectize(
-                                "linechart_episode_start",
-                                "Select start episode:",
-                                choices=[],  # Updated server-side
-                                multiple=False,
-                            ),
-                            ui.input_selectize(
-                                "linechart_episode_end",
-                                "Select end episode:",
-                                choices=[],  # Updated server-side
-                                multiple=False,
-                            ),
-                        )
+                    ui.card(
+                        {"class": "settings-card"},
+                        ui.card_header(ui.h4("Settings")),
+                        ui.input_selectize(
+                            "screentime_linechart_character",
+                            "Select characters:",
+                            choices=[],  # Updated server-side
+                            multiple=True,
+                            options={
+                                "placeholder": "Type to search...",
+                            },
+                        ),
+                        ui.input_selectize(
+                            "linechart_episode_start",
+                            "Select start episode:",
+                            choices=[],  # Updated server-side
+                            multiple=False,
+                        ),
+                        ui.input_selectize(
+                            "linechart_episode_end",
+                            "Select end episode:",
+                            choices=[],  # Updated server-side
+                            multiple=False,
+                        ),
                     )
                 ),
                 ui.div(
@@ -214,31 +211,30 @@ app_ui = ui.page_fluid(
             "Screentime Streamgraph",
             ui.layout_sidebar(
                 ui.sidebar(
-                    ui.div(
-                        ui.card(
-                            ui.card_header(ui.h4("Settings")),
-                            ui.input_selectize(
-                                "screentime_streamgraph_character",
-                                "Select characters:",
-                                choices=[],  # Updated server-side
-                                multiple=True,
-                                options={
-                                    "placeholder": "Type to search...",
-                                },
-                            ),
-                            ui.input_selectize(
-                                "streamgraph_episode_start",
-                                "Select start episode:",
-                                choices=[],  # Updated server-side
-                                multiple=False,
-                            ),
-                            ui.input_selectize(
-                                "streamgraph_episode_end",
-                                "Select end episode:",
-                                choices=[],  # Updated server-side
-                                multiple=False,
-                            ),
-                        )
+                    ui.card(
+                        {"class": "settings-card"},
+                        ui.card_header(ui.h4("Settings")),
+                        ui.input_selectize(
+                            "screentime_streamgraph_character",
+                            "Select characters:",
+                            choices=[],  # Updated server-side
+                            multiple=True,
+                            options={
+                                "placeholder": "Type to search...",
+                            },
+                        ),
+                        ui.input_selectize(
+                            "streamgraph_episode_start",
+                            "Select start episode:",
+                            choices=[],  # Updated server-side
+                            multiple=False,
+                        ),
+                        ui.input_selectize(
+                            "streamgraph_episode_end",
+                            "Select end episode:",
+                            choices=[],  # Updated server-side
+                            multiple=False,
+                        ),
                     )
                 ),
                 ui.div(
@@ -253,11 +249,10 @@ app_ui = ui.page_fluid(
             "Screentime Heatmap",
             ui.layout_sidebar(
                 ui.sidebar(
-                    ui.div(
-                        ui.card(
-                            ui.card_header(ui.h4("Settings")),
-                            "Coming soon...",
-                        )
+                    ui.card(
+                        {"class": "settings-card"},
+                        ui.card_header(ui.h4("Settings")),
+                        "Coming soon...",
                     )
                 ),
                 ui.div(
@@ -530,27 +525,7 @@ def server(input, output, session):
         await session.send_custom_message("set_zoom", {"zoom": zoom_level})
 
     @reactive.Effect
-    @reactive.event(input.map_character)
-    async def handle_map_character_change():
-        await map.handle_map_change(session, input, location_data, time_location_data)
-
-    @reactive.Effect
-    @reactive.event(input.map_episode_start)
-    async def handle_map_episode_start_change():
-        await map.handle_map_change(session, input, location_data, time_location_data)
-
-    @reactive.Effect
-    @reactive.event(input.map_episode_end)
-    async def handle_map_episode_end_change():
-        await map.handle_map_change(session, input, location_data, time_location_data)
-
-    @reactive.Effect
-    @reactive.event(input.show_time_spent)
-    async def handle_show_time_spend_change():
-        await map.handle_map_change(session, input, location_data, time_location_data)
-
-    @reactive.Effect
-    @reactive.event(input.show_travel_paths)
+    @reactive.event(input.map_character, input.map_episode_start, input.map_episode_end, input.show_time_spent, input.show_travel_paths)
     async def handle_show_travel_paths_change():
         await map.handle_map_change(session, input, location_data, time_location_data)
 
@@ -569,49 +544,54 @@ def server(input, output, session):
     @reactive.Effect
     @reactive.event(input.network_character, input.network_relationships)
     async def handle_network_filter():
-        selected_characters = input.network_character()
-        selected_relationships = input.network_relationships()
+        chars = list(input.network_character()) or network_nodes['id'].tolist()
+        rels = list(input.network_relationships())
         
-        # If no characters selected, show full network
-        if not selected_characters:
-            await show_network()
-            return
-            
-        # Filter nodes to include selected characters and their direct connections
-        filtered_nodes = network_nodes[
-            network_nodes['id'].isin(selected_characters)
-        ].to_dict('records')
-        
-        # Get all nodes that are connected to selected characters
-        filtered_links = network_links[
-            (network_links['source'].isin(selected_characters) | 
-             network_links['target'].isin(selected_characters))
+        # Get links connected to selected characters
+        links = network_links[
+            network_links['source'].isin(chars) |
+            network_links['target'].isin(chars)
         ]
         
-        # Filter links by relationship type if specified
-        if selected_relationships:
-            filtered_links = filtered_links[
-                filtered_links['type'].isin(selected_relationships)
-            ]
-            
-        # Add connected nodes to filtered_nodes
-        connected_chars = set(filtered_links['source'].tolist() + 
-                            filtered_links['target'].tolist())
-        additional_nodes = network_nodes[
-            network_nodes['id'].isin(connected_chars)
-        ].to_dict('records')
-        filtered_nodes.extend(additional_nodes)
+        # Filter by relationship type if specified
+        if rels:
+            links = links[links['category'].isin(rels)]
         
-        # Remove duplicates from nodes
-        filtered_nodes = [dict(t) for t in 
-                         {tuple(d.items()) for d in filtered_nodes}]
+        # Get all nodes that are connected through the filtered links
+        connected_chars = set(links['source'].tolist() + links['target'].tolist())
+        # Add back selected characters only if they have connections
+        connected_chars.update(char for char in chars if char in connected_chars)
+        
+        nodes = network_nodes[network_nodes['id'].isin(connected_chars)]
         
         await session.send_custom_message(
             "show_network",
             {
-                "nodes": filtered_nodes,
-                "links": filtered_links.to_dict('records')
+                "nodes": nodes.to_dict('records'),
+                "links": links.to_dict('records')
             }
+        )
+
+    @reactive.Effect
+    @reactive.event(input.network_node_click)
+    async def handle_network_node_click():
+        clicked_character = input.network_node_click()
+        current_selection = input.network_character() or ()
+        
+        # Toggle selection: remove if present, add if not
+        if clicked_character in current_selection:
+            # Remove character from selection
+            new_selection = tuple(char for char in current_selection if char != clicked_character)
+        else:
+            # Add character to selection
+            new_selection = current_selection + (clicked_character,)
+            
+        ui.update_selectize(
+            "network_character",
+            selected=new_selection,
+            choices=characters,
+            server=True,
+            session=session
         )
 
 zoom_level = 100

@@ -61,7 +61,7 @@ for character in data['characters']:
             links.append({
                 "source": character['characterName'],
                 "target": target,
-                "category": "guardian of"
+                "category": "guardianOf"
             })
             
     if 'parents' in character:
