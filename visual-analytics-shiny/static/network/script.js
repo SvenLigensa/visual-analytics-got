@@ -38,27 +38,50 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Sample data
   const nodes = [
-    { id: "Node 1" },
-    { id: "Node 2" },
-    { id: "Node 3" },
-    { id: "Node 4" }
+    {id:"Addam Marbrand", name:"Addam Marbrand"},
+    {id:"Aegon Targaryen", name:"Aegon Targaryen"},
   ];
 
   const links = [
-    { source: "Node 1", target: "Node 2" },
-    { source: "Node 2", target: "Node 3" },
-    { source: "Node 3", target: "Node 4" },
-    { source: "Node 4", target: "Node 1" }
+    {source: "Addam Marbrand", target: "Aegon Targaryen", category:"killedBy"}
   ];
+
+  // Define link color according to the link cathegory
+  function getLinkColor(category) {
+    switch (category) {
+      case "killedBy":
+        return "red";
+      default:
+        return "#999"; // default color
+  }
+}
 
   // Create force simulation with initial dimensions
   const simulation = d3.forceSimulation(nodes)
-    .force("link", d3.forceLink(links).id(d => d.id))
-    .force("charge", d3.forceManyBody().strength(-100))
+    .force("link", d3.forceLink(links).id(d => d.id).distance(200))
+    .force("charge", d3.forceManyBody())
+    .force("x", d3.forceX())
+    .force("y", d3.forceY())
     .force("center", d3.forceCenter(dimensions.width / 2, dimensions.height / 2));
 
   // Get SVG element using d3
   const svg = d3.select('#network-canvas');
+
+  // Add arrows to the links
+  svg.append("defs")
+    .selectAll("marker")
+    .data(links)
+    .join("marker")
+    .attr("id", d => `arrow-${d}`)
+    .attr("viewBox", "0 -5 10 10")
+    .attr("refX", 38)
+    .attr("refY", 0)
+    .attr("markerWidth", 6)
+    .attr("markerHeight", 6)
+    .attr("orient", "auto")
+    .append("path")
+    .attr("fill", d => getLinkColor(d.category))
+    .attr("d", 'M0,-5L10,0L0,5');
 
   // Draw links
   const link = svg.append("g")
@@ -66,15 +89,17 @@ document.addEventListener('DOMContentLoaded', function() {
     .data(links)
     .join("line")
     .style("stroke", "#999")
-    .style("stroke-width", 1);
+    .style("stroke-width", 1)
+    .style("stroke", d => getLinkColor(d.category))
+    .attr("marker-end", (d, i) => `url(#arrowhead-${i})`); // set unique ID for each links
 
   // Draw nodes
   const node = svg.append("g")
     .selectAll("circle")
     .data(nodes)
     .join("circle")
-    .attr("r", 5)
-    .style("fill", "#69b3a2")
+    .attr("r", 10)
+    .style("fill", "#999")
     .call(d3.drag()
       .on("start", dragstarted)
       .on("drag", dragged)
@@ -84,17 +109,35 @@ document.addEventListener('DOMContentLoaded', function() {
   node.append("title")
     .text(d => d.id);
 
+  // Add labels for nodes (this is where the node name is added)
+  const label = svg.append("g")
+    .selectAll("text")
+    .data(nodes)
+    .join("text")
+    .attr("x", d => d.x)  // Set initial position
+    .attr("y", d => d.y)  // Set initial position
+    .attr("dy", -10)      // Position the text a bit above the node
+    .attr("text-anchor", "middle")
+    .style("font-size", "12px")
+    .style("fill", "#333")
+    .text(d => d.name);  // Display the node's name
+
   // Update positions on each tick
   simulation.on("tick", () => {
     link
       .attr("x1", d => d.source.x)
       .attr("y1", d => d.source.y)
       .attr("x2", d => d.target.x)
-      .attr("y2", d => d.target.y);
+      .attr("y2", d => d.target.y)
+      //.attr("marker-end", "url(#arrowhead)");
 
     node
       .attr("cx", d => d.x)
       .attr("cy", d => d.y);
+
+      label
+      .attr("x", d => d.x)  // Update label's position
+      .attr("y", d => d.y);
   });
 
   // Drag functions
