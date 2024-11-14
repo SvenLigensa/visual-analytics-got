@@ -1,6 +1,5 @@
 from pathlib import Path
 from shiny import App, ui, reactive, render
-# from shiny._main import run_app
 from shinywidgets import output_widget, render_widget
 import plotly.express as px
 import pandas as pd
@@ -343,31 +342,157 @@ def server(input, output, session):
     @render_widget
     def screentime_linechart():
         selected_characters = input.screentime_linechart_character()
+        episode_start = input.linechart_episode_start()
+        episode_end = input.linechart_episode_end()
+
         if not selected_characters:
             fig = px.line()
             fig.add_annotation(
-                x=0.5,
-                y=0.5,
+                x=0.5, y=0.5,
                 text='Please select at least one character.',
                 showarrow=False,
                 font=dict(size=12),
-                xref='paper',
-                yref='paper',
-                xanchor='center',
-                yanchor='middle'
+                xref='paper', yref='paper',
+                xanchor='center', yanchor='middle'
             )
-            # Make the axes range from 0 to 1 to avoid showing the default range
             fig.update_xaxes(range=[0, 1])
             fig.update_yaxes(range=[0, 1])
             return fig
-        filtered_data = time_data[time_data['name'].isin(selected_characters)]
-        # Melt the DataFrame so that episodes become x-axis and times become y-axis
-        # 'name' remains as the identifier for each line
-        df_melted = filtered_data.melt(id_vars=['name'], var_name='episode', value_name='time')
-        # Ensure that the episode order is maintained correctly (e.g., S01E01, S01E02)
-        df_melted['episode'] = pd.Categorical(df_melted['episode'], categories=sorted(filtered_data.columns[1:]), ordered=True)
-        # Plot the data using Plotly
-        fig = px.line(df_melted, x='episode', y='time', color='name', title='Time Spent on Each Episode')
+
+        # Filter data for selected characters
+        filtered_data = time_data_alt[time_data_alt['name'].isin(selected_characters)]
+        
+        # Get all episodes in correct order and create episode mapping
+        episodes = episode_data[
+            (episode_data['identifier'] >= episode_start) &
+            (episode_data['identifier'] <= episode_end)
+        ]['identifier'].tolist()
+        episode_indices = {ep: idx for idx, ep in enumerate(episodes)}
+        
+        # Add episode index for proper ordering
+        filtered_data['episode_idx'] = filtered_data['episode'].map(episode_indices)
+        filtered_data = filtered_data[filtered_data['episode_idx'].notna()]
+        
+        # Pivot the data to have characters as rows and episodes as columns
+        pivot_df = filtered_data.pivot_table(
+            index='name',
+            columns='episode',
+            values='time',
+            fill_value=0
+        )
+        
+        # Ensure all episodes are represented and in correct order
+        pivot_df = pivot_df.reindex(columns=episodes, fill_value=0)
+        
+        # Melt the pivot table back to long format for plotting
+        plot_data = pivot_df.reset_index().melt(
+            id_vars=['name'],
+            value_vars=episodes,
+            var_name='episode',
+            value_name='time'
+        )
+        
+        # Create the line plot
+        fig = px.line(
+            plot_data, 
+            x='episode',
+            y='time',
+            color='name',
+            title='Screen Time per Episode',
+            labels={
+                'time': 'Screen Time (seconds)',
+                'episode': 'Episode',
+                'name': 'Character'
+            }
+        )
+        
+        # Customize the layout
+        fig.update_layout(
+            hovermode='x unified',
+            legend=dict(
+                yanchor="top",
+                y=0.99,
+                xanchor="left",
+                x=1.02
+            ),
+            margin=dict(r=150),
+            xaxis_tickangle=-45
+        )
+        
+        fig.update_traces(
+            mode='lines+markers',
+            hovertemplate='%{y:.0f} seconds<extra></extra>'
+        )
+        
+        return fig
+
+    @render.plot(alt="Streamgraph showing the screentime of selected characters")
+    def screentime_streamgraph():
+        selected_characters = input.screentime_streamgraph_character()
+        episode_start = input.streamgraph_episode_start()
+        episode_end = input.streamgraph_episode_end()
+
+        if not selected_characters:
+            fig, ax = plt.subplots(figsize=(10, 6))
+            ax.text(0.5, 0.5, 'Please select at least one character.', 
+                    horizontalalignment='center', verticalalignment='center')
+            ax.set_xticks([])
+            ax.set_yticks([])
+            return fig
+
+        # Filter data for selected characters
+        filtered_data = time_data_alt[
+            (time_data_alt['name'].isin(selected_characters)) &
+            (time_data_alt['episode'] >= episode_start) &
+            (time_data_alt['episode'] <= episode_end)
+        ]
+
+        # Get episodes in correct order
+        episodes = episode_data[
+            (episode_data['identifier'] >= episode_start) &
+            (episode_data['identifier'] <= episode_end)
+        ]['identifier'].tolist()
+        episode_indices = {ep: idx for idx, ep in enumerate(episodes)}
+        
+        # Add episode index for proper ordering
+        filtered_data['episode_idx'] = filtered_data['episode'].map(episode_indices)
+        
+        # Pivot the data to have characters as rows and episodes as columns
+        pivot_df = filtered_data.pivot_table(
+            index='name',
+            columns='episode_idx',
+            values='time',
+            fill_value=0
+        )
+        
+        # Ensure all episodes are represented
+        pivot_df = pivot_df.reindex(columns=range(len(episodes)), fill_value=0)
+        
+        x = range(len(episodes))
+        y = pivot_df.values
+        
+        # Use interpolated values to make streamgraph smooth
+        x_new = np.linspace(min(x), max(x), 500)  # Increase number of points => Smoother
+        y_smooth = make_interp_spline(x, y, axis=1)(x_new)
+        
+        fig, ax = plt.subplots(figsize=(12, 6))
+        ax.stackplot(
+            x_new,
+            y_smooth,
+            labels=pivot_df.index,
+            baseline='wiggle',
+            colors=plt.cm.tab20.colors[:len(pivot_df.index)]
+        )
+        
+        ax.set_xticks(x)
+        ax.set_xticklabels(episodes, rotation=45, ha='right')
+        ax.set_xlim(0, len(episodes)-1)
+        ax.set_xlabel('Episode')
+        ax.set_ylabel('Screen Time (seconds)')
+        ax.set_title('Screentime Streamgraph')
+        ax.legend(loc='upper left', bbox_to_anchor=(1, 1))
+
+        plt.tight_layout()
         return fig
 
     @reactive.Effect
@@ -405,128 +530,28 @@ def server(input, output, session):
     @reactive.Effect
     @reactive.event(input.map_character)
     async def handle_map_character_change():
-        await handle_map_change()
+        await map.handle_map_change(session, input, location_data, time_location_data)
 
     @reactive.Effect
     @reactive.event(input.map_episode_start)
     async def handle_map_episode_start_change():
-        await handle_map_change()
+        await map.handle_map_change(session, input, location_data, time_location_data)
 
     @reactive.Effect
     @reactive.event(input.map_episode_end)
     async def handle_map_episode_end_change():
-        await handle_map_change()
+        await map.handle_map_change(session, input, location_data, time_location_data)
 
     @reactive.Effect
     @reactive.event(input.show_time_spent)
     async def handle_show_time_spend_change():
-        await handle_map_change()
+        await map.handle_map_change(session, input, location_data, time_location_data)
 
     @reactive.Effect
     @reactive.event(input.show_travel_paths)
     async def handle_show_travel_paths_change():
-        await handle_map_change()
-
-    async def handle_map_change():
-        selected_characters = list(input.map_character())
-        character_mapping = {character: index for index, character in enumerate(selected_characters)}
-        await session.send_custom_message(
-            "show_legend",
-            {
-                "characters": selected_characters,
-            },
-        )
-        await session.send_custom_message("remove_svg_elements", {})
-        episode_start = input.map_episode_start()
-        episode_end = input.map_episode_end()
-        time_spend = input.show_time_spent()
-        travel_paths = input.show_travel_paths()
-        (_, character_locations_aggregated, character_travels) = map.filter_map_data(selected_characters, episode_start, episode_end, time_location_data)
-
-        if travel_paths:
-            for _, row in character_travels.iterrows():
-                # Get the x and y coordinates of the "from" and "to" locations
-                from_location = location_data[
-                    location_data["sub_location"] == row["from"]
-                ]
-                to_location = location_data[
-                    location_data["sub_location"] == row["to"]
-                ]
-                # Check, if all coordinates are available
-                if (
-                    from_location.empty
-                    or to_location.empty
-                    or any(
-                        pd.isna(
-                            [
-                                from_location["x_coord"].values[0],
-                                from_location["y_coord"].values[0],
-                                to_location["x_coord"].values[0],
-                                to_location["y_coord"].values[0],
-                            ]
-                        )
-                    )
-                ):
-                    continue
-                await session.send_custom_message(
-                    "show_travel",
-                    {
-                        "character_num": character_mapping[row["name"]],
-                        "from_x": from_location["x_coord"].values[0],
-                        "from_y": from_location["y_coord"].values[0],
-                        "to_x": to_location["x_coord"].values[0],
-                        "to_y": to_location["y_coord"].values[0],
-                        "num_travels": row["num_travels"],
-                    },
-                )
-        
-        character_locations_aggregated_sorted = character_locations_aggregated.sort_values(by=["sub_location", "time"], ascending=[True, False])
-        character_locations_aggregated_sorted = pd.merge(
-                character_locations_aggregated_sorted,
-                location_data,
-                on="sub_location",
-                how="left",
-            )
-        
-        if time_spend:
-            for _, row in character_locations_aggregated_sorted.iterrows():
-                if pd.isna(row["x_coord"]) or pd.isna(row["y_coord"]):
-                    continue
-                await session.send_custom_message(
-                    "show_location_bubble",
-                    {
-                        "character_num": character_mapping[row["name"]],
-                        "x_coord": row["x_coord"],
-                        "y_coord": row["y_coord"],
-                        "time": row["time"],
-                    },
-                )
-
-        unique_location_data = (character_locations_aggregated_sorted.groupby("sub_location")
-            .agg(
-                {
-                    "x_coord": "first",
-                    "y_coord": "first",
-                    "name": list,
-                    "time": list,
-                }
-            ).reset_index())
-
-        for _, row in unique_location_data.iterrows():
-            if pd.isna(row["x_coord"]) or pd.isna(row["y_coord"]):
-                continue
-            await session.send_custom_message(
-                "show_location_label",
-                {
-                    "sub_location": row["sub_location"],
-                    "x_coord": row["x_coord"],
-                    "y_coord": row["y_coord"],
-                    "character_nums": [character_mapping[name] for name in row["name"]],
-                    "character_times": row["time"],
-                },
-            )
+        await map.handle_map_change(session, input, location_data, time_location_data)
 
 zoom_level = 100
 fit_mode = "w"
 app = App(app_ui, server, static_assets=static_dir)
-# run_app(app)
