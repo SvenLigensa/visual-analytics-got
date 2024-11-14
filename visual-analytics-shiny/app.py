@@ -37,8 +37,13 @@ app_ui = ui.page_fluid(
     ),
     ui.tags.head(
         ui.tags.link(rel="stylesheet", type="text/css", href="styles.css"),
-        ui.tags.link(rel="stylesheet", type="text/css", href="map-styles.css"),
-        ui.tags.script(src="script.js"),
+        ui.tags.link(rel="stylesheet", type="text/css", href="map/styles.css"),
+        ui.tags.link(rel="stylesheet", type="text/css", href="network/styles.css"),
+        ui.tags.link(rel="stylesheet", type="text/css", href="heatmap/styles.css"),
+        ui.tags.script(src="https://d3js.org/d3.v7.min.js"),
+        ui.tags.script(src="map/script.js"),
+        ui.tags.script(src="network/script.js"),
+        ui.tags.script(src="heatmap/script.js"),
     ),
     ui.navset_pill(
         ui.nav_panel(
@@ -98,22 +103,22 @@ app_ui = ui.page_fluid(
                         {"class": "map-card"},
                         ui.input_action_button(
                             "toggle_fit",
-                            ui.tags.img(src="zoom.png", height="18px"),
+                            ui.tags.img(src="map/zoom.png", height="18px"),
                             class_="fit-toggle-button map-settings-button",
                         ),
                         ui.input_action_button(
                             "zoom_in",
-                            ui.tags.img(src="zoom_in.png", height="18px"),
+                            ui.tags.img(src="map/zoom_in.png", height="18px"),
                             class_="zoom-in-button map-settings-button",
                         ),
                         ui.input_action_button(
                             "zoom_out",
-                            ui.tags.img(src="zoom_out.png", height="18px"),
+                            ui.tags.img(src="map/zoom_out.png", height="18px"),
                             class_="zoom-out-button map-settings-button",
                         ),
                         ui.div(
                             {"id": "map-container"},
-                            ui.tags.img(id="map-img", src="map.png"),
+                            ui.tags.img(id="map-img", src="map/map.png"),
                             ui.tags.svg(id="map-canvas"),
                         ),
                     ),
@@ -156,11 +161,13 @@ app_ui = ui.page_fluid(
                         )
                     )
                 ),
-                # ui.div(
-                #     {"class": "content-container"},
-                #     ui.card(
-                #     ),
-                # ),
+                ui.div(
+                    {"class": "content-container"},
+                    ui.card(
+                        {"class": "network-card"},
+                        ui.tags.svg(id="network-canvas"),
+                    ),
+                ),
             ),
         ),
         ui.nav_panel(
@@ -333,52 +340,6 @@ def server(input, output, session):
         session=session,
     )
 
-    @render.plot(alt="Streamgraph showing the screentime of selected characters")
-    def screentime_streamgraph():
-        selected_characters = input.screentime_streamgraph_character()
-        if not selected_characters:
-            fig, ax = plt.subplots(figsize=(10, 6))
-            ax.text(0.5, 0.5, 'Please select at least one character.', horizontalalignment='center', verticalalignment='center')
-            return fig
-
-        # Filter data for selected characters
-        filtered_data = time_data_alt[time_data_alt['name'].isin(selected_characters)]
-        # Ensure episodes are sorted correctly
-        episodes = sorted(episode_data['identifier'].unique())
-        episode_indices = {ep: idx for idx, ep in enumerate(episodes)}
-        filtered_data['episode_idx'] = filtered_data['episode'].map(episode_indices)
-        # Pivot the data to have characters as rows and episodes as columns
-        pivot_df = filtered_data.pivot_table(index='name', columns='episode_idx', values='time', fill_value=0)
-        # Ensure all episodes are represented
-        pivot_df = pivot_df.reindex(columns=range(len(episodes)), fill_value=0)
-
-        x = range(len(episodes))
-        y = pivot_df.values
-        
-        # Use interpolated values to make streamgraph smooth
-        x_new = np.linspace(min(x), max(x), 500)  # Increase number of points => Smoother
-        y_smooth = make_interp_spline(x, y, axis=1)(x_new)
-        
-        fig, ax = plt.subplots(figsize=(12, 6))
-        ax.stackplot(
-            x_new,
-            y_smooth,
-            labels=pivot_df.index,
-            baseline='wiggle',
-            colors=plt.cm.tab20.colors[:len(pivot_df.index)]
-        )
-        
-        ax.set_xticks(x)
-        ax.set_xticklabels([episodes[i] for i in x], rotation=45, ha='right')
-        ax.set_xlim(0, len(episodes)-1)
-        ax.set_xlabel('Episode')
-        ax.set_ylabel('Screen Time')
-        ax.set_title('Screentime Streamgraph')
-        ax.legend(loc='upper left', bbox_to_anchor=(1, 1))
-        
-        plt.tight_layout()
-        return fig
-
     @render_widget
     def screentime_linechart():
         selected_characters = input.screentime_linechart_character()
@@ -469,16 +430,13 @@ def server(input, output, session):
     async def handle_map_change():
         selected_characters = list(input.map_character())
         character_mapping = {character: index for index, character in enumerate(selected_characters)}
-
         await session.send_custom_message(
             "show_legend",
             {
                 "characters": selected_characters,
             },
         )
-
         await session.send_custom_message("remove_svg_elements", {})
-
         episode_start = input.map_episode_start()
         episode_end = input.map_episode_end()
         time_spend = input.show_time_spent()
