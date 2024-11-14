@@ -71,6 +71,22 @@ document.addEventListener('DOMContentLoaded', function() {
   // Get SVG element using d3
   const svg = d3.select('#network-canvas');
 
+  // Add arrows to the links
+  svg.append("defs")
+    .selectAll("marker")
+    .data(links)
+    .join("marker")
+    .attr("id", d => `arrow-${d}`)
+    .attr("viewBox", "0 -5 10 10")
+    .attr("refX", 38)
+    .attr("refY", 0)
+    .attr("markerWidth", 6)
+    .attr("markerHeight", 6)
+    .attr("orient", "auto")
+    .append("path")
+    .attr("fill", d => getLinkColor(d.category))
+    .attr("d", 'M0,-5L10,0L0,5');
+
   // Draw links
   const link = svg.append("g")
     .selectAll("line")
