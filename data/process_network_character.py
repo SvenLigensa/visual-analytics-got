@@ -1,0 +1,92 @@
+import json
+
+# Load the JSON data
+with open('data/raw/characters.json', 'r') as f:
+    data = json.load(f)
+
+# Initialize lists for nodes and links
+nodes = []
+links = []
+
+# Track bidirectional relationships to avoid duplicates
+bidirectional_pairs = set()
+
+# Helper function to add bidirectional relationships
+def add_bidirectional_link(source, target, category):
+    # Create a sorted tuple of the pair to ensure consistent ordering
+    pair = tuple(sorted([source, target]))
+    pair_with_category = (pair[0], pair[1], category)
+    
+    # Only add if this pair hasn't been seen before
+    if pair_with_category not in bidirectional_pairs:
+        links.append({
+            "source": source,
+            "target": target,
+            "category": category
+        })
+        bidirectional_pairs.add(pair_with_category)
+
+# Process each character
+for character in data['characters']:
+    # Add node
+    node = {
+        "id": character['characterName'],
+        "characterImageThumb": character.get('characterImageThumb', ''),
+        "characterImageFull": character.get('characterImageFull', '')
+    }
+    nodes.append(node)
+    
+    # Process relationships
+    # Unidirectional relationships
+    if 'killed' in character:
+        for target in character['killed']:
+            links.append({
+                "source": character['characterName'],
+                "target": target,
+                "category": "killed"
+            })
+            
+    if 'serves' in character:
+        for target in character['serves']:
+            links.append({
+                "source": character['characterName'],
+                "target": target,
+                "category": "serves"
+            })
+            
+    if 'guardianOf' in character:
+        for target in character['guardianOf']:
+            links.append({
+                "source": character['characterName'],
+                "target": target,
+                "category": "guardian of"
+            })
+            
+    if 'parents' in character:
+        for target in character['parents']:
+            links.append({
+                "source": target,
+                "target": character['characterName'],
+                "category": "parent"
+            })
+    
+    # Bidirectional relationships
+    if 'allies' in character:
+        for target in character['allies']:
+            add_bidirectional_link(character['characterName'], target, "allies")
+            
+    if 'siblings' in character:
+        for target in character['siblings']:
+            add_bidirectional_link(character['characterName'], target, "siblings")
+            
+    if 'marriedEngaged' in character:
+        for target in character['marriedEngaged']:
+            add_bidirectional_link(character['characterName'], target, "married")
+
+# Save nodes to file
+with open('data/processed/got_network_nodes.json', 'w') as f:
+    json.dump(nodes, f, indent=2)
+
+# Save links to file
+with open('data/processed/got_network_links.json', 'w') as f:
+    json.dump(links, f, indent=2)
