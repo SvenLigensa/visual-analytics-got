@@ -1,5 +1,11 @@
 document.addEventListener('DOMContentLoaded', function() {
-  // Get SVG and update its dimensions
+
+  Shiny.addCustomMessageHandler('show_network', function(message) {
+    nodes = message.nodes;
+    links = message.links;
+    showNetwork(nodes, links);
+  });
+
   function updateSVGSize() {
     const svg = d3.select('#network-canvas');
     const container = document.querySelector('.network-card');
@@ -18,109 +24,122 @@ document.addEventListener('DOMContentLoaded', function() {
       // Ensure SVG fills container
       .style('width', '100%')
       .style('height', '100%');
-    
-    console.log(width, height);
 
     return { width, height };
   }
 
-  // Initial setup and window resize handler
-  window.addEventListener('resize', () => {
+  // TODO: Add colors for each category
+  function getLinkColor(category) {
+    switch (category) {
+      case "killed":
+        return "red";
+      case "siblings":
+        return "blue";
+      default:
+        return "#999"; // default color
+    }
+  }
+
+  function showNetwork(nodes, links) {
     const dimensions = updateSVGSize();
-    // Update the center force with new dimensions
-    simulation.force("center", d3.forceCenter(dimensions.width / 2, dimensions.height / 2));
-    // Restart simulation to apply new center force
-    simulation.alpha(0.3).restart();
-  });
+    const simulation = d3.forceSimulation(nodes)
+      .force("link", d3.forceLink(links).id(d => d.id).distance(30))
+      .force("charge", d3.forceManyBody().strength(-40))
+      .force("collision", d3.forceCollide().radius(20))
+      .force("x", d3.forceX().strength(0.0005))
+      .force("y", d3.forceY().strength(0.0005))
+      .force("center", d3.forceCenter(dimensions.width / 2, dimensions.height / 2));
+  
+    window.addEventListener('resize', () => {
+      const dimensions = updateSVGSize();
+      simulation.force("center", d3.forceCenter(dimensions.width / 2, dimensions.height / 2));
+      simulation.alpha(0.05).restart();
+    });
 
-  // Initial setup
-  const dimensions = updateSVGSize();
+    const svg = d3.select('#network-canvas');
+    svg.selectAll("*").remove();
 
-  // Sample data
-  const nodes = [
-    { id: "Node 1" },
-    { id: "Node 2" },
-    { id: "Node 3" },
-    { id: "Node 4" }
-  ];
-
-  const links = [
-    { source: "Node 1", target: "Node 2" },
-    { source: "Node 2", target: "Node 3" },
-    { source: "Node 3", target: "Node 4" },
-    { source: "Node 4", target: "Node 1" }
-  ];
-
-  // Create force simulation with initial dimensions
-  const simulation = d3.forceSimulation(nodes)
-    .force("link", d3.forceLink(links).id(d => d.id))
-    .force("charge", d3.forceManyBody().strength(-100))
-    .force("center", d3.forceCenter(dimensions.width / 2, dimensions.height / 2));
-
-  // Get SVG element using d3
-  const svg = d3.select('#network-canvas');
-
-  // Draw links
-  const link = svg.append("g")
-    .selectAll("line")
+    // Create arrow markers
+    svg.append("defs")
+    .selectAll("marker")
     .data(links)
-    .join("line")
-    .style("stroke", "#999")
-    .style("stroke-width", 1);
+    .join("marker")
+    .attr("id", d => `arrowhead-${d.source.id.replace(/\s+/g, '')}-${d.target.id.replace(/\s+/g, '')}-${d.category}`)
+    .attr("viewBox", "0 -5 10 10")
+    .attr("refX", 20)
+    .attr("refY", 0)
+    .attr("orient", "auto")
+    .attr("markerWidth", 8)
+    .attr("markerHeight", 8)
+    .append("path")
+    .attr("d", "M0,-5L10,0L0,5")
+    .attr("fill", d => getLinkColor(d.category));
 
-  // Draw nodes
-  const node = svg.append("g")
-    .selectAll("circle")
-    .data(nodes)
-    .join("circle")
-    .attr("r", 5)
-    .style("fill", "#69b3a2")
-    .call(d3.drag()
+    const link = svg.append("g")
+      .selectAll("line")
+      .attr("class", "link")
+      .data(links)
+      .join("line")
+      .style("stroke", d => getLinkColor(d.category))
+      .style("stroke-width", 1)
+      .attr("marker-end", d => `url(#arrowhead-${d.source.id.replace(/\s+/g, '')}-${d.target.id.replace(/\s+/g, '')}-${d.category})`);
+
+    const node = svg.append("g")
+      .selectAll("g")
+      .data(nodes)
+      .join("g");
+
+    // Add drag behavior to the groups
+    node.call(d3.drag()
       .on("start", dragstarted)
       .on("drag", dragged)
       .on("end", dragended));
 
-  // Add titles for nodes
-  node.append("title")
-    .text(d => d.id);
+    // Update the tick function to move the groups
+    simulation.on("tick", () => {
+      link
+        .attr("x1", d => d.source.x)
+        .attr("y1", d => d.source.y)
+        .attr("x2", d => d.target.x)
+        .attr("y2", d => d.target.y);
 
-  // Update positions on each tick
-  simulation.on("tick", () => {
-    link
-      .attr("x1", d => d.source.x)
-      .attr("y1", d => d.source.y)
-      .attr("x2", d => d.target.x)
-      .attr("y2", d => d.target.y);
+      node
+        .attr("transform", d => `translate(${d.x},${d.y})`);
+    });
 
-    node
-      .attr("cx", d => d.x)
-      .attr("cy", d => d.y);
-  });
+    // Show images, if available
+    node.filter(d => d.characterImageThumb)
+      .append("image")
+      .attr("xlink:href", d => d.characterImageThumb)
+      .attr("width", 20)
+      .attr("height", 20)
+      .attr("x", -10)
+      .attr("y", -10);
 
-  // Drag functions
-  function dragstarted(event, d) {
-    if (!event.active) simulation.alphaTarget(0.3).restart();
-    d.fx = d.x;
-    d.fy = d.y;
-  }
+    // Show circles, if no image is available
+    node.filter(d => !d.characterImageThumb)
+      .append("circle")
+      .attr("r", 8)
+      .attr("fill", "#999");
 
-  function dragged(event, d) {
-    d.fx = event.x;
-    d.fy = event.y;
-  }
+    // Add titles for nodes
+    node.append("title")
+      .text(d => d.id);
 
-  function dragended(event, d) {
-    if (!event.active) simulation.alphaTarget(0);
-    d.fx = null;
-    d.fy = null;
-  }
-
-  // Add Shiny message handler to clear SVG
-  Shiny.addCustomMessageHandler('remove_network_elements', function(message) {
-    const svg = document.getElementById('network-canvas');
-    if (!svg) return;
-    while (svg.firstChild) {
-      svg.removeChild(svg.firstChild);
+    // Drag functions
+    function dragstarted(event, d) {
+      if (!event.active) simulation.alphaTarget(0.3).restart();
+      d.fx = d.x;
+      d.fy = d.y;
     }
-  });
+    function dragged(event, d) {
+      d.fx = event.x;
+      d.fy = event.y;
+    }
+    function dragended(event, d) {
+      if (!event.active) simulation.alphaTarget(0);
+      d.fx = null;
+      d.fy = null;
+    }
+  }
 });
