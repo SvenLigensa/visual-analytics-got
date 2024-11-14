@@ -38,12 +38,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Sample data
   const nodes = [
-    {id:"Addam Marbrand", name:"Addam Marbrand"},
-    {id:"Aegon Targaryen", name:"Aegon Targaryen"},
+    {id:"Addam Marbrand"},
+    {id:"Aegon Targaryen"},
+    {id:"Aeron Greyjoy"},
   ];
 
   const links = [
-    {source: "Addam Marbrand", target: "Aegon Targaryen", category:"killedBy"}
+    {source: "Addam Marbrand", target: "Aegon Targaryen", category:"killedBy"},
+    {source: "Addam Marbrand", target: "Aeron Greyjoy", category:"siblings"}
   ];
 
   // Define link color according to the link cathegory
@@ -51,6 +53,8 @@ document.addEventListener('DOMContentLoaded', function() {
     switch (category) {
       case "killedBy":
         return "red";
+      case "siblings":
+        return "blue";
       default:
         return "#999"; // default color
   }
@@ -67,31 +71,33 @@ document.addEventListener('DOMContentLoaded', function() {
   // Get SVG element using d3
   const svg = d3.select('#network-canvas');
 
-  // Add arrows to the links
-  svg.append("defs")
-    .selectAll("marker")
-    .data(links)
-    .join("marker")
-    .attr("id", d => `arrow-${d}`)
-    .attr("viewBox", "0 -5 10 10")
-    .attr("refX", 38)
-    .attr("refY", 0)
-    .attr("markerWidth", 6)
-    .attr("markerHeight", 6)
-    .attr("orient", "auto")
-    .append("path")
-    .attr("fill", d => getLinkColor(d.category))
-    .attr("d", 'M0,-5L10,0L0,5');
-
   // Draw links
   const link = svg.append("g")
     .selectAll("line")
+    .attr("class", "link")
     .data(links)
     .join("line")
     .style("stroke", "#999")
     .style("stroke-width", 1)
     .style("stroke", d => getLinkColor(d.category))
-    .attr("marker-end", (d, i) => `url(#arrowhead-${i})`); // set unique ID for each links
+    .attr("marker-end", d => `url(#arrowhead-${d.source.id.replace(/\s+/g, '')}-${d.target.id.replace(/\s+/g, '')}-${d.category}`); // set unique ID for each links
+
+  // Add arrows to the links
+  svg.append("defs")
+    .selectAll("line")
+    .append("marker")
+    .data(links)
+    .attr("id", d => `arrowhead-${d.source.id.replace(/\s+/g, '')}-${d.target.id.replace(/\s+/g, '')}-${d.category}`)
+    .attr("viewBox", "0 -5 10 10")
+    .attr("refX", 20)
+    .attr("refY", 0)
+    .attr("orient", "auto")
+    .attr("markerWidth", 8)
+    .attr("markerHeight", 8)
+    .append("path")
+    .attr("d", "M0,-5L10,0L0,5")
+    .attr("fill", d => getLinkColor(d.category));
+
 
   // Draw nodes
   const node = svg.append("g")
@@ -120,7 +126,7 @@ document.addEventListener('DOMContentLoaded', function() {
     .attr("text-anchor", "middle")
     .style("font-size", "12px")
     .style("fill", "#333")
-    .text(d => d.name);  // Display the node's name
+    .text(d => d.id);  // Display the node's name
 
   // Update positions on each tick
   simulation.on("tick", () => {
