@@ -1,5 +1,11 @@
 document.addEventListener('DOMContentLoaded', function() {
-  // Get SVG and update its dimensions
+
+  Shiny.addCustomMessageHandler('show_network', function(message) {
+    nodes = message.nodes;
+    links = message.links;
+    showNetwork(nodes, links);
+  });
+
   function updateSVGSize() {
     const svg = d3.select('#network-canvas');
     const container = document.querySelector('.network-card');
@@ -18,91 +24,46 @@ document.addEventListener('DOMContentLoaded', function() {
       // Ensure SVG fills container
       .style('width', '100%')
       .style('height', '100%');
-    
-    console.log(width, height);
 
     return { width, height };
   }
 
-  // Initial setup and window resize handler
-  window.addEventListener('resize', () => {
-    const dimensions = updateSVGSize();
-    // Update the center force with new dimensions
-    simulation.force("center", d3.forceCenter(dimensions.width / 2, dimensions.height / 2));
-    // Restart simulation to apply new center force
-    simulation.alpha(0.3).restart();
-  });
-
-  // Initial setup
-  const dimensions = updateSVGSize();
-
-  // Sample data
-  const nodes = [
-    {id:"Addam Marbrand"},
-    {id:"Aegon Targaryen"},
-    {id:"Aeron Greyjoy"},
-  ];
-
-  const links = [
-    {source: "Addam Marbrand", target: "Aegon Targaryen", category:"killedBy"},
-    {source: "Addam Marbrand", target: "Aeron Greyjoy", category:"siblings"}
-  ];
-
-  // Define link color according to the link cathegory
+  // TODO: Add colors for each category
   function getLinkColor(category) {
     switch (category) {
-      case "killedBy":
+      case "killed":
         return "red";
       case "siblings":
         return "blue";
       default:
         return "#999"; // default color
+    }
   }
-}
 
-  // Create force simulation with initial dimensions
-  const simulation = d3.forceSimulation(nodes)
-    .force("link", d3.forceLink(links).id(d => d.id).distance(200))
-    .force("charge", d3.forceManyBody())
-    .force("x", d3.forceX())
-    .force("y", d3.forceY())
-    .force("center", d3.forceCenter(dimensions.width / 2, dimensions.height / 2));
+  function showNetwork(nodes, links) {
+    const dimensions = updateSVGSize();
+    const simulation = d3.forceSimulation(nodes)
+      .force("link", d3.forceLink(links).id(d => d.id).distance(30))
+      .force("charge", d3.forceManyBody().strength(-40))
+      .force("collision", d3.forceCollide().radius(20))
+      .force("x", d3.forceX().strength(0.0005))
+      .force("y", d3.forceY().strength(0.0005))
+      .force("center", d3.forceCenter(dimensions.width / 2, dimensions.height / 2));
+  
+    window.addEventListener('resize', () => {
+      const dimensions = updateSVGSize();
+      simulation.force("center", d3.forceCenter(dimensions.width / 2, dimensions.height / 2));
+      simulation.alpha(0.05).restart();
+    });
 
-  // Get SVG element using d3
-  const svg = d3.select('#network-canvas');
+    const svg = d3.select('#network-canvas');
+    svg.selectAll("*").remove();
 
-  // Add arrows to the links
-  svg.append("defs")
+    // Create arrow markers
+    svg.append("defs")
     .selectAll("marker")
     .data(links)
     .join("marker")
-    .attr("id", d => `arrow-${d}`)
-    .attr("viewBox", "0 -5 10 10")
-    .attr("refX", 38)
-    .attr("refY", 0)
-    .attr("markerWidth", 6)
-    .attr("markerHeight", 6)
-    .attr("orient", "auto")
-    .append("path")
-    .attr("fill", d => getLinkColor(d.category))
-    .attr("d", 'M0,-5L10,0L0,5');
-
-  // Draw links
-  const link = svg.append("g")
-    .selectAll("line")
-    .attr("class", "link")
-    .data(links)
-    .join("line")
-    .style("stroke", "#999")
-    .style("stroke-width", 1)
-    .style("stroke", d => getLinkColor(d.category))
-    .attr("marker-end", d => `url(#arrowhead-${d.source.id.replace(/\s+/g, '')}-${d.target.id.replace(/\s+/g, '')}-${d.category}`); // set unique ID for each links
-
-  // Add arrows to the links
-  svg.append("defs")
-    .selectAll("line")
-    .append("marker")
-    .data(links)
     .attr("id", d => `arrowhead-${d.source.id.replace(/\s+/g, '')}-${d.target.id.replace(/\s+/g, '')}-${d.category}`)
     .attr("viewBox", "0 -5 10 10")
     .attr("refX", 20)
@@ -114,78 +75,71 @@ document.addEventListener('DOMContentLoaded', function() {
     .attr("d", "M0,-5L10,0L0,5")
     .attr("fill", d => getLinkColor(d.category));
 
+    const link = svg.append("g")
+      .selectAll("line")
+      .attr("class", "link")
+      .data(links)
+      .join("line")
+      .style("stroke", d => getLinkColor(d.category))
+      .style("stroke-width", 1)
+      .attr("marker-end", d => `url(#arrowhead-${d.source.id.replace(/\s+/g, '')}-${d.target.id.replace(/\s+/g, '')}-${d.category})`);
 
-  // Draw nodes
-  const node = svg.append("g")
-    .selectAll("circle")
-    .data(nodes)
-    .join("circle")
-    .attr("r", 10)
-    .style("fill", "#999")
-    .call(d3.drag()
+    const node = svg.append("g")
+      .selectAll("g")
+      .data(nodes)
+      .join("g");
+
+    // Add drag behavior to the groups
+    node.call(d3.drag()
       .on("start", dragstarted)
       .on("drag", dragged)
       .on("end", dragended));
 
-  // Add titles for nodes
-  node.append("title")
-    .text(d => d.id);
+    // Update the tick function to move the groups
+    simulation.on("tick", () => {
+      link
+        .attr("x1", d => d.source.x)
+        .attr("y1", d => d.source.y)
+        .attr("x2", d => d.target.x)
+        .attr("y2", d => d.target.y);
 
-  // Add labels for nodes (this is where the node name is added)
-  const label = svg.append("g")
-    .selectAll("text")
-    .data(nodes)
-    .join("text")
-    .attr("x", d => d.x)  // Set initial position
-    .attr("y", d => d.y)  // Set initial position
-    .attr("dy", -10)      // Position the text a bit above the node
-    .attr("text-anchor", "middle")
-    .style("font-size", "12px")
-    .style("fill", "#333")
-    .text(d => d.id);  // Display the node's name
+      node
+        .attr("transform", d => `translate(${d.x},${d.y})`);
+    });
 
-  // Update positions on each tick
-  simulation.on("tick", () => {
-    link
-      .attr("x1", d => d.source.x)
-      .attr("y1", d => d.source.y)
-      .attr("x2", d => d.target.x)
-      .attr("y2", d => d.target.y)
-      //.attr("marker-end", "url(#arrowhead)");
+    // Show images, if available
+    node.filter(d => d.characterImageThumb)
+      .append("image")
+      .attr("xlink:href", d => d.characterImageThumb)
+      .attr("width", 20)
+      .attr("height", 20)
+      .attr("x", -10)
+      .attr("y", -10);
 
-    node
-      .attr("cx", d => d.x)
-      .attr("cy", d => d.y);
+    // Show circles, if no image is available
+    node.filter(d => !d.characterImageThumb)
+      .append("circle")
+      .attr("r", 8)
+      .attr("fill", "#999");
 
-      label
-      .attr("x", d => d.x)  // Update label's position
-      .attr("y", d => d.y);
-  });
+    // Add titles for nodes
+    node.append("title")
+      .text(d => d.id);
 
-  // Drag functions
-  function dragstarted(event, d) {
-    if (!event.active) simulation.alphaTarget(0.3).restart();
-    d.fx = d.x;
-    d.fy = d.y;
-  }
-
-  function dragged(event, d) {
-    d.fx = event.x;
-    d.fy = event.y;
-  }
-
-  function dragended(event, d) {
-    if (!event.active) simulation.alphaTarget(0);
-    d.fx = null;
-    d.fy = null;
-  }
-
-  // Add Shiny message handler to clear SVG
-  Shiny.addCustomMessageHandler('remove_network_elements', function(message) {
-    const svg = document.getElementById('network-canvas');
-    if (!svg) return;
-    while (svg.firstChild) {
-      svg.removeChild(svg.firstChild);
+    // Drag functions
+    function dragstarted(event, d) {
+      if (!event.active) simulation.alphaTarget(0.3).restart();
+      d.fx = d.x;
+      d.fy = d.y;
     }
-  });
+    function dragged(event, d) {
+      d.fx = event.x;
+      d.fy = event.y;
+    }
+    function dragended(event, d) {
+      if (!event.active) simulation.alphaTarget(0);
+      d.fx = null;
+      d.fy = null;
+    }
+  }
 });

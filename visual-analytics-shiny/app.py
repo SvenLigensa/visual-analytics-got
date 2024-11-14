@@ -21,6 +21,8 @@ episode_data = pd.read_csv(data_dir / "episodes.csv", dtype=str)
 time_data = pd.read_csv(data_dir / "time.csv")
 time_data_alt = pd.read_csv(data_dir / "characters_time.csv")
 time_location_data = pd.read_csv(data_dir / "time_location_post.csv")
+network_nodes = pd.read_json(data_dir / "got_network_nodes.json")
+network_links = pd.read_json(data_dir / "got_network_links.json")
 
 app_ui = ui.page_fluid(
     ui.tags.h1(
@@ -551,6 +553,66 @@ def server(input, output, session):
     @reactive.event(input.show_travel_paths)
     async def handle_show_travel_paths_change():
         await map.handle_map_change(session, input, location_data, time_location_data)
+
+    # Show the full network initially
+    @reactive.Effect
+    async def _():  # Create an Effect that runs on startup
+        await show_network()
+
+    async def show_network():
+        await session.send_custom_message("show_network", 
+                                {
+                                    "nodes": network_nodes.to_dict('records'),
+                                    "links": network_links.to_dict('records')
+                                })
+
+    @reactive.Effect
+    @reactive.event(input.network_character, input.network_relationships)
+    async def handle_network_filter():
+        selected_characters = input.network_character()
+        selected_relationships = input.network_relationships()
+        
+        # If no characters selected, show full network
+        if not selected_characters:
+            await show_network()
+            return
+            
+        # Filter nodes to include selected characters and their direct connections
+        filtered_nodes = network_nodes[
+            network_nodes['id'].isin(selected_characters)
+        ].to_dict('records')
+        
+        # Get all nodes that are connected to selected characters
+        filtered_links = network_links[
+            (network_links['source'].isin(selected_characters) | 
+             network_links['target'].isin(selected_characters))
+        ]
+        
+        # Filter links by relationship type if specified
+        if selected_relationships:
+            filtered_links = filtered_links[
+                filtered_links['type'].isin(selected_relationships)
+            ]
+            
+        # Add connected nodes to filtered_nodes
+        connected_chars = set(filtered_links['source'].tolist() + 
+                            filtered_links['target'].tolist())
+        additional_nodes = network_nodes[
+            network_nodes['id'].isin(connected_chars)
+        ].to_dict('records')
+        filtered_nodes.extend(additional_nodes)
+        
+        # Remove duplicates from nodes
+        filtered_nodes = [dict(t) for t in 
+                         {tuple(d.items()) for d in filtered_nodes}]
+        
+        await session.send_custom_message(
+            "show_network",
+            {
+                "nodes": filtered_nodes,
+                "links": filtered_links.to_dict('records')
+            }
+        )
 
 zoom_level = 100
 fit_mode = "w"

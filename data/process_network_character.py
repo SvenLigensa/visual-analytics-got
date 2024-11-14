@@ -7,6 +7,7 @@ with open('data/raw/characters.json', 'r') as f:
 # Initialize lists for nodes and links
 nodes = []
 links = []
+node_ids = set()  # Track existing node IDs
 
 # Track bidirectional relationships to avoid duplicates
 bidirectional_pairs = set()
@@ -35,6 +36,7 @@ for character in data['characters']:
         "characterImageFull": character.get('characterImageFull', '')
     }
     nodes.append(node)
+    node_ids.add(character['characterName'])
     
     # Process relationships
     # Unidirectional relationships
@@ -82,6 +84,21 @@ for character in data['characters']:
     if 'marriedEngaged' in character:
         for target in character['marriedEngaged']:
             add_bidirectional_link(character['characterName'], target, "married")
+
+# After all links are processed, add missing nodes
+all_referenced_ids = set()
+for link in links:
+    all_referenced_ids.add(link['source'])
+    all_referenced_ids.add(link['target'])
+
+# Add missing nodes
+for node_id in all_referenced_ids:
+    if node_id not in node_ids:
+        nodes.append({
+            "id": node_id,
+            "characterImageThumb": "",
+            "characterImageFull": ""
+        })
 
 # Save nodes to file
 with open('data/processed/got_network_nodes.json', 'w') as f:
