@@ -41,6 +41,10 @@ h1 {
   background-color: var(--light-gray);
 }
 
+.settings-card {
+  height: 100%;
+}
+
 /* Needed to make the card fill the whole height */
 .full-size-div {
   height: calc(100vh - var(--header-height) - var(--navbar-height));

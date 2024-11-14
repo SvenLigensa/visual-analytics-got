@@ -617,7 +617,7 @@
   {
     "source": "Drogon",
     "target": "Daenerys Targaryen",
-    "category": "guardian of"
+    "category": "guardianOf"
   },
   {
     "source": "Drogon",
@@ -652,7 +652,7 @@
   {
     "source": "Eddard Stark",
     "target": "Jon Snow",
-    "category": "guardian of"
+    "category": "guardianOf"
   },
   {
     "source": "Rickard Stark",
@@ -752,7 +752,7 @@
   {
     "source": "Ghost",
     "target": "Jon Snow",
-    "category": "guardian of"
+    "category": "guardianOf"
   },
   {
     "source": "Ghost",
@@ -857,7 +857,7 @@
   {
     "source": "Grey Wind",
     "target": "Robb Stark",
-    "category": "guardian of"
+    "category": "guardianOf"
   },
   {
     "source": "Grey Wind",
@@ -952,17 +952,17 @@
   {
     "source": "Jaime Lannister",
     "target": "Aerys II Targaryen",
-    "category": "guardian of"
+    "category": "guardianOf"
   },
   {
     "source": "Jaime Lannister",
     "target": "Robert Baratheon",
-    "category": "guardian of"
+    "category": "guardianOf"
   },
   {
     "source": "Jaime Lannister",
     "target": "Joffrey Baratheon",
-    "category": "guardian of"
+    "category": "guardianOf"
   },
   {
     "source": "Tywin Lannister",
@@ -1047,12 +1047,12 @@
   {
     "source": "Jon Arryn",
     "target": "Eddard Stark",
-    "category": "guardian of"
+    "category": "guardianOf"
   },
   {
     "source": "Jon Arryn",
     "target": "Robert Baratheon",
-    "category": "guardian of"
+    "category": "guardianOf"
   },
   {
     "source": "Jon Arryn",
@@ -1207,7 +1207,7 @@
   {
     "source": "Lady",
     "target": "Sansa Stark",
-    "category": "guardian of"
+    "category": "guardianOf"
   },
   {
     "source": "Lady",
@@ -1442,7 +1442,7 @@
   {
     "source": "Nymeria",
     "target": "Arya Stark",
-    "category": "guardian of"
+    "category": "guardianOf"
   },
   {
     "source": "Nymeria",
@@ -1647,7 +1647,7 @@
   {
     "source": "Rhaegal",
     "target": "Daenerys Targaryen",
-    "category": "guardian of"
+    "category": "guardianOf"
   },
   {
     "source": "Rhaegal",
@@ -1942,7 +1942,7 @@
   {
     "source": "Shaggydog",
     "target": "Rickon Stark",
-    "category": "guardian of"
+    "category": "guardianOf"
   },
   {
     "source": "Shaggydog",
@@ -1992,7 +1992,7 @@
   {
     "source": "Summer",
     "target": "Bran Stark",
-    "category": "guardian of"
+    "category": "guardianOf"
   },
   {
     "source": "Randyll Tarly",
@@ -2157,7 +2157,7 @@
   {
     "source": "Viserion",
     "target": "Daenerys Targaryen",
-    "category": "guardian of"
+    "category": "guardianOf"
   },
   {
     "source": "Rhaella Targaryen",
