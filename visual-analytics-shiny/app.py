@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 from scipy.interpolate import make_interp_spline
 
 from util import map
+from util.cluster import cluster_data
 
 app_dir = Path(__file__).parent
 static_dir = app_dir / "static"
@@ -18,7 +19,7 @@ data_dir = app_dir / "data"
 location_data = pd.read_csv(data_dir / "locations.csv", dtype=str)
 character_data = pd.read_csv(data_dir / "characters.csv", dtype=str)
 episode_data = pd.read_csv(data_dir / "episodes.csv", dtype=str)
-time_data = pd.read_csv(data_dir / "time.csv")
+time_data = pd.read_csv(data_dir / "time.csv", index_col=0)
 time_data_alt = pd.read_csv(data_dir / "characters_time.csv")
 time_location_data = pd.read_csv(data_dir / "time_location_post.csv")
 network_nodes = pd.read_json(data_dir / "got_network_nodes.json")
@@ -252,13 +253,19 @@ app_ui = ui.page_fluid(
                     ui.card(
                         {"class": "settings-card"},
                         ui.card_header(ui.h4("Settings")),
-                        "Coming soon...",
+                        ui.input_slider(
+                            "heatmap_threshold",
+                            "Minimum total screentime (minutes):",
+                            min=0,
+                            max=120,
+                            value=5,
+                        ),
                     )
                 ),
                 ui.div(
                     {"class": "content-container"},
                     ui.card(
-
+                        output_widget("character_heatmap", width="100%", height="auto")
                     ),
                 ),
             ),
@@ -292,6 +299,9 @@ def server(input, output, session):
     )
     ui.update_selectize(
         "screentime_heatmap_character", choices=characters, server=True, session=session
+    )
+    ui.update_selectize(
+        "heatmap_characters", choices=characters, selected=None
     )
     ui.update_selectize(
         "map_episode_start",
@@ -593,6 +603,59 @@ def server(input, output, session):
             server=True,
             session=session
         )
+
+    @output
+    @render_widget
+    def character_heatmap():
+        # Calculate total screentime for each character (in minutes)
+        total_screentime = time_data.sum(axis=1) / 60
+
+        filtered_chars = total_screentime[total_screentime >= input.heatmap_threshold()].index
+
+        # Filter the data for selected characters and convert to minutes
+        filtered_data = time_data.loc[filtered_chars] / 60  # Convert seconds to minutes
+
+        filtered_data = cluster_data(filtered_data)
+
+        # Create heatmap using plotly express
+        fig = px.imshow(
+            filtered_data,
+            aspect="auto",
+            color_continuous_scale="Blues",
+            labels=dict(x="Episode", y="Character", color="Screentime (minutes)"),
+        )
+
+        # Update layout
+        fig.update_layout(
+            xaxis_title="Episode",
+            yaxis_title="Character",
+            height=len(filtered_chars) * 25,  # Dynamic height based on number of characters
+            width=1200,
+            xaxis_tickangle=-45,
+            title=dict(
+                text=f"{len(filtered_chars)} Characters with over {input.heatmap_threshold()} minutes of total screentime",
+                xanchor="center",
+                x=0.5,
+            ),
+            coloraxis=dict(
+                colorbar=dict(
+                    y=1,
+                    thickness=25,
+                    orientation='h',
+                    yanchor="bottom",
+                    xanchor="center",
+                    ticks="inside",
+                    bgcolor='rgba(255,255,255,0.9)',
+                )
+            )
+        )
+
+        # Add hover template
+        fig.update_traces(
+            hovertemplate="Character: %{y}<br>Episode: %{x}<br>Screentime: %{z:.1f} minutes<extra></extra>"
+        )
+
+        return fig
 
 zoom_level = 100
 fit_mode = "w"

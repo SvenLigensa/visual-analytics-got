@@ -49,9 +49,11 @@ h1 {
 .full-size-div {
   height: calc(100vh - var(--header-height) - var(--navbar-height));
   display: flex;
+  overflow: auto;
 }
 /* Needed to make the card fill the whole width */
 .full-size-div > .card {
   width: 100%;
   height: 100%;
+  overflow: auto;
 }
