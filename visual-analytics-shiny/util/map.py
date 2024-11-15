@@ -52,9 +52,9 @@ async def handle_map_change(session, input, location_data, time_location_data):
 
     if input.show_travel_paths():
         await draw_travel_paths(session, char_travels, location_data, character_mapping)
-    
     if input.show_time_spent():
-        await draw_time_bubbles_and_labels(session, char_locations_agg, location_data, character_mapping)
+        await draw_time_bubbles(session, char_locations_agg, location_data, character_mapping)
+    await draw_location_labels(session, char_locations_agg, location_data, character_mapping)
 
 async def draw_travel_paths(session, character_travels, location_data, character_mapping):
     def get_coords(loc_name):
@@ -77,7 +77,7 @@ async def draw_travel_paths(session, character_travels, location_data, character
             "num_travels": row["num_travels"],
         })
 
-async def draw_time_bubbles_and_labels(session, character_locations_aggregated, location_data, character_mapping):
+async def draw_time_bubbles(session, character_locations_aggregated, location_data, character_mapping):
     character_locations_aggregated_sorted = character_locations_aggregated.sort_values(
         by=["sub_location", "time"], ascending=[True, False]
     )
@@ -88,7 +88,6 @@ async def draw_time_bubbles_and_labels(session, character_locations_aggregated, 
         how="left",
     )
     
-    # Draw bubbles
     for _, row in character_locations_aggregated_sorted.iterrows():
         if pd.isna(row["x_coord"]) or pd.isna(row["y_coord"]):
             continue
@@ -102,7 +101,17 @@ async def draw_time_bubbles_and_labels(session, character_locations_aggregated, 
             },
         )
 
-    # Draw labels
+async def draw_location_labels(session, character_locations_aggregated, location_data, character_mapping):
+    character_locations_aggregated_sorted = character_locations_aggregated.sort_values(
+        by=["sub_location", "time"], ascending=[True, False]
+    )
+    character_locations_aggregated_sorted = pd.merge(
+        character_locations_aggregated_sorted,
+        location_data,
+        on="sub_location",
+        how="left",
+    )
+    
     unique_location_data = (character_locations_aggregated_sorted.groupby("sub_location")
         .agg({
             "x_coord": "first",
