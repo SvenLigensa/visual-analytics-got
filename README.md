@@ -1,3 +1,5 @@
+[![Deployment](https://img.shields.io/badge/shinyapps.io-deployed-green)](https://sven-ligensa.shinyapps.io/got-analytics/)
+
 # Visual Analytics app for Game Of Thrones
 
 Run the **Shiny Python** app locally by executing the `app.py` script from the root folder (`visual-analytics-got`).
@@ -15,3 +17,4 @@ With *Docker* (Dockerfile set up following [this tutorial](https://hosting.analy
 
 - Improve the linechart to use `characters_time.csv` instead of `time.csv`
     - Then, remove `time.csv` and `X_process_time.py`
+- Add tab for 'About' with background information about the project and Credits

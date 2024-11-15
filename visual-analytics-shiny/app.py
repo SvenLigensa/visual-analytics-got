@@ -162,9 +162,8 @@ app_ui = ui.page_fluid(
                     )
                 ),
                 ui.div(
-                    {"class": "content-container"},
+                    {"class": "full-size-div"},
                     ui.card(
-                        {"class": "network-card"},
                         ui.tags.svg(id="network-canvas"),
                     ),
                 ),
@@ -263,7 +262,7 @@ app_ui = ui.page_fluid(
                     )
                 ),
                 ui.div(
-                    {"class": "content-container"},
+                    {"class": "full-size-div"},
                     ui.card(
                         output_widget("character_heatmap", width="100%", height="auto")
                     ),
@@ -630,7 +629,6 @@ def server(input, output, session):
             xaxis_title="Episode",
             yaxis_title="Character",
             height=len(filtered_chars) * 25,  # Dynamic height based on number of characters
-            width=1200,
             xaxis_tickangle=-45,
             title=dict(
                 text=f"{len(filtered_chars)} Characters with over {input.heatmap_threshold()} minutes of total screentime",

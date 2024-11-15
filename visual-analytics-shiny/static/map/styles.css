@@ -1,6 +1,7 @@
 /* Content container will grow to fill the available space */
 .content-container {
   height: calc(100vh - var(--header-height) - var(--navbar-height));
+  width: 100%;
   display: flex;
   overflow: hidden;
 }

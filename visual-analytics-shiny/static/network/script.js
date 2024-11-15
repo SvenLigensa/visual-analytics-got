@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   function updateSVGSize() {
     const svg = d3.select('#network-canvas');
-    const container = document.querySelector('.network-card');
+    const container = document.querySelector('.full-size-div');
     if (!container) return;
     const rect = container.getBoundingClientRect();
     const width = rect.width;
