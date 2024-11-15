@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Create arrow markers
     svg.append("defs")
       .selectAll("marker")
-      .data(links)
+      .data(links.filter(d => ["killed", "serves", "parent", "guardianOf"].includes(d.category)))
       .join("marker")
       .attr("id", d => `arrowhead-${d.source.id.replace(/\s+/g, '')}-${d.target.id.replace(/\s+/g, '')}-${d.category}`)
       .attr("viewBox", "0 -5 10 10")
@@ -93,11 +93,17 @@ document.addEventListener('DOMContentLoaded', function() {
       .join("line")
       .style("stroke", d => LINK_COLORS[d.category])
       .style("stroke-width", 2)
-      .attr("marker-end", d => `url(#arrowhead-${d.source.id.replace(/\s+/g, '')}-${d.target.id.replace(/\s+/g, '')}-${d.category})`);
+      .attr("marker-end", d => ["killed", "serves", "parent", "guardianOf"].includes(d.category) ? 
+        `url(#arrowhead-${d.source.id.replace(/\s+/g, '')}-${d.target.id.replace(/\s+/g, '')}-${d.category})` : 
+        null);
 
     // Add titles for nodes
     link.append("title")
-      .text(d => `${d.category.charAt(0).toUpperCase() + d.category.slice(1)}: ${d.source.id} → ${d.target.id}`);
+      .text(d => {
+        const relationshipType = d.category.charAt(0).toUpperCase() + d.category.slice(1);
+        const arrow = ["killed", "serves", "parent", "guardianOf"].includes(d.category) ? "→" : "↔";
+        return `${relationshipType}: ${d.source.id} ${arrow} ${d.target.id}`;
+      });
 
     const node = g.append("g")
       .selectAll("g")
