@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', function() {
       .join("marker")
       .attr("id", d => `arrowhead-${d.source.id.replace(/\s+/g, '')}-${d.target.id.replace(/\s+/g, '')}-${d.category}`)
       .attr("viewBox", "0 -5 10 10")
-      .attr("refX", 20)
+      .attr("refX", d => d.source === d.target ? 12 : 20)
       .attr("refY", 0)
       .attr("orient", "auto")
       .attr("markerWidth", 10)
@@ -87,12 +87,13 @@ document.addEventListener('DOMContentLoaded', function() {
       .attr("fill", d => LINK_COLORS[d.category]);
 
     const link = g.append("g")
-      .selectAll("line")
+      .selectAll("path")
       .attr("class", "link")
       .data(links)
-      .join("line")
+      .join("path")
       .style("stroke", d => LINK_COLORS[d.category])
       .style("stroke-width", 2)
+      .style("fill", "none")
       .attr("marker-end", d => ["killed", "serves", "parent", "guardianOf"].includes(d.category) ? 
         `url(#arrowhead-${d.source.id.replace(/\s+/g, '')}-${d.target.id.replace(/\s+/g, '')}-${d.category})` : 
         null);
@@ -118,14 +119,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Update the tick function to move the groups
     simulation.on("tick", () => {
-      link
-        .attr("x1", d => d.source.x)
-        .attr("y1", d => d.source.y)
-        .attr("x2", d => d.target.x)
-        .attr("y2", d => d.target.y);
+      link.attr("d", d => {
+        // Handle self-referential links
+        if (d.source === d.target) {
+          const x = d.source.x;
+          const y = d.source.y;
+          const size = IMG_SIZE + 10;
+          return `M ${x},${y} 
+                  C ${x + size},${y - size}
+                    ${x + size},${y + size}
+                    ${x + 15},${y}`;
+        }
+        // Normal straight line for different nodes
+        return `M ${d.source.x},${d.source.y} L ${d.target.x},${d.target.y}`;
+      });
 
-      node
-        .attr("transform", d => `translate(${d.x},${d.y})`);
+      node.attr("transform", d => `translate(${d.x},${d.y})`);
     });
 
     // Check if the image is available
