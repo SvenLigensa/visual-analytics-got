@@ -115,7 +115,7 @@ def cluster_data(data):
 
     normalized_data = data.copy()
     # Normalize columns to sum to 1
-    # normalized_data = normalized_data.div(normalized_data.sum(axis=0), axis=1)
+    normalized_data = normalized_data.div(normalized_data.sum(axis=0), axis=1)
     # Normalize rows to sum to 1
     normalized_data = normalized_data.div(normalized_data.sum(axis=1), axis=0)
     

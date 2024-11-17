@@ -576,7 +576,7 @@ def server(input, output, session):
 
 
         fig.update_layout(
-            yaxis_title="log(num characters)",
+            yaxis_title="log(#characters)",
             yaxis=dict(type="log"),
             xaxis=dict(range=[0, max_screentime]),
             showlegend=False,
