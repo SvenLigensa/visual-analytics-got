@@ -1,25 +1,21 @@
-const IMG_SIZE = 40;
-const IMG_PADDING = IMG_SIZE * 2/3;
-const LINK_DISTANCE = 50;
-
-const DUMMY_COLOR = "#4a4e69";
-const LINK_COLORS = {
-  "parent": "#264653",
-  "siblings": "#F4A261",
-  "killed": "#E76F51",
-  "serves": "#E9C46A",
-  "married": "#2A9D8F",
-  "allies": "#E9C46A",
-  "guardianOf": "#22333b",
+const CONFIG = {
+  IMG_SIZE: 40,
+  COLORS: {
+    dummy: "#4a4e69",
+    links: {
+      parent: "#264653",
+      siblings: "#F4A261",
+      killed: "#E76F51",
+      serves: "#E9C46A",
+      married: "#2A9D8F",
+      allies: "#E9C46A",
+      guardianOf: "#22333b",
+    }
+  },
+  DIRECTED_RELATIONSHIPS: ["killed", "serves", "parent", "guardianOf"]
 };
 
 document.addEventListener('DOMContentLoaded', function() {
-
-  Shiny.addCustomMessageHandler('show_network', function(message) {
-    nodes = message.nodes;
-    links = message.links;
-    showNetwork(nodes, links);
-  });
 
   function updateSVGSize() {
     const svg = d3.select('#network-canvas');
@@ -38,42 +34,41 @@ document.addEventListener('DOMContentLoaded', function() {
     return { width, height };
   }
 
+  Shiny.addCustomMessageHandler('show_network', function(message) {
+    nodes = message.nodes;
+    links = message.links;
+    showNetwork(nodes, links);
+  });
+
   function showNetwork(nodes, links) {
     const svg = d3.select('#network-canvas');
     svg.selectAll("*").remove();
     const dimensions = updateSVGSize();
 
-    // Add a container group for zoom
-    const g = svg.append("g")
-        .attr("class", "zoom-container");
-
-    // Add zoom behavior
+    const g = svg.append("g").attr("class", "zoom-container");
     const zoom = d3.zoom()
-        .scaleExtent([0.2, 4])
+        .scaleExtent([0.1, 10])
         .on("zoom", (event) => {
             g.attr("transform", event.transform);
         });
-
     svg.call(zoom);
 
     const simulation = d3.forceSimulation(nodes)
-      .force("link", d3.forceLink(links).id(d => d.id).distance(LINK_DISTANCE))
-      .force("charge", d3.forceManyBody().strength(-IMG_PADDING * 2))
-      .force("collision", d3.forceCollide().radius(IMG_PADDING))
-      .force("x", d3.forceX().strength(0.0005))
-      .force("y", d3.forceY().strength(0.0005))
-      .force("center", d3.forceCenter(dimensions.width / 2, dimensions.height / 2));
+      .force("link", d3.forceLink(links).id(d => d.id).distance(100))
+      .force("charge", d3.forceManyBody().strength(-CONFIG.IMG_SIZE * 2))
+      .force("collision", d3.forceCollide().radius(CONFIG.IMG_SIZE * 2/3))
+      .force("center", d3.forceCenter(dimensions.width / 2, dimensions.height / 2).strength(0.000001));
   
     window.addEventListener('resize', () => {
       const dimensions = updateSVGSize();
       simulation.force("center", d3.forceCenter(dimensions.width / 2, dimensions.height / 2));
-      simulation.alpha(0.05).restart();
+      simulation.alpha(0.1).restart();
     });
 
     // Create arrow markers
     svg.append("defs")
       .selectAll("marker")
-      .data(links.filter(d => ["killed", "serves", "parent", "guardianOf"].includes(d.category)))
+      .data(links.filter(d => CONFIG.DIRECTED_RELATIONSHIPS.includes(d.category)))
       .join("marker")
       .attr("id", d => `arrowhead-${d.source.id.replace(/\s+/g, '')}-${d.target.id.replace(/\s+/g, '')}-${d.category}`)
       .attr("viewBox", "0 -5 10 10")
@@ -84,17 +79,17 @@ document.addEventListener('DOMContentLoaded', function() {
       .attr("markerHeight", 10)
       .append("path")
       .attr("d", "M0,-5L10,0L0,5")
-      .attr("fill", d => LINK_COLORS[d.category]);
+      .attr("fill", d => CONFIG.COLORS.links[d.category]);
 
     const link = g.append("g")
       .selectAll("path")
       .attr("class", "link")
       .data(links)
       .join("path")
-      .style("stroke", d => LINK_COLORS[d.category])
+      .style("stroke", d => CONFIG.COLORS.links[d.category])
       .style("stroke-width", 2)
       .style("fill", "none")
-      .attr("marker-end", d => ["killed", "serves", "parent", "guardianOf"].includes(d.category) ? 
+      .attr("marker-end", d => CONFIG.DIRECTED_RELATIONSHIPS.includes(d.category) ? 
         `url(#arrowhead-${d.source.id.replace(/\s+/g, '')}-${d.target.id.replace(/\s+/g, '')}-${d.category})` : 
         null);
 
@@ -102,7 +97,7 @@ document.addEventListener('DOMContentLoaded', function() {
     link.append("title")
       .text(d => {
         const relationshipType = d.category.charAt(0).toUpperCase() + d.category.slice(1);
-        const arrow = ["killed", "serves", "parent", "guardianOf"].includes(d.category) ? "→" : "↔";
+        const arrow = CONFIG.DIRECTED_RELATIONSHIPS.includes(d.category) ? "→" : "↔";
         return `${relationshipType}: ${d.source.id} ${arrow} ${d.target.id}`;
       });
 
@@ -124,7 +119,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (d.source === d.target) {
           const x = d.source.x;
           const y = d.source.y;
-          const size = IMG_SIZE + 10;
+          const size = CONFIG.IMG_SIZE + 10;
           return `M ${x},${y} 
                   C ${x + size},${y - size}
                     ${x + size},${y + size}
@@ -153,7 +148,7 @@ document.addEventListener('DOMContentLoaded', function() {
     node.filter(d => !d.characterImageThumb)
       .append("circle")
       .attr("r", 8)
-      .attr("fill", DUMMY_COLOR);
+      .attr("fill", CONFIG.COLORS.dummy);
 
     // Then handle nodes with potential images
     node.filter(d => d.characterImageThumb).each(function(d) {
@@ -162,14 +157,14 @@ document.addEventListener('DOMContentLoaded', function() {
         if (available) {
           element.append("image")
             .attr("xlink:href", d.characterImageThumb)
-            .attr("width", IMG_SIZE)
-            .attr("height", IMG_SIZE)
-            .attr("x", -IMG_SIZE / 2)
-            .attr("y", -IMG_SIZE / 2);
+            .attr("width", CONFIG.IMG_SIZE)
+            .attr("height", CONFIG.IMG_SIZE)
+            .attr("x", -CONFIG.IMG_SIZE / 2)
+            .attr("y", -CONFIG.IMG_SIZE / 2);
         } else {
           element.append("circle")
             .attr("r", 8)
-            .attr("fill", DUMMY_COLOR);
+            .attr("fill", CONFIG.COLORS.dummy);
         }
       });
     });

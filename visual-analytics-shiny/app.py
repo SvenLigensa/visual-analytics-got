@@ -10,7 +10,8 @@ import matplotlib.pyplot as plt
 from scipy.interpolate import make_interp_spline
 
 from util import map
-from util.cluster import cluster_data
+from util.heatmap import create_heatmap
+import plotly.graph_objects as go
 
 app_dir = Path(__file__).parent
 static_dir = app_dir / "static"
@@ -24,6 +25,9 @@ time_data_alt = pd.read_csv(data_dir / "characters_time.csv")
 time_location_data = pd.read_csv(data_dir / "time_location_post.csv")
 network_nodes = pd.read_json(data_dir / "got_network_nodes.json")
 network_links = pd.read_json(data_dir / "got_network_links.json")
+
+characters = character_data["name"].tolist()
+episodes = episode_data["identifier"].tolist()
 
 app_ui = ui.page_fluid(
     ui.tags.h1(
@@ -170,39 +174,26 @@ app_ui = ui.page_fluid(
             ),
         ),
         ui.nav_panel(
-            "Screentime Linechart",
+            "Screentime Heatmap",
             ui.layout_sidebar(
                 ui.sidebar(
                     ui.card(
                         {"class": "settings-card"},
                         ui.card_header(ui.h4("Settings")),
-                        ui.input_selectize(
-                            "screentime_linechart_character",
-                            "Select characters:",
-                            choices=[],  # Updated server-side
-                            multiple=True,
-                            options={
-                                "placeholder": "Type to search...",
-                            },
+                        ui.input_slider(
+                            "heatmap_threshold",
+                            "Screentime range (minutes):",
+                            min=0,
+                            max=685,
+                            value=[60, 685],
                         ),
-                        ui.input_selectize(
-                            "linechart_episode_start",
-                            "Select start episode:",
-                            choices=[],  # Updated server-side
-                            multiple=False,
-                        ),
-                        ui.input_selectize(
-                            "linechart_episode_end",
-                            "Select end episode:",
-                            choices=[],  # Updated server-side
-                            multiple=False,
-                        ),
+                        output_widget("screentime_distribution"),
                     )
                 ),
                 ui.div(
                     {"class": "full-size-div"},
                     ui.card(
-                        output_widget("screentime_linechart", width="100%")
+                        output_widget("character_heatmap", width="100%", height="auto")
                     ),
                 ),
             ),
@@ -246,25 +237,39 @@ app_ui = ui.page_fluid(
             ),
         ),
         ui.nav_panel(
-            "Screentime Heatmap",
+            "Screentime Linechart",
             ui.layout_sidebar(
                 ui.sidebar(
                     ui.card(
                         {"class": "settings-card"},
                         ui.card_header(ui.h4("Settings")),
-                        ui.input_slider(
-                            "heatmap_threshold",
-                            "Minimum total screentime (minutes):",
-                            min=0,
-                            max=120,
-                            value=5,
+                        ui.input_selectize(
+                            "screentime_linechart_character",
+                            "Select characters:",
+                            choices=[],  # Updated server-side
+                            multiple=True,
+                            options={
+                                "placeholder": "Type to search...",
+                            },
+                        ),
+                        ui.input_selectize(
+                            "linechart_episode_start",
+                            "Select start episode:",
+                            choices=[],  # Updated server-side
+                            multiple=False,
+                        ),
+                        ui.input_selectize(
+                            "linechart_episode_end",
+                            "Select end episode:",
+                            choices=[],  # Updated server-side
+                            multiple=False,
                         ),
                     )
                 ),
                 ui.div(
                     {"class": "full-size-div"},
                     ui.card(
-                        output_widget("character_heatmap", width="100%", height="auto")
+                        output_widget("screentime_linechart", width="100%")
                     ),
                 ),
             ),
@@ -274,76 +279,19 @@ app_ui = ui.page_fluid(
 
 
 def server(input, output, session):
-
     # Update selectize inputs
-    characters = character_data["name"].tolist()
-    episodes = episode_data["identifier"].tolist()
-    ui.update_selectize(
-        "map_character", choices=characters, server=True, session=session
-    )
-    ui.update_selectize(
-        "network_character", choices=characters, server=True, session=session
-    )
-    ui.update_selectize(
-        "screentime_linechart_character",
-        choices=characters,
-        server=True,
-        session=session,
-    )
-    ui.update_selectize(
-        "screentime_streamgraph_character",
-        choices=characters,
-        server=True,
-        session=session,
-    )
-    ui.update_selectize(
-        "screentime_heatmap_character", choices=characters, server=True, session=session
-    )
-    ui.update_selectize(
-        "heatmap_characters", choices=characters, selected=None
-    )
-    ui.update_selectize(
-        "map_episode_start",
-        choices=episodes,
-        selected="S01E01",
-        server=True,
-        session=session,
-    )
-    ui.update_selectize(
-        "map_episode_end",
-        choices=episodes,
-        selected="S08E06",
-        server=True,
-        session=session,
-    )
-    ui.update_selectize(
-        "linechart_episode_start",
-        choices=episodes,
-        selected="S01E01",
-        server=True,
-        session=session,
-    )
-    ui.update_selectize(
-        "linechart_episode_end",
-        choices=episodes,
-        selected="S08E06",
-        server=True,
-        session=session,
-    )
-    ui.update_selectize(
-        "streamgraph_episode_start",
-        choices=episodes,
-        selected="S01E01",
-        server=True,
-        session=session,
-    )
-    ui.update_selectize(
-        "streamgraph_episode_end",
-        choices=episodes,
-        selected="S08E06",
-        server=True,
-        session=session,
-    )
+    ui.update_selectize("map_character", choices=characters, server=True, session=session)
+    ui.update_selectize("network_character", choices=characters, server=True, session=session)
+    ui.update_selectize("screentime_linechart_character", choices=characters, server=True, session=session)
+    ui.update_selectize("screentime_streamgraph_character", choices=characters, server=True, session=session)
+    ui.update_selectize("screentime_heatmap_character", choices=characters, server=True, session=session)
+    ui.update_selectize("heatmap_characters", choices=characters, selected=None)
+    ui.update_selectize("map_episode_start", choices=episodes, selected="S01E01", server=True, session=session)
+    ui.update_selectize("map_episode_end", choices=episodes, selected="S08E06", server=True, session=session)
+    ui.update_selectize("linechart_episode_start", choices=episodes, selected="S01E01", server=True, session=session)
+    ui.update_selectize("linechart_episode_end", choices=episodes, selected="S08E06", server=True, session=session)
+    ui.update_selectize("streamgraph_episode_start", choices=episodes, selected="S01E01", server=True, session=session)
+    ui.update_selectize("streamgraph_episode_end", choices=episodes, selected="S08E06", server=True, session=session)
 
     @render_widget
     def screentime_linechart():
@@ -538,17 +486,14 @@ def server(input, output, session):
     async def handle_show_travel_paths_change():
         await map.handle_map_change(session, input, location_data, time_location_data)
 
-    # Show the full network initially
+    # Initialize network visualization
     @reactive.Effect
-    async def _():  # Create an Effect that runs on startup
-        await show_network()
-
-    async def show_network():
-        await session.send_custom_message("show_network", 
-                                {
-                                    "nodes": network_nodes.to_dict('records'),
-                                    "links": network_links.to_dict('records')
-                                })
+    async def initialize_network():
+        network_data = {
+            "nodes": network_nodes.to_dict('records'),
+            "links": network_links.to_dict('records')
+        }
+        await session.send_custom_message("show_network", network_data)
 
     @reactive.Effect
     @reactive.event(input.network_character, input.network_relationships)
@@ -606,51 +551,38 @@ def server(input, output, session):
     @output
     @render_widget
     def character_heatmap():
+        return create_heatmap(time_data, input.heatmap_threshold())
+
+    @render_widget
+    def screentime_distribution():
         # Calculate total screentime for each character (in minutes)
         total_screentime = time_data.sum(axis=1) / 60
+        max_screentime = total_screentime.max()
 
-        filtered_chars = total_screentime[total_screentime >= input.heatmap_threshold()].index
+        # Create histogram
+        fig = go.Figure()
+        fig.add_trace(go.Histogram(
+            x=total_screentime,
+            nbinsx=100,
+            name='All Characters'
+        ))
 
-        # Filter the data for selected characters and convert to minutes
-        filtered_data = time_data.loc[filtered_chars] / 60  # Convert seconds to minutes
+        # Add vertical lines for the current threshold
+        min_threshold, max_threshold = input.heatmap_threshold()
 
-        filtered_data = cluster_data(filtered_data)
+        fig.add_vrect(x0=min_threshold, x1=max_threshold, 
+            annotation_text="selected", annotation_position="top",
+            fillcolor="green", opacity=0.2, line_width=0)
 
-        # Create heatmap using plotly express
-        fig = px.imshow(
-            filtered_data,
-            aspect="auto",
-            color_continuous_scale="Blues",
-            labels=dict(x="Episode", y="Character", color="Screentime (minutes)"),
-        )
 
-        # Update layout
         fig.update_layout(
-            xaxis_title="Episode",
-            yaxis_title="Character",
-            height=len(filtered_chars) * 25,  # Dynamic height based on number of characters
-            xaxis_tickangle=-45,
-            title=dict(
-                text=f"{len(filtered_chars)} Characters with over {input.heatmap_threshold()} minutes of total screentime",
-                xanchor="center",
-                x=0.5,
-            ),
-            coloraxis=dict(
-                colorbar=dict(
-                    y=1,
-                    thickness=25,
-                    orientation='h',
-                    yanchor="bottom",
-                    xanchor="center",
-                    ticks="inside",
-                    bgcolor='rgba(255,255,255,0.9)',
-                )
-            )
-        )
-
-        # Add hover template
-        fig.update_traces(
-            hovertemplate="Character: %{y}<br>Episode: %{x}<br>Screentime: %{z:.1f} minutes<extra></extra>"
+            yaxis_title="log(num characters)",
+            yaxis=dict(type="log"),
+            xaxis=dict(range=[0, max_screentime]),
+            showlegend=False,
+            height=150,
+            margin=dict(l=1, r=1, t=1, b=1),
+            bargap=0.05,
         )
 
         return fig
