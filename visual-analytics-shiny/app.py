@@ -274,6 +274,36 @@ app_ui = ui.page_fluid(
                 ),
             ),
         ),
+        ui.nav_spacer(),
+        ui.nav_panel(
+            "About",
+            ui.div(
+                {"id": "about-container"},
+                ui.h1("Report"),
+                ui.p(['This visual analytics app was developed by Sven Ligensa, Camille Alazard and Zhao Lige in the course ', ui.em("Data Visualization"), ' at the UPM in the academic year 2024-2025.',
+                "The source code is made available on ",
+                ui.a([
+                    ui.img({"src": "about/gh_logo.png", "height": "16px", "style": "vertical-align: middle;"}),
+                    " GitHub"
+                    ], href="https://github.com/SvenLigensa/visual-analytics-got", target="_blank"),
+                    ". We used ",
+                    ui.a([
+                        ui.img({"src": "about/shiny_logo.png", "height": "16px", "style": "vertical-align: middle;"}),
+                        ' Shiny for Python'
+                    ], href="https://shiny.posit.co/py/", target="_blank"),
+                    " as the framework, while the visualizations utilize different libraries, as discussed below."
+                ]),
+                ui.h3("Credits"),
+                ui.p(["The data used in this project was obtained from ",
+                    ui.a("this repository", href="https://github.com/jeffreylancaster/game-of-thrones", target="_blank"),
+                    " by Jeffrey Lancaster. We appreciate the effort he put into creating this dataset and thank him for releasing it as open-source. ",
+                    "The map of Westeros and Essos was obtained from ",
+                    ui.a(ui.img({"src": "about/hbo_logo.png", "height": "16px", "style": "vertical-align: middle;"}),
+                         " here", href="https://www.hbo.com/house-of-the-dragon/map-of-westeros", target="_blank"),
+                    "."
+                ]),
+            ),
+        ),
     ),
 )
 

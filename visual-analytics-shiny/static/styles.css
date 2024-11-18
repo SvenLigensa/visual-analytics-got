@@ -57,3 +57,7 @@ h1 {
   height: 100%;
   overflow: auto;
 }
+
+#about-container {
+  padding: 20px 5% 20px 5%;
+}
