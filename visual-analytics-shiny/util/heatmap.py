@@ -1,5 +1,6 @@
 import plotly.express as px
 from scipy.cluster.hierarchy import linkage, leaves_list
+import pandas as pd
 
 def create_heatmap(time_data, threshold):
     """
@@ -113,8 +114,18 @@ def cluster_data(data):
     if data.empty or data.shape[0] == 1:
         return data
 
-    normalized_data = data.copy()
-    # Normalize columns to sum to 1
+    # Remove rows that contain all zeros
+    non_zero_mask = (data.sum(axis=1) > 0)
+    if non_zero_mask.sum() == 0:  # If all rows are zeros
+        return data
+    
+    data_to_cluster = data[non_zero_mask]
+    zero_data = data[~non_zero_mask]
+
+    normalized_data = data_to_cluster.copy()
+    # Normalize columns to sum to 1 (only where column sum is non-zero)
+    col_sums = normalized_data.sum(axis=0)
+    normalized_data = normalized_data.loc[:, col_sums > 0]  # Remove all-zero columns
     normalized_data = normalized_data.div(normalized_data.sum(axis=0), axis=1)
     # Normalize rows to sum to 1
     normalized_data = normalized_data.div(normalized_data.sum(axis=1), axis=0)
@@ -126,5 +137,10 @@ def cluster_data(data):
     # Get the leaf ordering from the linkage matrix
     leaf_order = leaves_list(linkage_matrix)
 
-    # Reorder the original data according to the clustering
-    return data.iloc[leaf_order]
+    # Reorder the non-zero data according to the clustering
+    clustered_data = data_to_cluster.iloc[leaf_order]
+    
+    # Append the zero rows at the end
+    if not zero_data.empty:
+        return pd.concat([clustered_data, zero_data])
+    return clustered_data
