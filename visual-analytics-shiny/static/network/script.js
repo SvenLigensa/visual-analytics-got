@@ -37,10 +37,11 @@ document.addEventListener('DOMContentLoaded', function() {
   Shiny.addCustomMessageHandler('show_network', function(message) {
     nodes = message.nodes;
     links = message.links;
-    showNetwork(nodes, links);
+    show_pictures = message.show_pictures;
+    showNetwork(nodes, links, show_pictures);
   });
 
-  function showNetwork(nodes, links) {
+  function showNetwork(nodes, links, show_pictures) {
     const svg = d3.select('#network-canvas');
     svg.selectAll("*").remove();
     const dimensions = updateSVGSize();
@@ -123,7 +124,7 @@ document.addEventListener('DOMContentLoaded', function() {
           return `M ${x},${y} 
                   C ${x + size},${y - size}
                     ${x + size},${y + size}
-                    ${x + 15},${y}`;
+                    ${x},${y}`;
         }
         // Normal straight line for different nodes
         return `M ${d.source.x},${d.source.y} L ${d.target.x},${d.target.y}`;
@@ -154,7 +155,7 @@ document.addEventListener('DOMContentLoaded', function() {
     node.filter(d => d.characterImageThumb).each(function(d) {
       const element = d3.select(this);
       image_available(d.characterImageThumb).then(available => {
-        if (available) {
+        if (available && show_pictures) {
           element.append("image")
             .attr("xlink:href", d.characterImageThumb)
             .attr("width", CONFIG.IMG_SIZE)

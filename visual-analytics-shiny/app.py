@@ -163,6 +163,11 @@ app_ui = ui.page_fluid(
                                 "placeholder": "Type to search...",
                             },
                         ),
+                        ui.input_checkbox(
+                            "show_character_pictures",
+                            "Show pictures",
+                            value=False
+                        ),
                     )
                 ),
                 ui.div(
@@ -526,10 +531,11 @@ def server(input, output, session):
         await session.send_custom_message("show_network", network_data)
 
     @reactive.Effect
-    @reactive.event(input.network_character, input.network_relationships)
+    @reactive.event(input.network_character, input.network_relationships, input.show_character_pictures)
     async def handle_network_filter():
         chars = list(input.network_character()) or network_nodes['id'].tolist()
         rels = list(input.network_relationships())
+        show_pictures = input.show_character_pictures()
         
         # Get links connected to selected characters
         links = network_links[
@@ -552,7 +558,8 @@ def server(input, output, session):
             "show_network",
             {
                 "nodes": nodes.to_dict('records'),
-                "links": links.to_dict('records')
+                "links": links.to_dict('records'),
+                "show_pictures": show_pictures,
             }
         )
 
