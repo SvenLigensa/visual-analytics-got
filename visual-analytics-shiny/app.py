@@ -312,7 +312,6 @@ app_ui = ui.page_fluid(
     ),
 )
 
-
 def server(input, output, session):
     # Update selectize inputs
     ui.update_selectize("map_character", choices=characters, server=True, session=session)
@@ -381,6 +380,8 @@ def server(input, output, session):
             value_name='time'
         )
         
+        colors = [get_color_for_character(name, color_mapping) for name in pivot_df.index]
+
         # Create the line plot
         fig = px.line(
             plot_data, 
@@ -392,7 +393,9 @@ def server(input, output, session):
                 'time': 'Screen Time (seconds)',
                 'episode': 'Episode',
                 'name': 'Character'
-            }
+            },
+            category_orders={'name': all_characters},
+            color_discrete_sequence=colors,
         )
         
         # Customize the layout
@@ -421,10 +424,14 @@ def server(input, output, session):
         episode_start = input.streamgraph_episode_start()
         episode_end = input.streamgraph_episode_end()
 
-        if not selected_characters:
+        if not selected_characters or episode_start >= episode_end:
             fig, ax = plt.subplots(figsize=(10, 6))
-            ax.text(0.5, 0.5, 'Please select at least one character.', 
-                    horizontalalignment='center', verticalalignment='center')
+            if not selected_characters:
+                ax.text(0.5, 0.5, 'Please select at least one character.',
+                        horizontalalignment='center', verticalalignment='center')
+            else:
+                ax.text(0.5, 0.5, 'Please select a non-empty episode range.',
+                        horizontalalignment='center', verticalalignment='center')
             ax.set_xticks([])
             ax.set_yticks([])
             return fig
@@ -465,12 +472,15 @@ def server(input, output, session):
         y_smooth = make_interp_spline(x, y, axis=1)(x_new)
         
         fig, ax = plt.subplots(figsize=(12, 6))
+        
+        colors = [get_color_for_character(name, color_mapping) for name in pivot_df.index]
+        
         ax.stackplot(
             x_new,
             y_smooth,
             labels=pivot_df.index,
             baseline='wiggle',
-            colors=plt.cm.tab20.colors[:len(pivot_df.index)]
+            colors=colors
         )
         
         ax.set_xticks(x)
@@ -624,6 +634,47 @@ def server(input, output, session):
 
         return fig
 
+
+def create_color_palette(characters):
+    """
+    Create a color mapping for alll characters.
+    Returns a dictionary mapping characters to colors.
+    """
+    # Color palette (ColorBrewer2 qualitative palette with 7 colors)
+    colors = [
+        '#1b9e77',  # Green
+        '#d95f02',  # Orange
+        '#7570b3',  # Purple
+        '#e7298a',  # Red
+        '#66a61e',  # Olive green
+        '#e6ab02',  # Gold
+        '#a6761d',  # Brown
+    ]
+    # Sort characters to ensure consistent color assignment
+    sorted_characters = sorted(characters)
+    # Map characters to colors, cycling through palette if more characters than colors
+    color_mapping = {
+        char: colors[i % len(colors)] 
+        for i, char in enumerate(sorted_characters)
+    }
+    return color_mapping
+
+def get_color_for_character(character, color_map):
+    """Retrieve color for a specific character, with a fallback to a neutral color.
+    
+    Args:
+        character (str): Character name
+        color_map (dict): Color mapping dictionary
+    
+    Returns:
+        str: Hex color code for the character
+    """
+    return color_map.get(character, '#d3d3d3')  # Light gray if character not in color map
+
 zoom_level = 100
 fit_mode = "w"
 app = App(app_ui, server, static_assets=static_dir)
+
+# Initialize the color mapping
+all_characters = sorted(time_data_alt['name'].unique())
+color_mapping = create_color_palette(all_characters)

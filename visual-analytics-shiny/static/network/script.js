@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', function() {
       .force("link", d3.forceLink(links).id(d => d.id).distance(100))
       .force("charge", d3.forceManyBody().strength(-CONFIG.IMG_SIZE * 2))
       .force("collision", d3.forceCollide().radius(CONFIG.IMG_SIZE * 2/3))
-      .force("center", d3.forceCenter(dimensions.width / 2, dimensions.height / 2).strength(0.000001));
+      .force("center", d3.forceCenter(dimensions.width / 2, dimensions.height / 2).strength(0.01));
   
     window.addEventListener('resize', () => {
       const dimensions = updateSVGSize();
