@@ -29,6 +29,17 @@ network_links = pd.read_json(data_dir / "got_network_links.json")
 characters = character_data["name"].tolist()
 episodes = episode_data["identifier"].tolist()
 
+# Color palette (https://colorbrewer2.org/#type=qualitative&scheme=Set1&n=7)
+COLORS = [
+    '#377eb8',  # Blue
+    '#e41a1c',  # Red
+    '#4daf4a',  # Green
+    '#984ea3',  # Purple
+    '#ff7f00',  # Orange
+    '#ffff33',  # Yellow
+    '#a65628',  # Brown
+]
+
 app_ui = ui.page_fluid(
     ui.tags.h1(
         {"class": "got-font"},
@@ -151,12 +162,12 @@ app_ui = ui.page_fluid(
                             "Select relationship types:",
                             choices=[
                                 "parent",
-                                "sibling",
+                                "siblings",
                                 "married",
                                 "killed",
                                 "serves",
                                 "guardianOf",
-                                "ally",
+                                "allies",
                             ],
                             multiple=True,
                             options={
@@ -166,7 +177,7 @@ app_ui = ui.page_fluid(
                         ui.input_checkbox(
                             "show_character_pictures",
                             "Show pictures",
-                            value=False
+                            value=True,
                         ),
                     )
                 ),
@@ -379,8 +390,6 @@ def server(input, output, session):
             var_name='episode',
             value_name='time'
         )
-        
-        colors = [get_color_for_character(name, color_mapping) for name in pivot_df.index]
 
         # Create the line plot
         fig = px.line(
@@ -394,8 +403,7 @@ def server(input, output, session):
                 'episode': 'Episode',
                 'name': 'Character'
             },
-            category_orders={'name': all_characters},
-            color_discrete_sequence=colors,
+            color_discrete_sequence=COLORS,
         )
         
         # Customize the layout
@@ -473,14 +481,12 @@ def server(input, output, session):
         
         fig, ax = plt.subplots(figsize=(12, 6))
         
-        colors = [get_color_for_character(name, color_mapping) for name in pivot_df.index]
-        
         ax.stackplot(
             x_new,
             y_smooth,
             labels=pivot_df.index,
             baseline='wiggle',
-            colors=colors
+            colors=COLORS,
         )
         
         ax.set_xticks(x)
@@ -635,46 +641,6 @@ def server(input, output, session):
         return fig
 
 
-def create_color_palette(characters):
-    """
-    Create a color mapping for alll characters.
-    Returns a dictionary mapping characters to colors.
-    """
-    # Color palette (ColorBrewer2 qualitative palette with 7 colors)
-    colors = [
-        '#1b9e77',  # Green
-        '#d95f02',  # Orange
-        '#7570b3',  # Purple
-        '#e7298a',  # Red
-        '#66a61e',  # Olive green
-        '#e6ab02',  # Gold
-        '#a6761d',  # Brown
-    ]
-    # Sort characters to ensure consistent color assignment
-    sorted_characters = sorted(characters)
-    # Map characters to colors, cycling through palette if more characters than colors
-    color_mapping = {
-        char: colors[i % len(colors)] 
-        for i, char in enumerate(sorted_characters)
-    }
-    return color_mapping
-
-def get_color_for_character(character, color_map):
-    """Retrieve color for a specific character, with a fallback to a neutral color.
-    
-    Args:
-        character (str): Character name
-        color_map (dict): Color mapping dictionary
-    
-    Returns:
-        str: Hex color code for the character
-    """
-    return color_map.get(character, '#d3d3d3')  # Light gray if character not in color map
-
 zoom_level = 100
 fit_mode = "w"
 app = App(app_ui, server, static_assets=static_dir)
-
-# Initialize the color mapping
-all_characters = sorted(time_data_alt['name'].unique())
-color_mapping = create_color_palette(all_characters)

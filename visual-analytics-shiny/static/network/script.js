@@ -2,14 +2,15 @@ const CONFIG = {
   IMG_SIZE: 40,
   COLORS: {
     dummy: "#4a4e69",
+    // Color palette (https://colorbrewer2.org/#type=qualitative&scheme=Set1&n=7)
     links: {
-      parent: "#264653",
-      siblings: "#F4A261",
-      killed: "#E76F51",
-      serves: "#E9C46A",
-      married: "#2A9D8F",
-      allies: "#E9C46A",
-      guardianOf: "#22333b",
+      parent: "#377eb8", // Blue
+      siblings: "#984ea3", // Purple
+      killed: "#e41a1c", // Red
+      serves: "#ff7f00", // Orange
+      married: "#4daf4a", // Green
+      allies: "#ffff33", // Yellow
+      guardianOf: "#a65628", // Brown
     }
   },
   DIRECTED_RELATIONSHIPS: ["killed", "serves", "parent", "guardianOf"]

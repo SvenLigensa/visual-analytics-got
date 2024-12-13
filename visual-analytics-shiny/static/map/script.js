@@ -1,5 +1,5 @@
-// Colors
-const CHARACTER_COLORMAP = ['#1b9e77','#d95f02','#7570b3']; // Colormap from https://colorbrewer2.org/#type=qualitative&scheme=Dark2&n=3
+// Blue, Red, Green (subset of https://colorbrewer2.org/#type=qualitative&scheme=Set1&n=7)
+const CHARACTER_COLORMAP = ['#377eb8','#e41a1c','#4daf4a'];
 const LABEL_BACKGROUND_COLOR = 'hsl(202 100% 11%)';
 const LABEL_TEXT_COLOR = 'hsl(202 100% 90%)';
 
@@ -8,11 +8,6 @@ const LABEL_WIDTH = 100;
 const LABEL_HEIGHT = 18;
 const FOCUS_LEFT_OFFSET = 150;
 const FOCUS_HEIGHT = 100;
-
-const CIRCLE_COLOR_FULL = 'hsl(246 70% 70%)';
-const CIRCLE_COLOR = 'hsla(246 70% 70% / 0.8)'; // Last value is opacity
-const POPOUT_BACKGROUND_COLOR = 'hsl(246 70% 70%)';
-const TEXT_COLOR = 'hsl(360 0% 94%)';
 
 document.addEventListener('DOMContentLoaded', function() {
   Shiny.addCustomMessageHandler('remove_svg_elements', function(message) {
@@ -289,30 +284,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
       });
     });
-
-    // var popup;
-    // newText.addEventListener('mouseover', function () {
-    //   var rect = newText.getBoundingClientRect();
-    //   popup = document.createElement('div');
-    //   popup.innerHTML = `<b>${label}</b><p>${character_id}: ${time} seconds</p>`;
-    //   popup.style.position = 'absolute';
-    //   popup.style.left = `${rect.left}px`;
-    //   popup.style.top = `${rect.top - 30}px`;
-    //   popup.style.backgroundColor = POPOUT_BACKGROUND_COLOR;
-    //   popup.style.color = TEXT_COLOR;
-    //   popup.style.padding = '5px';
-    //   popup.style.borderRadius = '5px';
-    //   popup.style.pointerEvents = 'none';
-    //   popup.style.zIndex = 10;
-    //   document.body.appendChild(popup);
-    // });
-
-    // newText.addEventListener('mouseout', function () {
-    //   if (popup) {
-    //     document.body.removeChild(popup);
-    //     popup = null;
-    //   }
-    // });
   }
 
   // Set the zoom of the map-container and map-img by setting the width of both to the desired value
