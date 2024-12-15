@@ -45,7 +45,7 @@ for character in data['characters']:
             links.append({
                 "source": character['characterName'],
                 "target": target,
-                "category": "killed"
+                "category": "Kills"
             })
             
     if 'serves' in character:
@@ -53,7 +53,7 @@ for character in data['characters']:
             links.append({
                 "source": character['characterName'],
                 "target": target,
-                "category": "serves"
+                "category": "Serves"
             })
             
     if 'guardianOf' in character:
@@ -61,7 +61,7 @@ for character in data['characters']:
             links.append({
                 "source": character['characterName'],
                 "target": target,
-                "category": "guardianOf"
+                "category": "GuardianOf"
             })
             
     if 'parents' in character:
@@ -69,21 +69,21 @@ for character in data['characters']:
             links.append({
                 "source": target,
                 "target": character['characterName'],
-                "category": "parent"
+                "category": "ParentOf"
             })
     
     # Bidirectional relationships
     if 'allies' in character:
         for target in character['allies']:
-            add_bidirectional_link(character['characterName'], target, "allies")
+            add_bidirectional_link(character['characterName'], target, "Allies")
             
     if 'siblings' in character:
         for target in character['siblings']:
-            add_bidirectional_link(character['characterName'], target, "siblings")
+            add_bidirectional_link(character['characterName'], target, "Siblings")
             
     if 'marriedEngaged' in character:
         for target in character['marriedEngaged']:
-            add_bidirectional_link(character['characterName'], target, "married")
+            add_bidirectional_link(character['characterName'], target, "Married")
 
 # After all links are processed, add missing nodes
 all_referenced_ids = set()

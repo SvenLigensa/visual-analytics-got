@@ -4,16 +4,16 @@ const CONFIG = {
     dummy: "#4a4e69",
     // Color palette (https://colorbrewer2.org/#type=qualitative&scheme=Set1&n=7)
     links: {
-      parent: "#377eb8", // Blue
-      siblings: "#984ea3", // Purple
-      killed: "#e41a1c", // Red
-      serves: "#ff7f00", // Orange
-      married: "#4daf4a", // Green
-      allies: "#ffff33", // Yellow
-      guardianOf: "#a65628", // Brown
+      ParentOf: "#377eb8", // Blue
+      Siblings: "#984ea3", // Purple
+      Married: "#4daf4a", // Green
+      Kills: "#e41a1c", // Red
+      Serves: "#ff7f00", // Orange
+      GuardianOf: "#a65628", // Brown
+      Allies: "#ffff33", // Yellow
     }
   },
-  DIRECTED_RELATIONSHIPS: ["killed", "serves", "parent", "guardianOf"]
+  DIRECTED_RELATIONSHIPS: ["Kills", "Serves", "ParentOf", "GuardianOf"]
 };
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -199,5 +199,29 @@ document.addEventListener('DOMContentLoaded', function() {
       d.fx = null;
       d.fy = null;
     }
+
+    const legend = svg.append("g")
+      .attr("class", "legend")
+      .attr("transform", "translate(20,20)");
+
+    const categories = Object.keys(CONFIG.COLORS.links);
+    const legendItemHeight = 20;
+
+    categories.forEach((category, index) => {
+      // Create a colored rectangle for each category
+      legend.append("rect")
+        .attr("x", 0)
+        .attr("y", index * legendItemHeight)
+        .attr("width", 18)
+        .attr("height", 18)
+        .attr("fill", CONFIG.COLORS.links[category]);
+
+      // Add text label next to the rectangle
+      legend.append("text")
+        .attr("x", 25)
+        .attr("y", index * legendItemHeight + 15)
+        .attr("color", "white")
+        .text(category);
+    });
   }
 });

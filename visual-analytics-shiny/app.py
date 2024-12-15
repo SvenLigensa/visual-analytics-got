@@ -1,17 +1,15 @@
-from pathlib import Path
 from shiny import App, ui, reactive, render
 from shinywidgets import output_widget, render_widget
-import plotly.express as px
+from pathlib import Path
+import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-
-import numpy as np
-import matplotlib.pyplot as plt
+import plotly.express as px
+import plotly.graph_objects as go
 from scipy.interpolate import make_interp_spline
 
-from util import map
+from util.map import handle_map_change
 from util.heatmap import create_heatmap
-import plotly.graph_objects as go
 
 app_dir = Path(__file__).parent
 static_dir = app_dir / "static"
@@ -64,7 +62,7 @@ app_ui = ui.page_fluid(
     ),
     ui.navset_pill(
         ui.nav_panel(
-            "Map",
+            "Map | Character Travel",
             ui.layout_sidebar(
                 ui.sidebar(
                     ui.card(
@@ -142,7 +140,7 @@ app_ui = ui.page_fluid(
             ),
         ),
         ui.nav_panel(
-            "Character Network",
+            "Network | Relationships",
             ui.layout_sidebar(
                 ui.sidebar(
                     ui.card(
@@ -161,13 +159,13 @@ app_ui = ui.page_fluid(
                             "network_relationships",
                             "Select relationship types:",
                             choices=[
-                                "parent",
-                                "siblings",
-                                "married",
-                                "killed",
-                                "serves",
-                                "guardianOf",
-                                "allies",
+                                "ParentOf",
+                                "Siblings",
+                                "Married",
+                                "Kills",
+                                "Serves",
+                                "GuardianOf",
+                                "Allies",
                             ],
                             multiple=True,
                             options={
@@ -179,7 +177,7 @@ app_ui = ui.page_fluid(
                             "Show pictures",
                             value=True,
                         ),
-                    )
+                    ),
                 ),
                 ui.div(
                     {"class": "full-size-div"},
@@ -190,7 +188,7 @@ app_ui = ui.page_fluid(
             ),
         ),
         ui.nav_panel(
-            "Screentime Heatmap",
+            "Heatmap | Screentime",
             ui.layout_sidebar(
                 ui.sidebar(
                     ui.card(
@@ -215,7 +213,7 @@ app_ui = ui.page_fluid(
             ),
         ),
         ui.nav_panel(
-            "Screentime Streamgraph",
+            "[Streamgraph]",
             ui.layout_sidebar(
                 ui.sidebar(
                     ui.card(
@@ -253,7 +251,7 @@ app_ui = ui.page_fluid(
             ),
         ),
         ui.nav_panel(
-            "Screentime Linechart",
+            "[Linechart]",
             ui.layout_sidebar(
                 ui.sidebar(
                     ui.card(
@@ -292,32 +290,22 @@ app_ui = ui.page_fluid(
         ),
         ui.nav_spacer(),
         ui.nav_panel(
-            "About",
-            ui.div(
-                {"id": "about-container"},
-                ui.h1("Report"),
-                ui.p(['This visual analytics app was developed by Sven Ligensa, Camille Alazard and Zhao Lige in the course ', ui.em("Data Visualization"), ' at the UPM in the academic year 2024-2025.',
-                "The source code is made available on ",
-                ui.a([
-                    ui.img({"src": "about/gh_logo.png", "height": "16px", "style": "vertical-align: middle;"}),
-                    " GitHub"
-                    ], href="https://github.com/SvenLigensa/visual-analytics-got", target="_blank"),
-                    ". We used ",
-                    ui.a([
-                        ui.img({"src": "about/shiny_logo.png", "height": "16px", "style": "vertical-align: middle;"}),
-                        ' Shiny for Python'
-                    ], href="https://shiny.posit.co/py/", target="_blank"),
-                    " as the framework, while the visualizations utilize different libraries, as discussed below."
-                ]),
-                ui.h3("Credits"),
-                ui.p(["The data used in this project was obtained from ",
-                    ui.a("this repository", href="https://github.com/jeffreylancaster/game-of-thrones", target="_blank"),
-                    " by Jeffrey Lancaster. We appreciate the effort he put into creating this dataset and thank him for releasing it as open-source. ",
-                    "The map of Westeros and Essos was obtained from ",
-                    ui.a(ui.img({"src": "about/hbo_logo.png", "height": "16px", "style": "vertical-align: middle;"}),
-                         " here", href="https://www.hbo.com/house-of-the-dragon/map-of-westeros", target="_blank"),
-                    "."
-                ]),
+            "Report",
+            ui.tags.iframe(
+                {"id": "report-iframe", "src": "Report.pdf", "width": "100%", "style": "border: none;"}
+            ),
+            # Needed to dynamically resize the iframe based on the window height
+            ui.tags.script(
+                """
+                window.addEventListener('load', function() {
+                    function resizeIframe() {
+                        var iframe = document.getElementById('report-iframe');
+                        iframe.style.height = (window.innerHeight - 100) + 'px';
+                    }
+                    resizeIframe();
+                    window.addEventListener('resize', resizeIframe);
+                });
+                """
             ),
         ),
     ),
@@ -535,7 +523,7 @@ def server(input, output, session):
     @reactive.Effect
     @reactive.event(input.map_character, input.map_episode_start, input.map_episode_end, input.show_time_spent, input.show_travel_paths)
     async def handle_show_travel_paths_change():
-        await map.handle_map_change(session, input, location_data, time_location_data)
+        await handle_map_change(session, input, location_data, time_location_data)
 
     # Initialize network visualization
     @reactive.Effect

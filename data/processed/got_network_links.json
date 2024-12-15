@@ -2,2216 +2,2216 @@
   {
     "source": "Elia Martell",
     "target": "Aegon Targaryen",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Rhaegar Targaryen",
     "target": "Aegon Targaryen",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Aegon Targaryen",
     "target": "Rhaenys Targaryen",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Aegon Targaryen",
     "target": "Jon Snow",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Aeron Greyjoy",
     "target": "Balon Greyjoy",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Aeron Greyjoy",
     "target": "Euron Greyjoy",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Aerys II Targaryen",
     "target": "Brandon Stark",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Aerys II Targaryen",
     "target": "Rickard Stark",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Aerys II Targaryen",
     "target": "Rhaella Targaryen",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Aerys II Targaryen",
     "target": "Rhaella Targaryen",
-    "category": "married"
+    "category": "Married"
   },
   {
     "source": "Alliser Thorne",
     "target": "Jon Snow",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Harald Karstark",
     "target": "Alys Karstark",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Amory Lorch",
     "target": "Yoren",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Areo Hotah",
     "target": "Doran Martell",
-    "category": "serves"
+    "category": "Serves"
   },
   {
     "source": "Arthur Dayne",
     "target": "Aerys II Targaryen",
-    "category": "serves"
+    "category": "Serves"
   },
   {
     "source": "Arya Stark",
     "target": "Red Keep Stableboy",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Arya Stark",
     "target": "Frey Soldier #1",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Arya Stark",
     "target": "Polliver",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Arya Stark",
     "target": "Rorge",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Arya Stark",
     "target": "Ghita",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Arya Stark",
     "target": "Meryn Trant",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Arya Stark",
     "target": "The Waif",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Arya Stark",
     "target": "Black Walder Rivers",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Arya Stark",
     "target": "Lothar Frey",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Arya Stark",
     "target": "Walder Frey",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Arya Stark",
     "target": "Petyr Baelish",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Arya Stark",
     "target": "The Night King",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Arya Stark",
     "target": "White Walker",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Arya Stark",
     "target": "Viserion",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Eddard Stark",
     "target": "Arya Stark",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Catelyn Stark",
     "target": "Arya Stark",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Arya Stark",
     "target": "Robb Stark",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Arya Stark",
     "target": "Sansa Stark",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Arya Stark",
     "target": "Bran Stark",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Arya Stark",
     "target": "Rickon Stark",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Samwell Tarly",
     "target": "Baby Sam",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Gilly",
     "target": "Baby Sam",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Balon Greyjoy",
     "target": "Euron Greyjoy",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Barristan Selmy",
     "target": "Daenerys Targaryen",
-    "category": "serves"
+    "category": "Serves"
   },
   {
     "source": "Rickard Stark",
     "target": "Benjen Stark",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Benjen Stark",
     "target": "Brandon Stark",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Benjen Stark",
     "target": "Lyanna Stark",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Benjen Stark",
     "target": "Eddard Stark",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Black Walder Rivers",
     "target": "Catelyn Stark",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Walder Frey",
     "target": "Black Walder Rivers",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Bowen Marsh",
     "target": "Jon Snow",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Rickard Stark",
     "target": "Brandon Stark",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Brandon Stark",
     "target": "Lyanna Stark",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Brandon Stark",
     "target": "Eddard Stark",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Eddard Stark",
     "target": "Bran Stark",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Catelyn Stark",
     "target": "Bran Stark",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Bran Stark",
     "target": "Robb Stark",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Bran Stark",
     "target": "Sansa Stark",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Bran Stark",
     "target": "Rickon Stark",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Brienne of Tarth",
     "target": "Soldier Tom",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Brienne of Tarth",
     "target": "Stannis Baratheon",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Brienne of Tarth",
     "target": "Bolton Officer",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Brienne of Tarth",
     "target": "Renly Baratheon",
-    "category": "serves"
+    "category": "Serves"
   },
   {
     "source": "Brienne of Tarth",
     "target": "Catelyn Stark",
-    "category": "serves"
+    "category": "Serves"
   },
   {
     "source": "Brienne of Tarth",
     "target": "Sansa Stark",
-    "category": "serves"
+    "category": "Serves"
   },
   {
     "source": "Brienne of Tarth",
     "target": "Bran Stark",
-    "category": "serves"
+    "category": "Serves"
   },
   {
     "source": "Bronn",
     "target": "Vardis Egen",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Bronn",
     "target": "Matthos Seaworth",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Bronn",
     "target": "Lead Dornish Guard",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Bronn",
     "target": "Lollys Stokeworth",
-    "category": "married"
+    "category": "Married"
   },
   {
     "source": "Brynden Tully",
     "target": "Hoster Tully",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Catelyn Stark",
     "target": "Joyeuse Erenford",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Hoster Tully",
     "target": "Catelyn Stark",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Catelyn Stark",
     "target": "Lysa Arryn",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Catelyn Stark",
     "target": "Edmure Tully",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Catelyn Stark",
     "target": "Eddard Stark",
-    "category": "married"
+    "category": "Married"
   },
   {
     "source": "Catelyn Stark",
     "target": "Brandon Stark",
-    "category": "married"
+    "category": "Married"
   },
   {
     "source": "Cersei Lannister",
     "target": "Lancel Lannister",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Cersei Lannister",
     "target": "High Sparrow",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Cersei Lannister",
     "target": "Loras Tyrell",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Cersei Lannister",
     "target": "Mace Tyrell",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Cersei Lannister",
     "target": "Margaery Tyrell",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Cersei Lannister",
     "target": "Kevan Lannister",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Cersei Lannister",
     "target": "Tyene Sand",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Tywin Lannister",
     "target": "Cersei Lannister",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Cersei Lannister",
     "target": "Jaime Lannister",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Cersei Lannister",
     "target": "Tyrion Lannister",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Cersei Lannister",
     "target": "Robert Baratheon",
-    "category": "married"
+    "category": "Married"
   },
   {
     "source": "Daario Naharis",
     "target": "Mero",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Daario Naharis",
     "target": "Prendahl na Ghezn",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Daario Naharis",
     "target": "Oznak zo Pahl",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Daario Naharis",
     "target": "Mossador",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Daario Naharis",
     "target": "Iggo",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Daario Naharis",
     "target": "Akho",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Daario Naharis",
     "target": "Daenerys Targaryen",
-    "category": "serves"
+    "category": "Serves"
   },
   {
     "source": "Daenerys Targaryen",
     "target": "Khal Drogo",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Daenerys Targaryen",
     "target": "Mirri Maz Duur",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Daenerys Targaryen",
     "target": "Doreah",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Daenerys Targaryen",
     "target": "Xaro Xhoan Daxos",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Daenerys Targaryen",
     "target": "Khal Rhalko",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Daenerys Targaryen",
     "target": "Khal Brozho",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Daenerys Targaryen",
     "target": "Khal Qorro",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Daenerys Targaryen",
     "target": "Khal Forzho",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Daenerys Targaryen",
     "target": "Khal Moro",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Daenerys Targaryen",
     "target": "Dothraki Bloodrider #1",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Daenerys Targaryen",
     "target": "Dothraki Bloodrider #2",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Daenerys Targaryen",
     "target": "Randyll Tarly",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Daenerys Targaryen",
     "target": "Dickon Tarly",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Daenerys Targaryen",
     "target": "Eleanor",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Daenerys Targaryen",
     "target": "Eleanor's Daughter",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Daenerys Targaryen",
     "target": "Lord Varys",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Aerys II Targaryen",
     "target": "Daenerys Targaryen",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Rhaella Targaryen",
     "target": "Daenerys Targaryen",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Daenerys Targaryen",
     "target": "Rhaegar Targaryen",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Daenerys Targaryen",
     "target": "Viserys Targaryen",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Daenerys Targaryen",
     "target": "Khal Drogo",
-    "category": "married"
+    "category": "Married"
   },
   {
     "source": "Davos Seaworth",
     "target": "Stannis Baratheon",
-    "category": "serves"
+    "category": "Serves"
   },
   {
     "source": "Davos Seaworth",
     "target": "Jon Snow",
-    "category": "serves"
+    "category": "Serves"
   },
   {
     "source": "Randyll Tarly",
     "target": "Dickon Tarly",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Melessa Tarly",
     "target": "Dickon Tarly",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Dickon Tarly",
     "target": "Samwell Tarly",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Dickon Tarly",
     "target": "Talla Tarly",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Doran Martell",
     "target": "Elia Martell",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Doran Martell",
     "target": "Oberyn Martell",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Doreah",
     "target": "Irri",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Drogon",
     "target": "Pyat Pree",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Drogon",
     "target": "Kraznys mo Nakloz",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Drogon",
     "target": "Zalla",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Drogon",
     "target": "Daenerys Targaryen",
-    "category": "guardianOf"
+    "category": "GuardianOf"
   },
   {
     "source": "Drogon",
     "target": "Rhaegal",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Drogon",
     "target": "Viserion",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Eddard Stark",
     "target": "Arthur Dayne",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Eddard Stark",
     "target": "Will",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Eddard Stark",
     "target": "Lady",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Eddard Stark",
     "target": "Gerold Hightower",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Eddard Stark",
     "target": "Jon Snow",
-    "category": "guardianOf"
+    "category": "GuardianOf"
   },
   {
     "source": "Rickard Stark",
     "target": "Eddard Stark",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Eddard Stark",
     "target": "Howland Reed",
-    "category": "allies"
+    "category": "Allies"
   },
   {
     "source": "Eddard Stark",
     "target": "Robert Baratheon",
-    "category": "allies"
+    "category": "Allies"
   },
   {
     "source": "Eddard Stark",
     "target": "Lyanna Stark",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Edmure Tully",
     "target": "Lysa Arryn",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Edmure Tully",
     "target": "Roslin Frey",
-    "category": "married"
+    "category": "Married"
   },
   {
     "source": "Ellaria Sand",
     "target": "Myrcella Baratheon",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Ellaria Sand",
     "target": "Doran Martell",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Ellaria Sand",
     "target": "Oberyn Martell",
-    "category": "married"
+    "category": "Married"
   },
   {
     "source": "Elia Martell",
     "target": "Oberyn Martell",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Elia Martell",
     "target": "Rhaegar Targaryen",
-    "category": "married"
+    "category": "Married"
   },
   {
     "source": "Euron Greyjoy",
     "target": "Balon Greyjoy",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Euron Greyjoy",
     "target": "Obara Sand",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Euron Greyjoy",
     "target": "Nymeria Sand",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Euron Greyjoy",
     "target": "Rhaegal",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Gendry",
     "target": "Kevin Eldon",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Gendry",
     "target": "Laurence Spellman",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Robert Baratheon",
     "target": "Gendry",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Ghost",
     "target": "Rast",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Ghost",
     "target": "Jon Snow",
-    "category": "guardianOf"
+    "category": "GuardianOf"
   },
   {
     "source": "Ghost",
     "target": "Grey Wind",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Ghost",
     "target": "Lady",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Ghost",
     "target": "Nymeria",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Ghost",
     "target": "Summer",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Ghost",
     "target": "Shaggydog",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Craster",
     "target": "Gilly",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Gilly",
     "target": "Samwell Tarly",
-    "category": "married"
+    "category": "Married"
   },
   {
     "source": "Gregor Clegane",
     "target": "Elia Martell",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Gregor Clegane",
     "target": "Rhaenys Targaryen",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Gregor Clegane",
     "target": "Aegon Targaryen",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Gregor Clegane",
     "target": "Hugh of the Vale",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Gregor Clegane",
     "target": "Oberyn Martell",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Gregor Clegane",
     "target": "King's Landing Boaster",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Gregor Clegane",
     "target": "Faith Militant",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Gregor Clegane",
     "target": "Missandei",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Gregor Clegane",
     "target": "Qyburn",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Gregor Clegane",
     "target": "Tywin Lannister",
-    "category": "serves"
+    "category": "Serves"
   },
   {
     "source": "Gregor Clegane",
     "target": "Cersei Lannister",
-    "category": "serves"
+    "category": "Serves"
   },
   {
     "source": "Grenn",
     "target": "Mag the Mighty",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Grey Wind",
     "target": "Rennick",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Grey Wind",
     "target": "Robb Stark",
-    "category": "guardianOf"
+    "category": "GuardianOf"
   },
   {
     "source": "Grey Wind",
     "target": "Lady",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Grey Wind",
     "target": "Nymeria",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Grey Wind",
     "target": "Summer",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Grey Wind",
     "target": "Shaggydog",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Grey Worm",
     "target": "Belicho Paenymion",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Grey Worm",
     "target": "Razdal mo Eraz",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Grey Worm",
     "target": "Harry Strickland",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Grey Worm",
     "target": "Daenerys Targaryen",
-    "category": "serves"
+    "category": "Serves"
   },
   {
     "source": "Rickard Karstark",
     "target": "Harald Karstark",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Hodor",
     "target": "Locke",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Howland Reed",
     "target": "Arthur Dayne",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Ilyn Payne",
     "target": "Eddard Stark",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Jaime Lannister",
     "target": "Aerys II Targaryen",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Jaime Lannister",
     "target": "Jory Cassel",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Jaime Lannister",
     "target": "Alton Lannister",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Jaime Lannister",
     "target": "Torrhen Karstark",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Jaime Lannister",
     "target": "Olenna Tyrell",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Jaime Lannister",
     "target": "Euron Greyjoy",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Jaime Lannister",
     "target": "Aerys II Targaryen",
-    "category": "guardianOf"
+    "category": "GuardianOf"
   },
   {
     "source": "Jaime Lannister",
     "target": "Robert Baratheon",
-    "category": "guardianOf"
+    "category": "GuardianOf"
   },
   {
     "source": "Jaime Lannister",
     "target": "Joffrey Baratheon",
-    "category": "guardianOf"
+    "category": "GuardianOf"
   },
   {
     "source": "Tywin Lannister",
     "target": "Jaime Lannister",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Jaime Lannister",
     "target": "Tyrion Lannister",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Janos Slynt",
     "target": "Barra",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Jaqen H'ghar",
     "target": "The Tickler",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Jaqen H'ghar",
     "target": "Amory Lorch",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Jaqen H'ghar",
     "target": "Despondent Man",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Joffrey Baratheon",
     "target": "Ros",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Robert Baratheon",
     "target": "Joffrey Baratheon",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Cersei Lannister",
     "target": "Joffrey Baratheon",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Jaime Lannister",
     "target": "Joffrey Baratheon",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Joffrey Baratheon",
     "target": "Myrcella Baratheon",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Joffrey Baratheon",
     "target": "Tommen Baratheon",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Joffrey Baratheon",
     "target": "Sansa Stark",
-    "category": "married"
+    "category": "Married"
   },
   {
     "source": "Joffrey Baratheon",
     "target": "Margaery Tyrell",
-    "category": "married"
+    "category": "Married"
   },
   {
     "source": "Howland Reed",
     "target": "Jojen Reed",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Jojen Reed",
     "target": "Meera Reed",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Jon Arryn",
     "target": "Eddard Stark",
-    "category": "guardianOf"
+    "category": "GuardianOf"
   },
   {
     "source": "Jon Arryn",
     "target": "Robert Baratheon",
-    "category": "guardianOf"
+    "category": "GuardianOf"
   },
   {
     "source": "Jon Arryn",
     "target": "Robert Baratheon",
-    "category": "allies"
+    "category": "Allies"
   },
   {
     "source": "Jon Snow",
     "target": "Othor",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Jon Snow",
     "target": "Qhorin Halfhand",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Jon Snow",
     "target": "Orell",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Jon Snow",
     "target": "Karl Tanner",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Jon Snow",
     "target": "Styr",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Jon Snow",
     "target": "Mance Rayder",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Jon Snow",
     "target": "Janos Slynt",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Jon Snow",
     "target": "White Walker",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Jon Snow",
     "target": "Alliser Thorne",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Jon Snow",
     "target": "Othell Yarwyck",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Jon Snow",
     "target": "Bowen Marsh",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Jon Snow",
     "target": "Olly",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Jon Snow",
     "target": "Lyanna Stark",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Jon Snow",
     "target": "Daenerys Targaryen",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Rhaegar Targaryen",
     "target": "Jon Snow",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Lyanna Stark",
     "target": "Jon Snow",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Jon Snow",
     "target": "Ygritte",
-    "category": "married"
+    "category": "Married"
   },
   {
     "source": "Jorah Mormont",
     "target": "Qotho",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Jorah Mormont",
     "target": "Norvoshi Pit Fighter",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Jorah Mormont",
     "target": "Meereenese Champion",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Jorah Mormont",
     "target": "Daenerys Targaryen",
-    "category": "serves"
+    "category": "Serves"
   },
   {
     "source": "Jeor Mormont",
     "target": "Jorah Mormont",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Jory Cassel",
     "target": "Eddard Stark",
-    "category": "serves"
+    "category": "Serves"
   },
   {
     "source": "Joyeuse Erenford",
     "target": "Walder Frey",
-    "category": "married"
+    "category": "Married"
   },
   {
     "source": "Karl Tanner",
     "target": "Craster",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Kevan Lannister",
     "target": "Tywin Lannister",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Khal Drogo",
     "target": "Viserys Targaryen",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Khal Drogo",
     "target": "Mago",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Kitty Frey",
     "target": "Walder Frey",
-    "category": "married"
+    "category": "Married"
   },
   {
     "source": "Lady",
     "target": "Sansa Stark",
-    "category": "guardianOf"
+    "category": "GuardianOf"
   },
   {
     "source": "Lady",
     "target": "Nymeria",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Lady",
     "target": "Summer",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Lady",
     "target": "Shaggydog",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Kevan Lannister",
     "target": "Lancel Lannister",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Lancel Lannister",
     "target": "Martyn Lannister",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Lancel Lannister",
     "target": "Willem Lannister",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Lem Lemoncloak",
     "target": "Brother Ray",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Mace Tyrell",
     "target": "Loras Tyrell",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Loras Tyrell",
     "target": "Margaery Tyrell",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Lothar Frey",
     "target": "Talisa Maegyr",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Walder Frey",
     "target": "Lothar Frey",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Lyanna Mormont",
     "target": "Wun Wun",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Rickard Stark",
     "target": "Lyanna Stark",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Lyanna Stark",
     "target": "Robert Baratheon",
-    "category": "married"
+    "category": "Married"
   },
   {
     "source": "Lyanna Stark",
     "target": "Rhaegar Targaryen",
-    "category": "married"
+    "category": "Married"
   },
   {
     "source": "Lysa Arryn",
     "target": "Jon Arryn",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Hoster Tully",
     "target": "Lysa Arryn",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Lysa Arryn",
     "target": "Catelyn Tully",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Lysa Arryn",
     "target": "Petyr Baelish",
-    "category": "married"
+    "category": "Married"
   },
   {
     "source": "Maester Cressen",
     "target": "Maester Cressen",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Mag the Mighty",
     "target": "Grenn",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Mag the Mighty",
     "target": "Donnel Hill",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Mag the Mighty",
     "target": "Cooper",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Mace Tyrell",
     "target": "Margaery Tyrell",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Margaery Tyrell",
     "target": "Renly Baratheon",
-    "category": "married"
+    "category": "Married"
   },
   {
     "source": "Margaery Tyrell",
     "target": "Tommen Baratheon",
-    "category": "married"
+    "category": "Married"
   },
   {
     "source": "Kevan Lannister",
     "target": "Martyn Lannister",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Martyn Lannister",
     "target": "Willem Lannister",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Davos Seaworth",
     "target": "Matthos Seaworth",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Meera Reed",
     "target": "Jojen Reed",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Meera Reed",
     "target": "White Walker",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Howland Reed",
     "target": "Meera Reed",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Melessa Tarly",
     "target": "Randyll Tarly",
-    "category": "married"
+    "category": "Married"
   },
   {
     "source": "Melisandre",
     "target": "Renly Baratheon",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Melisandre",
     "target": "Axell Florent",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Melisandre",
     "target": "Mance Rayder",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Melisandre",
     "target": "Shireen Baratheon",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Meryn Trant",
     "target": "Syrio Forel",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Mirri Maz Duur",
     "target": "Rhaego",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Missandei",
     "target": "Daenerys Targaryen",
-    "category": "serves"
+    "category": "Serves"
   },
   {
     "source": "Mossador",
     "target": "Son of the Harpy",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Robert Baratheon",
     "target": "Myrcella Baratheon",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Cersei Lannister",
     "target": "Myrcella Baratheon",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Jaime Lannister",
     "target": "Myrcella Baratheon",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Myrcella Baratheon",
     "target": "Tommen Baratheon",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Myrcella Baratheon",
     "target": "Trystane Martell",
-    "category": "married"
+    "category": "Married"
   },
   {
     "source": "Nymeria",
     "target": "Arya Stark",
-    "category": "guardianOf"
+    "category": "GuardianOf"
   },
   {
     "source": "Nymeria",
     "target": "Summer",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Nymeria",
     "target": "Shaggydog",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Oberyn Martell",
     "target": "Nymeria Sand",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Obara Sand",
     "target": "Merchant Captain",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Obara Sand",
     "target": "Trystane Martell",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Oberyn Martell",
     "target": "Obara Sand",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Olenna Tyrell",
     "target": "Joffrey Baratheon",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Olly",
     "target": "Ygritte",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Olly",
     "target": "Jon Snow",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Osha",
     "target": "Drennan",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Osha",
     "target": "Maester Luwin",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Othell Yarwyck",
     "target": "Jon Snow",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Petyr Baelish",
     "target": "Joffrey Baratheon",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Petyr Baelish",
     "target": "Dontos Hollard",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Petyr Baelish",
     "target": "Lysa Arryn",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Podrick Payne",
     "target": "Mandon Moore",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Podrick Payne",
     "target": "Bolton Soldier",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Podrick Payne",
     "target": "Tyrion Lannister",
-    "category": "serves"
+    "category": "Serves"
   },
   {
     "source": "Podrick Payne",
     "target": "Brienne of Tarth",
-    "category": "serves"
+    "category": "Serves"
   },
   {
     "source": "Podrick Payne",
     "target": "Bran Stark",
-    "category": "serves"
+    "category": "Serves"
   },
   {
     "source": "Polliver",
     "target": "Lommy Greenhands",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Pyat Pree",
     "target": "Spice King",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Pyat Pree",
     "target": "Silk King",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Qyburn",
     "target": "Cersei Lannister",
-    "category": "serves"
+    "category": "Serves"
   },
   {
     "source": "Ramsay Snow",
     "target": "Master Torturer",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Ramsay Snow",
     "target": "Medger Cerwyn",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Ramsay Snow",
     "target": "Lady Cerwyn",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Ramsay Snow",
     "target": "Unidentified Cerwyn",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Ramsay Snow",
     "target": "Old Woman",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Ramsay Snow",
     "target": "Roose Bolton",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Ramsay Snow",
     "target": "Osha",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Ramsay Snow",
     "target": "Rickon Stark",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Ramsay Snow",
     "target": "Wun Wun",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Roose Bolton",
     "target": "Ramsay Snow",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Ramsay Snow",
     "target": "Sansa Stark",
-    "category": "married"
+    "category": "Married"
   },
   {
     "source": "Rast",
     "target": "Jeor Mormont",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Renly Baratheon",
     "target": "Robert Baratheon",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Renly Baratheon",
     "target": "Stannis Baratheon",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Rhaegal",
     "target": "Pyat Pree",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Rhaegal",
     "target": "Great Master #1",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Rhaegal",
     "target": "Daenerys Targaryen",
-    "category": "guardianOf"
+    "category": "GuardianOf"
   },
   {
     "source": "Rhaegal",
     "target": "Viserion",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Rhaella Targaryen",
     "target": "Rhaegar Targaryen",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Aerys II Targaryen",
     "target": "Rhaegar Targaryen",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Rhaegar Targaryen",
     "target": "Viserys Targaryen",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Khal Drogo",
     "target": "Rhaego",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Daenerys Targaryen",
     "target": "Rhaego",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Elia Martell",
     "target": "Rhaenys Targaryen",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Rhaegar Targaryen",
     "target": "Rhaenys Targaryen",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Rickard Karstark",
     "target": "Martyn Lannister",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Rickard Karstark",
     "target": "Willem Lannister",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Eddard Stark",
     "target": "Rickon Stark",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Catelyn Stark",
     "target": "Rickon Stark",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Rickon Stark",
     "target": "Robb Stark",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Rickon Stark",
     "target": "Sansa Stark",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Robb Stark",
     "target": "Wallen",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Robb Stark",
     "target": "Rickard Karstark",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Eddard Stark",
     "target": "Robb Stark",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Catelyn Stark",
     "target": "Robb Stark",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Robb Stark",
     "target": "Sansa Stark",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Robb Stark",
     "target": "Roslin Frey",
-    "category": "married"
+    "category": "Married"
   },
   {
     "source": "Robb Stark",
     "target": "Talisa Maegyr",
-    "category": "married"
+    "category": "Married"
   },
   {
     "source": "Robert Baratheon",
     "target": "Rhaegar Targaryen",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Robert Baratheon",
     "target": "Tywin Lannister",
-    "category": "allies"
+    "category": "Allies"
   },
   {
     "source": "Robert Baratheon",
     "target": "Stannis Baratheon",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Jon Arryn",
     "target": "Robin Arryn",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Lysa Arryn",
     "target": "Robin Arryn",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Rodrik Cassel",
     "target": "Eddard Stark",
-    "category": "serves"
+    "category": "Serves"
   },
   {
     "source": "Roose Bolton",
     "target": "Robb Stark",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Roose Bolton",
     "target": "Walda Bolton",
-    "category": "married"
+    "category": "Married"
   },
   {
     "source": "Walder Frey",
     "target": "Roslin Frey",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Walder Frey",
     "target": "Ryger Rivers",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Samwell Tarly",
     "target": "White Walker",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Samwell Tarly",
     "target": "Thenn Warg",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Randyll Tarly",
     "target": "Samwell Tarly",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Melessa Tarly",
     "target": "Samwell Tarly",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Samwell Tarly",
     "target": "Talla Tarly",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Sandor Clegane",
     "target": "Mycah",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Sandor Clegane",
     "target": "Kings Landing Rioter #1",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Sandor Clegane",
     "target": "Kings Landing Rioter #2",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Sandor Clegane",
     "target": "Kings Landing Rioter #3",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Sandor Clegane",
     "target": "Beric Dondarrion",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Sandor Clegane",
     "target": "Frey Soldier #2",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Sandor Clegane",
     "target": "Lowell",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Sandor Clegane",
     "target": "Dying Man",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Sandor Clegane",
     "target": "Biter",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Sandor Clegane",
     "target": "Steve",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Sandor Clegane",
     "target": "Riddell",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Sandor Clegane",
     "target": "Gatins",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Sandor Clegane",
     "target": "Morgan",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Sandor Clegane",
     "target": "Lem Lemoncloak",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Sandor Clegane",
     "target": "Gregor Clegane",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Sandor Clegane",
     "target": "Sandor Clegane",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Sandor Clegane",
     "target": "Gregor Clegane",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Eddard Stark",
     "target": "Sansa Stark",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Catelyn Stark",
     "target": "Sansa Stark",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Sansa Stark",
     "target": "Tyrion Lannister",
-    "category": "married"
+    "category": "Married"
   },
   {
     "source": "Selyse Baratheon",
     "target": "Selyse Baratheon",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Selyse Baratheon",
     "target": "Stannis Baratheon",
-    "category": "married"
+    "category": "Married"
   },
   {
     "source": "Shaggydog",
     "target": "Rickon Stark",
-    "category": "guardianOf"
+    "category": "GuardianOf"
   },
   {
     "source": "Shaggydog",
     "target": "Summer",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Stannis Baratheon",
     "target": "Shireen Baratheon",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Selyse Baratheon",
     "target": "Shireen Baratheon",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Smalljon Umber",
     "target": "Shaggydog",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Greatjon Umber",
     "target": "Smalljon Umber",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Stannis Baratheon",
     "target": "Gordy",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Stannis Baratheon",
     "target": "Simpson",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Styr",
     "target": "Olly's Mother",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Summer",
     "target": "Catspaw Assassin",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Summer",
     "target": "Bran Stark",
-    "category": "guardianOf"
+    "category": "GuardianOf"
   },
   {
     "source": "Randyll Tarly",
     "target": "Talla Tarly",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Melessa Tarly",
     "target": "Talla Tarly",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "The Night King",
     "target": "Three-Eyed Raven",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "The Night King",
     "target": "Viserion",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "The Night King",
     "target": "Ned Umber",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "The Night King",
     "target": "Theon Greyjoy",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "The Tickler",
     "target": "Tortured Prisoner",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "The Waif",
     "target": "Lady Crane",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Theon Greyjoy",
     "target": "Stiv",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Theon Greyjoy",
     "target": "Rodrik Cassel",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Theon Greyjoy",
     "target": "Myranda",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Theon Greyjoy",
     "target": "Bolton Soldier",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Theon Greyjoy",
     "target": "Harrag",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Balon Greyjoy",
     "target": "Theon Greyjoy",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Theon Greyjoy",
     "target": "Yara Greyjoy",
-    "category": "siblings"
+    "category": "Siblings"
   },
   {
     "source": "Tommen Baratheon",
     "target": "Tommen Baratheon",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Robert Baratheon",
     "target": "Tommen Baratheon",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Cersei Lannister",
     "target": "Tommen Baratheon",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Jaime Lannister",
     "target": "Tommen Baratheon",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Tormund Giantsbane",
     "target": "Rattleshirt",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Tormund Giantsbane",
     "target": "Smalljon Umber",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Doran Martell",
     "target": "Trystane Martell",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Tyene Sand",
     "target": "Areo Hotah",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Tyene Sand",
     "target": "Maester Caleotte",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Oberyn Martell",
     "target": "Tyene Sand",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Ellaria Sand",
     "target": "Tyene Sand",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Tyrion Lannister",
     "target": "Shae",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Tyrion Lannister",
     "target": "Tywin Lannister",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Tyrion Lannister",
     "target": "Daenerys Targaryen",
-    "category": "serves"
+    "category": "Serves"
   },
   {
     "source": "Tywin Lannister",
     "target": "Tyrion Lannister",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Viserion",
     "target": "Pyat Pree",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Viserion",
     "target": "Great Master #1",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Viserion",
     "target": "Daenerys Targaryen",
-    "category": "guardianOf"
+    "category": "GuardianOf"
   },
   {
     "source": "Rhaella Targaryen",
     "target": "Viserys Targaryen",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Aerys II Targaryen",
     "target": "Viserys Targaryen",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Yohn Royce",
     "target": "Waymar Royce",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "White Walker",
     "target": "Loboda",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Kevan Lannister",
     "target": "Willem Lannister",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Wun Wun",
     "target": "Lyanna Mormont",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Balon Greyjoy",
     "target": "Yara Greyjoy",
-    "category": "parent"
+    "category": "ParentOf"
   },
   {
     "source": "Ygritte",
     "target": "Old Man",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Ygritte",
     "target": "Guymon",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Ygritte",
     "target": "Mole's Town Whore",
-    "category": "killed"
+    "category": "Kills"
   },
   {
     "source": "Ygritte",
     "target": "Pypar",
-    "category": "killed"
+    "category": "Kills"
   }
 ]
